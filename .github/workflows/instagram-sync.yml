@@ -34,6 +34,8 @@ jobs:
           "$RUNNER_TEMP/venv/bin/pip" install --quiet --upgrade curl_cffi pillow
 
       - name: ดึงโพสต์จาก Instagram
+        env:
+          IG_DEBUG: "1"
         run: |
           "$RUNNER_TEMP/venv/bin/python" tools/instagram_sync.py
 
@@ -42,7 +44,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/instagram-feed.js assets/img/instagram
+          mkdir -p assets/img/instagram
+          git add -A data/ assets/img/instagram/
           if git diff --cached --quiet; then
             echo "ไม่มีอะไรเปลี่ยน"
             exit 0

@@ -16,6 +16,7 @@ import io
 import json
 import os
 import re
+import shutil
 import sys
 import urllib.parse
 import urllib.request
@@ -35,6 +36,8 @@ TIMELINE_HASH = "69cba40317214236af40e7efa697781d"
 TZ_TH = datetime.timezone(datetime.timedelta(hours=7))
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0 Safari/537.36")
+DEBUG = os.environ.get("IG_DEBUG") == "1"   # เก็บหน้าที่ Instagram ตอบกลับไว้ดูสาเหตุเวลาดึงไม่ได้
+DEBUG_DIR = ROOT / "data" / "instagram-debug"
 MOBILE_UA = ("Instagram 275.0.0.27.98 Android (33/13; 420dpi; 1080x2400; samsung; SM-G991B; o1s; "
              "exynos2100; en_US; 458229237)")
 API_HEADERS = {"X-IG-App-ID": APP_ID, "X-ASBD-ID": "129477", "X-Requested-With": "XMLHttpRequest",
@@ -53,6 +56,14 @@ def log(msg):
 def warn(msg):
     print(f"::warning::{msg}", flush=True)
     summary.append(f"คำเตือน: {msg}")
+
+
+def dump(name, st, body):
+    if not DEBUG:
+        return
+    DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+    text = body.decode("utf-8", "replace") if isinstance(body, bytes) else str(body)
+    (DEBUG_DIR / f"{name}.txt").write_text(f"HTTP {st}\n{text[:400000]}", "utf-8")
 
 
 # ---------- HTTP ----------
@@ -75,6 +86,12 @@ class Http:
                 return resp.status, resp.read()
         except urllib.error.HTTPError as exc:
             return exc.code, exc.read()
+
+    def cookie(self, name):
+        try:
+            return self.s.cookies.get(name) if self.s is not None else None
+        except Exception:
+            return None
 
 
 def load_old():
@@ -167,15 +184,25 @@ def parse_user(user):
 
 
 # ---------- วิธีดึง ----------
-def fetch_web_profile(http, host):
+def fetch_web_profile(http, host, warm=False):
     headers = dict(API_HEADERS)
     if host.startswith("i."):
         headers["User-Agent"] = MOBILE_UA
+    tag = host.split(".")[0] + ("-warm" if warm else "")
+    if warm:
+        # เปิดหน้าบัญชีก่อนเพื่อรับคุกกี้ แล้วค่อยขอข้อมูล
+        st, body = http.get(PROFILE_URL, {"Accept": "text/html,application/xhtml+xml", "Accept-Language": "th-TH,th;q=0.9,en;q=0.8"})
+        dump("profile-page", st, body)
+        token = http.cookie("csrftoken")
+        if token:
+            headers["X-CSRFToken"] = token
     st, body = http.get(f"https://{host}/api/v1/users/web_profile_info/?username={ACCOUNT}", headers)
     if st != 200:
+        dump(f"web_profile_info-{tag}", st, body)
         raise RuntimeError(f"HTTP {st} {body[:80]!r}")
     user = (json.loads(body).get("data") or {}).get("user")
     if not user:
+        dump(f"web_profile_info-{tag}", st, body)
         raise RuntimeError("ไม่พบข้อมูลบัญชีในผลลัพธ์")
     return parse_user(user)
 
@@ -202,6 +229,8 @@ def fetch_more(http, user_id, cursor, need):
 def fetch_post_embed(http, code):
     # หน้า embed ของโพสต์เดี่ยว เปิดได้โดยไม่ต้องล็อกอิน มีคำบรรยายและภาพ
     st, body = http.get(f"https://www.instagram.com/p/{code}/embed/captioned/", {"Referer": "https://watpolprot-cloud.github.io/"})
+    if DEBUG and not (DEBUG_DIR / "post-embed.txt").exists():
+        dump("post-embed", st, body)
     if st != 200:
         raise RuntimeError(f"HTTP {st}")
     text = body.decode("utf-8", "replace")
@@ -237,9 +266,13 @@ def fetch_post_embed(http, code):
 def fetch_profile_embed(http, known):
     # สำรอง: หน้า embed ของบัญชี มีลิงก์โพสต์ล่าสุด แล้วเปิด embed ของแต่ละโพสต์ที่ยังไม่มี
     st, body = http.get(f"https://www.instagram.com/{ACCOUNT}/embed/", {"Referer": "https://watpolprot-cloud.github.io/"})
+    dump("profile-embed", st, body)
     if st != 200:
         raise RuntimeError(f"HTTP {st}")
-    codes = list(dict.fromkeys(c.decode() for c in re.findall(rb'/(?:p|reel|tv)/([A-Za-z0-9_-]{6,20})', body)))
+    # ลิงก์โพสต์อาจอยู่ใน JSON ที่ใส่ \/ แทน / หรืออยู่ในช่อง shortcode
+    found = re.findall(rb'\\?/(?:p|reel|tv)\\?/([A-Za-z0-9_-]{10,14})(?![A-Za-z0-9_-])', body)
+    found += re.findall(rb'"(?:shortcode|code)"\s*:\s*"([A-Za-z0-9_-]{10,14})"', body)
+    codes = list(dict.fromkeys(c.decode() for c in found))
     if not codes:
         raise RuntimeError(f"ไม่พบลิงก์โพสต์ในหน้า embed ({len(body)} ไบต์)")
     posts = []
@@ -252,6 +285,22 @@ def fetch_profile_embed(http, known):
         except Exception as exc:
             warn(f"embed โพสต์ {code}: {exc}")
     return posts
+
+
+def probe(http):
+    # โหมดตรวจสาเหตุ: ลองเปิดหน้าอื่น ๆ ของบัญชีแล้วเก็บผลไว้ดู (ไม่ใช้ข้อมูลจริง)
+    tries = [
+        ("a1", PROFILE_URL + "?__a=1&__d=dis", API_HEADERS),
+        ("page-fbhit", PROFILE_URL, {"User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"}),
+        ("page-googlebot", PROFILE_URL, {"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}),
+    ]
+    for name, url, headers in tries:
+        try:
+            st, body = http.get(url, headers)
+            dump("probe-" + name, st, body)
+            log(f"ตรวจ {name}: HTTP {st} {len(body)} ไบต์")
+        except Exception as exc:
+            log(f"ตรวจ {name}: {exc}")
 
 
 # ---------- ภาพ ----------
@@ -296,16 +345,19 @@ def write_summary():
 
 
 def main():
+    IMG_DIR.mkdir(parents=True, exist_ok=True)
+    if not DEBUG and DEBUG_DIR.exists():
+        shutil.rmtree(DEBUG_DIR)
     old = load_old()
     old_posts = {p["id"]: p for p in old.get("posts") or []}
     http = Http()
     errors = []
 
     profile, found, via, page_complete = None, [], "", False
-    for host in ("www.instagram.com", "i.instagram.com"):
+    for host, warm in (("www.instagram.com", False), ("i.instagram.com", False), ("www.instagram.com", True)):
         try:
-            profile, found, user_id, cursor = fetch_web_profile(http, host)
-            via = "web_profile_info@" + host
+            profile, found, user_id, cursor = fetch_web_profile(http, host, warm)
+            via = "web_profile_info@" + host + ("+cookie" if warm else "")
             log(f"{via}: ได้ {len(found)} โพสต์ บัญชีมี {profile['posts']} โพสต์ ผู้ติดตาม {profile['followers']}")
             # ครั้งแรก (หรือยังเก็บไม่ครบ) ดึงหน้าถัดไปด้วย เพื่อเอาโพสต์เก่ามาทั้งหมด
             total = profile.get("posts") or 0
@@ -319,7 +371,7 @@ def main():
             page_complete = bool(total) and len(found) >= total
             break
         except Exception as exc:
-            errors.append(f"web_profile_info@{host}: {exc}")
+            errors.append(f"web_profile_info@{host}{'+cookie' if warm else ''}: {exc}")
     if not found:
         try:
             found = fetch_profile_embed(http, old_posts)
@@ -329,6 +381,8 @@ def main():
             errors.append(f"embed: {exc}")
     for e in errors:
         warn(e)
+    if DEBUG:
+        probe(http)
 
     if not found:
         log("ดึงโพสต์ไม่สำเร็จ")
