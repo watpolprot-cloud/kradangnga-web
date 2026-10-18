@@ -129,10 +129,16 @@
     // หมวดที่มีคลิป เรียงจากหมวดที่มีคลิปมากสุด
     const used = T.categories.map(c => ({ c, list: vids.filter(v => v.cat === c.key) })).filter(x => x.list.length)
       .sort((a, b) => b.list.length - a.list.length);
-    const cover = list => (list.find(v => v.cover) || {}).cover;
+    // ภาพหมวด: คลิปที่ตั้งไว้ใน cover ของหมวด ถ้าไม่ได้ตั้งใช้ภาพแนวนอน (พอดีกรอบ) ก่อน แล้วตามด้วยคลิปยอดดูสูงสุด
+    const cover = (c, list) => {
+      const has = list.filter(v => v.cover);
+      const wide = v => v.cw && v.ch && v.cw > v.ch ? 1 : 0;
+      const pick = has.find(v => v.id === c.cover) || has.slice().sort((a, b) => wide(b) - wide(a) || (b.views || 0) - (a.views || 0))[0];
+      return pick ? pick.cover : "";
+    };
     document.getElementById("tt-cats").innerHTML = used.map(({ c, list }) => `
       <button type="button" class="tt-cat reveal" data-cat="${esc(c.key)}">
-        ${cover(list) ? `<img src="${esc(cover(list))}" alt="" loading="lazy">` : ""}
+        ${cover(c, list) ? `<img src="${esc(cover(c, list))}" alt="" loading="lazy">` : ""}
         <span class="tt-cat-body"><small>${list.length} คลิป</small><b>${esc(c.name)}</b><span>${esc(c.desc || "")}</span></span>
       </button>`).join("");
     const chips = document.getElementById("tt-chips");
