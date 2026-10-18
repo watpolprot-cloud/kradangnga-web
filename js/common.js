@@ -1,4 +1,4 @@
-// ส่วนที่ใช้ร่วมกันทุกหน้า: เมนู ส่วนท้าย แถบประกาศด่วน ภาพขยาย (lightbox) และตัวช่วยจัดรูปแบบวันที่
+// ส่วนที่ใช้ร่วมกันทุกหน้า: เมนู ส่วนท้าย แถบประกาศด่วน แชตบอต ภาพขยาย (lightbox) และตัวช่วยจัดรูปแบบวันที่
 (function () {
   const PAGES = [
     ["index.html", "หน้าแรก"],
@@ -125,4 +125,15 @@
     } catch (e) { /* ไม่มีข้อมูล Instagram ก็ไม่ต้องแสดงแถบ */ }
   }
   document.addEventListener("DOMContentLoaded", urgentBar);
+
+  // ---------- แชตบอตน้องกระดังงา มุมขวาล่าง (ทุกหน้า) ----------
+  async function chatbot() {
+    window.KD = window.KD || {};
+    try {
+      if (!KD.chatbot) await loadScript("data/chatbot.js");
+      if (!window.KDC) await loadScript("js/chatbot.js");
+      KDC.mount();
+    } catch (e) { /* โหลดแชตบอตไม่ได้ก็ใช้เว็บได้ตามปกติ */ }
+  }
+  document.addEventListener("DOMContentLoaded", chatbot);
 })();

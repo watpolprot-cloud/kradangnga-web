@@ -1,0 +1,61 @@
+# รวมเนื้อหาทั้งเว็บเป็นความรู้ให้แชตบอต "น้องกระดังงา" (data/chatbot-knowledge.json)
+# รันเองทุกครั้งที่แก้ข้อมูลหรือหน้าเว็บ หลังบอทดึงโพสต์ Instagram / คลิป TikTok และกดรันเองได้ที่แท็บ Actions
+name: อัปเดตความรู้แชตบอต
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "!data/chatbot-knowledge.json"
+      - "*.html"
+      - "tools/build_chatbot.js"
+      - ".github/workflows/chatbot-knowledge.yml"
+  workflow_run:
+    workflows: ["ดึงโพสต์ Instagram", "ดึงคลิป TikTok"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: chatbot-knowledge
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: รวมเนื้อหาทั้งเว็บ
+        run: node tools/build_chatbot.js
+
+      - name: บันทึกขึ้นเว็บถ้ามีอะไรเปลี่ยน
+        id: save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/chatbot-knowledge.json
+          if git diff --cached --quiet; then
+            echo "ไม่มีอะไรเปลี่ยน"
+            exit 0
+          fi
+          git commit -m "อัปเดตความรู้แชตบอตอัตโนมัติ"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep 5
+          done
+          echo "pushed=1" >> "$GITHUB_OUTPUT"
+
+      - name: สั่งสร้างหน้าเว็บใหม่
+        if: steps.save.outputs.pushed == '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
