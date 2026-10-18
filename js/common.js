@@ -78,7 +78,11 @@
   let list = [], idx = 0;
   const img = lb.querySelector("img"), cap = lb.querySelector(".lb-cap");
   function show() { img.src = list[idx].src; cap.textContent = list[idx].cap || `${idx + 1} / ${list.length}`; }
-  window.openLightbox = function (items, i) { list = items; idx = i || 0; show(); lb.classList.add("open"); document.body.style.overflow = "hidden"; };
+  window.openLightbox = function (items, i) {
+    list = items; idx = i || 0; show();
+    lb.querySelectorAll(".lb-prev, .lb-next").forEach(b => b.hidden = list.length < 2);  // ภาพเดียวไม่ต้องมีปุ่มเลื่อน
+    lb.classList.add("open"); document.body.style.overflow = "hidden";
+  };
   function close() { lb.classList.remove("open"); document.body.style.overflow = ""; }
   lb.querySelector(".lb-close").onclick = close;
   lb.querySelector(".lb-prev").onclick = e => { e.stopPropagation(); idx = (idx - 1 + list.length) % list.length; show(); };

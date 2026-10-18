@@ -86,6 +86,37 @@
   </div>
 </section>
 
+<section class="block alt" id="promo">
+  <div class="wrap promo-grid">
+    <div class="promo-text reveal">
+      <div class="eyebrow" style="color:var(--gold-deep)">แนะนำเว็บไซต์คณะสี</div>
+      <h2>ชวนเพื่อนมาดูเว็บคณะสี</h2>
+      <p>คลิปและโปสเตอร์แนะนำเว็บไซต์คณะสีกระดังงา ดาวน์โหลดไปส่งในกลุ่ม LINE โพสต์ลงโซเชียล หรือพิมพ์ติดบอร์ดได้เลย สแกน QR บนโปสเตอร์แล้วเข้าเว็บนี้ได้ทันที</p>
+      <div class="promo-dl">
+        <a class="btn btn-green" href="assets/promo/promo-poster.jpg" download="คณะสีกระดังงา โปสเตอร์เว็บไซต์.jpg">ดาวน์โหลดโปสเตอร์</a>
+        <a class="btn btn-outline" href="assets/promo/promo-poster-print.jpg" download="คณะสีกระดังงา โปสเตอร์เว็บไซต์ สำหรับพิมพ์.jpg">ไฟล์สำหรับพิมพ์</a>
+        <a class="btn btn-outline" href="assets/promo/promo-clip.mp4" download="คณะสีกระดังงา คลิปแนะนำเว็บไซต์.mp4">ดาวน์โหลดคลิป</a>
+        <button type="button" class="btn btn-gold" id="promo-share">แชร์ลิงก์เว็บ</button>
+      </div>
+      <p class="promo-url" id="promo-url">watpolprot-cloud.github.io/kradangnga-web</p>
+    </div>
+    <figure class="promo-clip reveal">
+      <div class="promo-phone">
+        <video controls playsinline preload="none" poster="assets/promo/promo-clip-poster.jpg" aria-label="คลิปแนะนำเว็บไซต์คณะสีกระดังงา">
+          <source src="assets/promo/promo-clip.mp4" type="video/mp4">
+        </video>
+      </div>
+      <figcaption>คลิปแนะนำเว็บ 38 วินาที มีเสียงพูด</figcaption>
+    </figure>
+    <figure class="promo-poster reveal">
+      <button type="button" id="promo-poster" aria-label="ดูโปสเตอร์ขนาดใหญ่">
+        <img src="assets/promo/promo-poster-thumb.jpg" alt="โปสเตอร์แนะนำเว็บไซต์คณะสีกระดังงา" loading="lazy">
+      </button>
+      <figcaption>กดที่โปสเตอร์เพื่อดูภาพใหญ่</figcaption>
+    </figure>
+  </div>
+</section>
+
 <section class="block dark quote-band">
   <div class="wrap">
     <div class="q">ทุกน้ำใจคือพลัง<br>ทุกการสนับสนุนคือกำลังใจ</div>
@@ -178,6 +209,21 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
       <p>รวมคลิปจากช่อง TikTok ของคณะสีไว้ในหน้า "คลิป TikTok" แบ่งตามหมวดให้ดูง่าย โพสต์ใหม่เมื่อไรก็ขึ้นในเว็บให้เอง</p>
       <div class="hero-actions"><a class="btn btn-gold" href="tiktok.html">เข้าหน้าคลิป TikTok</a></div>
     </div></div>`;
+})();
+
+// แนะนำเว็บไซต์: ดูโปสเตอร์ภาพใหญ่ และแชร์ลิงก์เว็บ (มือถือเปิดเมนูแชร์ คอมคัดลอกลิงก์)
+(function () {
+  const url = "https://watpolprot-cloud.github.io/kradangnga-web/";
+  document.getElementById("promo-poster").onclick = () =>
+    openLightbox([{ src: "assets/promo/promo-poster.jpg", cap: "โปสเตอร์แนะนำเว็บไซต์คณะสีกระดังงา" }], 0);
+  const btn = document.getElementById("promo-share");
+  btn.onclick = async () => {
+    const data = { title: "เว็บไซต์คณะสีกระดังงา (สีเขียว)", text: "บ้านออนไลน์ของชาวสีเขียว โรงเรียนพรตพิทยพยัต", url };
+    if (navigator.share) { try { await navigator.share(data); } catch (e) {} return; }
+    try { await navigator.clipboard.writeText(url); btn.textContent = "คัดลอกลิงก์แล้ว"; }
+    catch (e) { btn.textContent = "คัดลอกลิงก์ด้านล่างได้เลย"; }
+    setTimeout(() => btn.textContent = "แชร์ลิงก์เว็บ", 2500);
+  };
 })();
 
 document.getElementById("home-teachers").innerHTML = [30, 24, 9].map(no => {
