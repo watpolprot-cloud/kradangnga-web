@@ -210,18 +210,32 @@ def main():
     except Exception as exc:
         errors.append(f"ข้อมูลช่อง: {exc}")
 
-    clips = []
-    for name, fn in (("yt-dlp", fetch_with_ytdlp), ("embed", fetch_with_embed)):
+    # TikTok บางรอบส่งรายการมาไม่ครบ จึงลองหลายครั้งแล้วรวมผล จนได้ครบตามจำนวนคลิปของช่อง
+    target = (profile or {}).get("videos")
+    found = {}
+    for name, fn in (("yt-dlp", fetch_with_ytdlp), ("yt-dlp", fetch_with_ytdlp), ("yt-dlp", fetch_with_ytdlp), ("embed", fetch_with_embed)):
+        if found and target and len(found) >= target:
+            break
         try:
-            clips = fn()
-            log(f"ดึงคลิปด้วย {name} ได้ {len(clips)} คลิป")
-            if clips:
-                break
+            got = fn()
+            log(f"ดึงคลิปด้วย {name} ได้ {len(got)} คลิป")
+            for c in got:
+                found.setdefault(c["id"], c)
         except Exception as exc:
             errors.append(f"{name}: {exc}")
+    clips = list(found.values())
+    complete = bool(target) and len(clips) >= target
+    log(f"รวมได้ {len(clips)} คลิป จากในช่อง {target} คลิป")
 
     for e in errors:
         warn(e)
+
+    # ถ้ายังได้ไม่ครบ คงคลิปเดิมที่รอบนี้ไม่เห็นไว้ (ลบเฉพาะเมื่อดึงได้ครบทั้งช่อง)
+    if clips and not complete:
+        for vid, prev in old_clips.items():
+            if vid not in found:
+                clips.append({k: prev.get(k) for k in ("id", "desc", "ts", "dur", "views", "likes", "comments", "shares", "music")}
+                             | {"coverUrl": ""})
 
     if not clips:
         if old_clips:
