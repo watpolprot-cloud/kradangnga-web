@@ -12,5 +12,7 @@ KD.site = {
   gamesDates: "12–13 พฤศจิกายน 2569",
   tiktok: "https://www.tiktok.com/@kradangnga.prot",
   tiktokName: "@kradangnga.prot",
+  instagram: "https://www.instagram.com/green.prot/",
+  instagramName: "@green.prot",
   updated: "18 ตุลาคม 2569"
 };

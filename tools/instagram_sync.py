@@ -10,7 +10,9 @@ GitHub Actions (.github/workflows/instagram-sync.yml) รันไฟล์น�
 
 ถ้าดึงจาก Instagram ไม่สำเร็จ จะคงข้อมูลเดิมไว้ ไม่ลบโพสต์ที่เคยขึ้นเว็บ
 โพสต์ที่ใส่ hide: true หรือมีคำใน hideWords ของ data/instagram.js จะไม่ถูกดึงขึ้นเว็บเลย (ไม่เก็บภาพด้วย)
-ต้องใช้: pip install curl_cffi pillow
+โพสต์ใหม่ที่ในภาพมี QR code (เช่น โปสเตอร์ขอรับการสนับสนุน) จะถูกซ่อนเอง เพราะเว็บคณะสีไม่ลงเรื่องเงินและ QR
+ถ้าแน่ใจว่าโพสต์นั้นขึ้นเว็บได้ ใส่ show: true ให้โพสต์นั้นใน data/instagram.js
+ต้องใช้: pip install curl_cffi pillow opencv-python-headless
 """
 import datetime
 import html
@@ -104,13 +106,14 @@ def load_rules():
     try:
         txt = CURATED.read_text("utf-8")
     except OSError:
-        return set(), [], []
+        return set(), [], [], set()
     hide = set(re.findall(r'"([A-Za-z0-9_-]{5,20})"\s*:\s*\{[^{}]*?\bhide\s*:\s*true', txt))
     m = re.search(r'hideWords\s*:\s*\[([^\]]*)\]', txt)
     words = [w.lower() for w in re.findall(r'"([^"]+)"', m.group(1))] if m else []
+    show = set(re.findall(r'"([A-Za-z0-9_-]{5,20})"\s*:\s*\{[^{}]*?\bshow\s*:\s*true', txt))
     m = re.search(r'\bposts\s*:\s*\{', txt)
     listed = re.findall(r'"([A-Za-z0-9_-]{8,40})"\s*:\s*\{', txt[m.end():]) if m else []
-    return hide, words, [c for c in listed if c not in hide]
+    return hide, words, [c for c in listed if c not in hide], show
 
 
 def to_int(x):
@@ -256,24 +259,33 @@ def fetch_post_embed(http, code):
     p = from_graph(media) if media else None
     if p:
         return p
+    # หน้า embed ของโพสต์เดี่ยวไม่มี JSON แล้ว อ่านจาก HTML แทน (ได้ภาพแรก คำบรรยาย และยอดถูกใจ)
     text = body.decode("utf-8", "replace")
-    cap = re.search(r'<div class="Caption">(.*?)<div class="CaptionComments">', text, re.S)
+    cap = re.search(r'<div class="Caption">(.*?)</div>', text, re.S)
     caption = ""
     if cap:
         inner = re.sub(r'<a class="CaptionUsername".*?</a>', "", cap.group(1), flags=re.S)
-        caption = html.unescape(re.sub(r"<[^>]+>", "", inner.replace("<br />", "\n").replace("<br/>", "\n"))).strip()
-    img = re.search(r'<img class="EmbeddedMediaImage"[^>]*src="([^"]+)"', text)
-    ts = re.search(r'datetime="([0-9T:\-\.Z+]+)"', text)
+        inner = re.sub(r"<br\s*/?>", "\n", inner)
+        caption = html.unescape(re.sub(r"<[^>]+>", "", inner)).strip()
+    img = re.search(r'<img class="EmbeddedMediaImage"[^>]*?src="([^"]+)"', text)
+    likes = re.search(r'>([\d,]+) likes?<', text)
     if not img and not caption:
         raise RuntimeError("หน้า embed ไม่มีข้อมูลโพสต์")
-    when = None
-    if ts:
-        try:
-            when = int(datetime.datetime.fromisoformat(ts.group(1).replace("Z", "+00:00")).timestamp())
-        except ValueError:
-            pass
-    return {"id": code, "caption": caption, "ts": when, "kind": "image", "reel": False, "alt": "",
-            "imageUrls": [html.unescape(img.group(1))] if img else []}
+    return {"id": code, "caption": caption, "ts": code_time(code),
+            "kind": "video" if re.search(r'class="[^"]*VideoSpritePlayButton', text) else "image",
+            "reel": False, "alt": "", "imageUrls": [html.unescape(img.group(1))] if img else [],
+            "likes": to_int(likes.group(1).replace(",", "")) if likes else None, "comments": None, "pinned": False}
+
+
+def code_time(code):
+    # รหัสโพสต์แปลงกลับเป็นเลขโพสต์ได้ และเลขโพสต์มีเวลาที่โพสต์ซ่อนอยู่ (หน่วยมิลลิวินาทีนับจากปี 2011)
+    abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+    if len(code) > 12 or any(c not in abc for c in code):
+        return None
+    n = 0
+    for c in code:
+        n = n * 64 + abc.index(c)
+    return ((n >> 23) + 1314220021721) // 1000 or None
 
 
 def fetch_profile_embed(http):
@@ -344,6 +356,23 @@ def image_size(path):
         return None, None
 
 
+def has_qr(path):
+    # ตรวจว่าในภาพมี QR code ไหม (โปสเตอร์ขอรับบริจาคมักมี QR และเลขบัญชี)
+    try:
+        import cv2
+        import numpy as np
+        from PIL import Image
+    except ImportError:
+        return False
+    try:
+        with Image.open(path) as im:
+            gray = np.array(im.convert("L"))
+        det = cv2.QRCodeDetector()
+        return bool(det.detectMulti(gray)[0] or det.detect(gray)[0])
+    except Exception:
+        return False
+
+
 def write_feed(feed):
     FEED.write_text(HEADER + "window.KD = window.KD || {};\nKD.instagramFeed = "
                     + json.dumps(feed, ensure_ascii=False, indent=1) + ";\n", "utf-8")
@@ -362,7 +391,7 @@ def main():
         shutil.rmtree(DEBUG_DIR)
     old = load_old()
     old_posts = {p["id"]: p for p in old.get("posts") or []}
-    hide, words, listed = load_rules()
+    hide, words, listed, show = load_rules()
     http = Http()
     errors = []
     profile, found, via, owner_id, page_complete = None, {}, [], None, False
@@ -401,20 +430,11 @@ def main():
             except Exception as exc:
                 errors.append(f"web_profile_info@{host}: {exc}")
 
-    # 3) โพสต์เก่าที่ใส่รหัสไว้ใน data/instagram.js และโพสต์หลายภาพที่ยังได้ภาพไม่ครบ เปิด embed ของโพสต์นั้น
-    todo = [c for c in listed if c not in found and c not in old_posts][:15]
-    todo += [p["id"] for p in found.values() if p["kind"] == "carousel" and len(p.get("imageUrls") or []) < 2
-             and len((old_posts.get(p["id"]) or {}).get("images") or []) < 2][:6]
-    for code in todo:
+    # 3) โพสต์เก่าที่ใส่รหัสไว้ใน data/instagram.js แต่ยังไม่มีในเว็บ เปิด embed ของโพสต์นั้นทีละโพสต์
+    for code in [c for c in listed if c not in found and c not in old_posts][:15]:
         try:
-            got = fetch_post_embed(http, code)
-            if code in found:
-                prev = found[code]
-                if len(got.get("imageUrls") or []) > len(prev.get("imageUrls") or []):
-                    prev["imageUrls"] = got["imageUrls"]
-            else:
-                found[code] = got
-            log(f"embed โพสต์ {code}: ได้ {len(got.get('imageUrls') or [])} ภาพ")
+            found[code] = fetch_post_embed(http, code)
+            log(f"embed โพสต์ {code}: ได้แล้ว")
         except Exception as exc:
             errors.append(f"embed โพสต์ {code}: {exc}")
     for e in errors:
@@ -442,7 +462,8 @@ def main():
             continue
         newest[pid] = dict(prev, imageUrls=[])
 
-    posts = [p for p in newest.values() if p["id"] not in hide
+    skipped = set(old.get("skipped") or []) - show   # โพสต์ที่เคยซ่อนเพราะมี QR
+    posts = [p for p in newest.values() if p["id"] not in hide and p["id"] not in skipped
              and not any(w in (p.get("caption") or "").lower() for w in words)]
     log(f"เหลือ {len(posts)} โพสต์หลังตัดโพสต์ที่ซ่อนไว้")
     today = datetime.datetime.now(TZ_TH).strftime("%Y-%m-%d")
@@ -470,6 +491,12 @@ def main():
                 save_image(http, urls[i], dest)
             if dest.exists():
                 images.append(f"assets/img/instagram/{dest.name}")
+        if p["id"] not in show and (old.get("qr") != 1 or not prev) and any(has_qr(ROOT / i) for i in images):
+            log(f"ซ่อนโพสต์ {p['id']} เพราะในภาพมี QR code")
+            skipped.add(p["id"])
+            for i in images:
+                (ROOT / i).unlink(missing_ok=True)
+            continue
         cw, ch = image_size(ROOT / images[0]) if images else (None, None)
         reel = bool(p.get("reel") or prev.get("reel"))
         out.append({
@@ -507,8 +534,8 @@ def main():
         if o.get("day") == today and o.get("posts") == prof["posts"]:
             prof["followers"], prof["following"] = o.get("followers"), o.get("following")
 
-    feed = {"account": ACCOUNT, "profile": prof, "posts": out, "via": "+".join(via)}
-    if all(old.get(k) == feed[k] for k in ("account", "profile", "posts")) and not old.get("error"):
+    feed = {"account": ACCOUNT, "profile": prof, "posts": out, "skipped": sorted(skipped), "qr": 1, "via": "+".join(via)}
+    if all(old.get(k) == feed[k] for k in ("account", "profile", "posts", "skipped", "qr")) and not old.get("error"):
         log("ข้อมูลเหมือนเดิม ไม่ต้องอัปเดต")
         return
     feed["updated"] = datetime.datetime.now(TZ_TH).isoformat(timespec="minutes")

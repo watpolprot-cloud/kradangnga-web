@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instagram · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="รวมโพสต์จาก Instagram @green.prot ของคณะสีกระดังงา ประกาศ รับสมัคร กิจกรรม และบรรยากาศสีเขียว อัปเดตตาม Instagram อัตโนมัติ">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section class="tt-hero ig-hero">
+  <div class="wrap tt-hero-grid">
+    <div class="tt-hero-text">
+      <div class="eyebrow">Instagram · @green.prot</div>
+      <h1>Instagram สีเขียว</h1>
+      <p class="lead">รวมโพสต์จาก Instagram ของคณะสี ทั้งประกาศ รับสมัคร กิจกรรม และบรรยากาศบ้านกระดังงา โพสต์ใหม่ขึ้นหน้านี้ให้เอง ถ้าเป็นประกาศด่วนจะขึ้นแถบสีทองด้านบนทุกหน้าของเว็บ</p>
+      <div class="tt-stats" id="ig-stats"></div>
+      <div class="hero-actions">
+        <a class="btn btn-gold" id="ig-follow" target="_blank" rel="noopener">ติดตามบน Instagram</a>
+        <a class="btn btn-line" href="#ig-all">ดูโพสต์ทั้งหมด</a>
+      </div>
+    </div>
+    <div class="ig-badge-wrap" id="ig-badge"></div>
+  </div>
+</section>
+
+<section class="block" id="ig-urgent-sec" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>ประกาศด่วน</h2><p>เรื่องที่สีเขียวต้องรู้ตอนนี้</p></div>
+    </div>
+    <div class="ig-grid" id="ig-urgent"></div>
+  </div>
+</section>
+
+<section class="block" id="ig-latest-sec" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>โพสต์ล่าสุด</h2><p>กดที่ภาพเพื่อดูโพสต์เต็ม</p></div>
+    </div>
+    <div class="ig-latest" id="ig-latest"></div>
+  </div>
+</section>
+
+<section class="block alt" id="ig-all">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>โพสต์ทั้งหมด</h2><p>เลือกหมวดที่อยากดู แล้วกดที่โพสต์เพื่อดูภาพหรือเล่นคลิป</p></div>
+    </div>
+    <div class="filters tt-chips" id="ig-chips"></div>
+    <div class="ig-grid" id="ig-grid"></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <p class="note" id="ig-note"></p>
+  </div>
+</section>
+
+<script src="data/site.js"></script>
+<script src="data/instagram.js"></script>
+<script src="data/instagram-feed.js"></script>
+<script src="js/common.js"></script>
+<script src="js/instagram.js"></script>
+<script>
+(function () {
+  const I = KDI, posts = I.posts, P = I.profile;
+  document.getElementById("ig-follow").href = I.profileUrl;
+
+  // ตัวเลขของบัญชี
+  const stats = [
+    [P && P.posts != null ? P.posts : "", "โพสต์ใน IG"],
+    [P && P.followers != null ? I.fmtNum(P.followers) : "", "ผู้ติดตาม"],
+    [posts.length || "", "ขึ้นเว็บแล้ว"]
+  ];
+  document.getElementById("ig-stats").innerHTML = stats.filter(s => s[0] !== "")
+    .map(s => `<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("");
+
+  // ภาพโพสต์ล่าสุดลอยซ้อนกัน กับรูปโปรไฟล์ในวงแหวนทอง
+  const picks = posts.slice(0, 3);
+  document.getElementById("ig-badge").innerHTML = `
+    <div class="ig-stage">
+      ${picks.map((p, i) => `<button type="button" class="ig-float ig-float-${i + 1}" data-ig="${esc(p.id)}" aria-label="ดูโพสต์ ${esc(p.title)}">${I.thumbHtml(p)}</button>`).join("")}
+      <a class="ig-ring" href="${esc(I.profileUrl)}" target="_blank" rel="noopener" aria-label="เปิด Instagram ของคณะสี">
+        <img class="ig-avatar" src="${esc((P && P.avatar) || "assets/img/logo.png")}" alt="รูปโปรไฟล์ Instagram คณะสีกระดังงา">
+        <img class="ig-flower" src="assets/img/kradangnga-flower.svg" alt="">
+      </a>
+    </div>
+    <div class="ig-handle">@${esc(I.account)}<small>${esc((P && P.name) || "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต")}</small></div>`;
+  I.bindCards(document.getElementById("ig-badge"));
+
+  // ประกาศด่วน
+  if (I.urgentPosts.length) {
+    document.getElementById("ig-urgent-sec").hidden = false;
+    const box = document.getElementById("ig-urgent");
+    box.innerHTML = I.urgentPosts.map(I.cardHtml).join("");
+    I.bindCards(box);
+  }
+
+  // โพสต์ล่าสุด
+  const first = posts[0];
+  if (first) {
+    document.getElementById("ig-latest-sec").hidden = false;
+    const box = document.getElementById("ig-latest");
+    box.innerHTML = `${I.cardHtml(first).replace('<span class="ig-cap">', '<span class="ig-cap" hidden>')}
+      <div class="ig-latest-info">
+        <div class="ig-tags-row">${first.urgent ? '<span class="tag ig-tag-urgent">ประกาศด่วน</span>' : ""}<span class="tag">${esc(I.catOf(first.cat).name)}</span></div>
+        <h3>${esc(first.title)}</h3>
+        ${first.date ? `<div class="tt-date">โพสต์ ${thDate(first.date)}</div>` : ""}
+        ${first.note ? `<p class="tt-note">${esc(first.note)}</p>` : ""}
+        ${first.tags.length ? `<div class="tt-tags">${first.tags.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}
+        <div class="hero-actions" style="margin-top:8px">
+          <button type="button" class="btn btn-green" data-ig="${esc(first.id)}">${first.kind === "video" ? "เล่นคลิป" : "ดูภาพเต็ม"}</button>
+          <a class="btn btn-gold" href="${esc(first.url)}" target="_blank" rel="noopener">เปิดใน Instagram</a>
+        </div>
+      </div>`;
+    I.bindCards(box);
+  }
+
+  // โพสต์ทั้งหมดตามหมวด
+  const chips = document.getElementById("ig-chips"), grid = document.getElementById("ig-grid");
+  const used = I.categories.map(c => ({ c, n: posts.filter(p => p.cat === c.key).length })).filter(x => x.n);
+  let cur = "";
+  const rest = Math.max(0, I.total - posts.length);
+  function render() {
+    chips.innerHTML = posts.length ? `<button class="chip${cur ? "" : " active"}" data-cat="">ทั้งหมด (${posts.length})</button>` +
+      used.map(({ c, n }) => `<button class="chip${cur === c.key ? " active" : ""}" data-cat="${esc(c.key)}">${esc(c.name)} (${n})</button>`).join("") : "";
+    const list = posts.filter(p => !cur || p.cat === cur);
+    grid.innerHTML = list.map(I.cardHtml).join("") +
+      `<a class="ig-more-card reveal" href="${esc(I.profileUrl)}" target="_blank" rel="noopener">
+        ${rest ? `<b>+${rest}</b><span>โพสต์อื่น ๆ ดูต่อได้ใน Instagram</span>` : `<b>IG</b><span>ดูทั้งหมดใน Instagram</span>`}
+        <small>@${esc(I.account)}</small></a>`;
+    I.bindCards(grid);
+    revealAll();
+  }
+  chips.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) { cur = b.dataset.cat; render(); } });
+  render();
+
+  const upd = I.updated ? `${thDate(I.updated.slice(0, 10))} เวลา ${I.updated.slice(11, 16)} น.` : "";
+  document.getElementById("ig-note").innerHTML = posts.length
+    ? `โพสต์ในหน้านี้ดึงจาก Instagram ${esc("@" + I.account)} อัตโนมัติทุก 2 ชั่วโมง (06.00–22.00 น.)${upd ? ` อัปเดตล่าสุด ${upd}` : ""} โพสต์ใหม่จะสะสมไว้ในหน้านี้เรื่อย ๆ ส่วนโพสต์เรื่องเงินหรือมี QR code ระบบจะไม่นำขึ้นเว็บ อยากให้โพสต์ไหนอยู่หมวดอื่นหรือไม่ต้องการให้ขึ้นเว็บ แจ้งครูนพพลหรือฝ่ายประชาสัมพันธ์ได้`
+    : `หน้านี้เชื่อมกับ Instagram ${esc("@" + I.account)} แล้ว โพสต์จะขึ้นเองหลังระบบดึงโพสต์รอบถัดไป ระหว่างนี้ดูโพสต์ได้ที่ Instagram ของคณะสี`;
+  revealAll();
+})();
+</script>
+</body>
+</html>

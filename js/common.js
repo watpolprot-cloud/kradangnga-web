@@ -1,10 +1,11 @@
-// ส่วนที่ใช้ร่วมกันทุกหน้า: เมนู ส่วนท้าย ภาพขยาย (lightbox) และตัวช่วยจัดรูปแบบวันที่
+// ส่วนที่ใช้ร่วมกันทุกหน้า: เมนู ส่วนท้าย แถบประกาศด่วน ภาพขยาย (lightbox) และตัวช่วยจัดรูปแบบวันที่
 (function () {
   const PAGES = [
     ["index.html", "หน้าแรก"],
     ["news.html", "ข่าวสาร"],
     ["gallery.html", "ภาพกิจกรรม"],
-    ["tiktok.html", "คลิป TikTok"],
+    ["tiktok.html", "TikTok"],
+    ["instagram.html", "Instagram"],
     ["memories.html", "ความทรงจำ"],
     ["teachers.html", "ทำเนียบครู"],
     ["students.html", "ทำเนียบนักเรียน"],
@@ -52,7 +53,8 @@
       <div>
         <h4>ติดตามคณะสี</h4>
         <div>TikTok: <a href="${S.tiktok || "#"}" target="_blank" rel="noopener">${S.tiktokName || ""}</a></div>
-        <div><a href="tiktok.html">ดูคลิปทั้งหมดในเว็บ</a></div>
+        <div>Instagram: <a href="${S.instagram || "#"}" target="_blank" rel="noopener">${S.instagramName || ""}</a></div>
+        <div><a href="tiktok.html">ดูคลิป</a> · <a href="instagram.html">ดูโพสต์ IG</a> ในเว็บ</div>
         <div style="margin-top:10px">${(S.motto || []).join("<br>")}</div>
       </div>
       <div class="copy">เว็บไซต์ของครูและนักเรียนคณะสีกระดังงา · ปรับปรุงล่าสุด ${S.updated || ""}</div>
@@ -103,4 +105,24 @@
     els.forEach(e => io.observe(e));
   };
   document.addEventListener("DOMContentLoaded", () => window.revealAll());
+
+  // ---------- แถบประกาศด่วนจาก Instagram (ทุกหน้า) ----------
+  // หน้าไหนยังไม่ได้โหลดข้อมูล Instagram จะโหลดให้เอง แล้วแสดงแถบใต้เมนูถ้ามีโพสต์ด่วน
+  function loadScript(src) {
+    return new Promise((ok, fail) => {
+      const s = document.createElement("script");
+      s.src = src; s.onload = ok; s.onerror = fail;
+      document.head.append(s);
+    });
+  }
+  async function urgentBar() {
+    window.KD = window.KD || {};
+    try {
+      if (!KD.instagram) await loadScript("data/instagram.js");
+      if (!KD.instagramFeed) await loadScript("data/instagram-feed.js");
+      if (!window.KDI) await loadScript("js/instagram.js");
+      KDI.renderUrgentBar(header);
+    } catch (e) { /* ไม่มีข้อมูล Instagram ก็ไม่ต้องแสดงแถบ */ }
+  }
+  document.addEventListener("DOMContentLoaded", urgentBar);
 })();

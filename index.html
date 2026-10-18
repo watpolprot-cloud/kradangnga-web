@@ -45,6 +45,19 @@
   </div>
 </section>
 
+<section class="block alt" id="ig-home" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>อัปเดตจาก Instagram</h2><p>ประกาศ รับสมัคร และบรรยากาศล่าสุดจาก @green.prot โพสต์ใหม่ขึ้นที่นี่ให้เอง</p></div>
+      <div class="hero-actions" style="margin-top:0">
+        <a class="btn btn-green" href="instagram.html">ดูโพสต์ทั้งหมด</a>
+        <a class="btn btn-outline ig-follow-link" target="_blank" rel="noopener">ติดตามบน Instagram</a>
+      </div>
+    </div>
+    <div class="ig-home-row" id="ig-home-row"></div>
+  </div>
+</section>
+
 <section class="block dark" id="tt-home">
   <div class="wrap">
     <div class="sec-title">
@@ -131,8 +144,11 @@
 <script src="data/students.js"></script>
 <script src="data/tiktok.js"></script>
 <script src="data/tiktok-feed.js"></script>
+<script src="data/instagram.js"></script>
+<script src="data/instagram-feed.js"></script>
 <script src="js/common.js"></script>
 <script src="js/tiktok.js"></script>
+<script src="js/instagram.js"></script>
 <script>
 // นับถอยหลังบุนนาคเกมส์
 (function () {
@@ -209,6 +225,18 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
       <p>รวมคลิปจากช่อง TikTok ของคณะสีไว้ในหน้า "คลิป TikTok" แบ่งตามหมวดให้ดูง่าย โพสต์ใหม่เมื่อไรก็ขึ้นในเว็บให้เอง</p>
       <div class="hero-actions"><a class="btn btn-gold" href="tiktok.html">เข้าหน้าคลิป TikTok</a></div>
     </div></div>`;
+})();
+
+// อัปเดตจาก Instagram (ดึงอัตโนมัติ) ประกาศด่วนขึ้นก่อน
+(function () {
+  const I = KDI;
+  if (!I.posts.length) return;
+  document.getElementById("ig-home").hidden = false;
+  document.querySelectorAll(".ig-follow-link").forEach(a => a.href = I.profileUrl);
+  const list = I.urgentPosts.concat(I.posts.filter(p => !p.urgent)).slice(0, 4);
+  const row = document.getElementById("ig-home-row");
+  row.innerHTML = list.map(I.cardHtml).join("");
+  I.bindCards(row);
 })();
 
 // แนะนำเว็บไซต์: ดูโปสเตอร์ภาพใหญ่ และแชร์ลิงก์เว็บ (มือถือเปิดเมนูแชร์ คอมคัดลอกลิงก์)
