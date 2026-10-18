@@ -4,6 +4,7 @@
     ["index.html", "หน้าแรก"],
     ["news.html", "ข่าวสาร"],
     ["gallery.html", "ภาพกิจกรรม"],
+    ["tiktok.html", "คลิป TikTok"],
     ["memories.html", "ความทรงจำ"],
     ["teachers.html", "ทำเนียบครู"],
     ["students.html", "ทำเนียบนักเรียน"],
@@ -51,6 +52,7 @@
       <div>
         <h4>ติดตามคณะสี</h4>
         <div>TikTok: <a href="${S.tiktok || "#"}" target="_blank" rel="noopener">${S.tiktokName || ""}</a></div>
+        <div><a href="tiktok.html">ดูคลิปทั้งหมดในเว็บ</a></div>
         <div style="margin-top:10px">${(S.motto || []).join("<br>")}</div>
       </div>
       <div class="copy">เว็บไซต์ของครูและนักเรียนคณะสีกระดังงา · ปรับปรุงล่าสุด ${S.updated || ""}</div>

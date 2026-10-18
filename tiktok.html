@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คลิป TikTok · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="รวมคลิปจาก TikTok @kradangnga.prot ของคณะสีกระดังงา แบ่งตามหมวด ซ้อมเชียร์ การแสดง กีฬา และบรรยากาศสีเขียว อัปเดตตามช่องอัตโนมัติ">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section class="tt-hero">
+  <div class="wrap tt-hero-grid">
+    <div class="tt-hero-text">
+      <div class="eyebrow">TikTok · @kradangnga.prot</div>
+      <h1>คลิปคณะสีกระดังงา</h1>
+      <p class="lead">รวมคลิปซ้อมเชียร์ การแสดง กีฬา และบรรยากาศบ้านสีเขียวจาก TikTok ของคณะสี คลิปใหม่ขึ้นหน้านี้ให้เองตามช่อง</p>
+      <div class="tt-stats" id="tt-stats"></div>
+      <div class="hero-actions">
+        <a class="btn btn-gold" id="tt-follow" target="_blank" rel="noopener">ติดตามบน TikTok</a>
+        <a class="btn btn-line" href="#tt-all" id="tt-jump">ดูคลิปตามหมวด</a>
+      </div>
+    </div>
+    <div class="tt-stage" id="tt-stage"></div>
+  </div>
+</section>
+
+<section class="block" id="tt-featured-sec" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2 id="tt-featured-h">คลิปล่าสุด</h2><p>กดเล่นได้ในหน้านี้เลย</p></div>
+    </div>
+    <div class="tt-featured" id="tt-featured"></div>
+  </div>
+</section>
+
+<section class="block alt" id="tt-all" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>คลิปตามหมวด</h2><p>เลือกหมวดที่อยากดู แล้วกดที่คลิปเพื่อเล่น</p></div>
+    </div>
+    <div class="tt-cats" id="tt-cats"></div>
+    <div class="filters tt-chips" id="tt-chips"></div>
+    <div class="tt-grid" id="tt-grid"></div>
+    <div style="text-align:center;margin-top:26px"><button class="btn btn-green" id="tt-more" hidden>ดูคลิปเพิ่ม</button></div>
+  </div>
+</section>
+
+<section class="block dark" id="tt-live">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>หน้า TikTok ของคณะสี</h2><p>ส่วนนี้แสดงจาก TikTok โดยตรง โพสต์คลิปใหม่เมื่อไรก็ขึ้นที่นี่ทันที</p></div>
+      <a class="btn btn-gold" id="tt-follow2" target="_blank" rel="noopener">ไปที่ช่อง TikTok</a>
+    </div>
+    <div class="tt-live-box" id="tt-live-box"></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <p class="note" id="tt-note"></p>
+  </div>
+</section>
+
+<script src="data/site.js"></script>
+<script src="data/tiktok.js"></script>
+<script src="data/tiktok-feed.js"></script>
+<script src="js/common.js"></script>
+<script src="js/tiktok.js"></script>
+<script>
+(function () {
+  const T = KDT, vids = T.videos, P = T.profile;
+  ["tt-follow", "tt-follow2"].forEach(id => document.getElementById(id).href = T.profileUrl);
+
+  // ตัวเลขของช่อง
+  const stats = P
+    ? [[T.fmtNum(P.followers), "ผู้ติดตาม"], [T.fmtNum(P.likes), "ยอดถูกใจรวม"], [P.videos != null ? P.videos : vids.length, "คลิปในช่อง"]]
+    : [["@" + T.account, "ช่อง TikTok คณะสี"], [vids.length || "วันละ 2 รอบ", vids.length ? "คลิปในหน้านี้" : "อัปเดตคลิปอัตโนมัติ"], [T.categories.length, "หมวดคลิป"]];
+  document.getElementById("tt-stats").innerHTML = stats.filter(s => s[0] !== "")
+    .map(s => `<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("");
+
+  // เวทีหน้าโทรศัพท์
+  const f = T.featured, side = vids.filter(v => v !== f && v.cover).slice(0, 2);
+  document.getElementById("tt-stage").innerHTML = `
+    ${side.map((v, i) => `<button type="button" class="tt-float tt-float-${i + 1}" data-tt="${esc(v.id)}" aria-label="เล่นคลิป ${esc(v.title)}">${T.coverHtml(v, "tt-cover")}</button>`).join("")}
+    <div class="tt-phone">
+      <div class="tt-screen">
+        ${f ? `<button type="button" class="tt-screen-btn" data-tt="${esc(f.id)}" aria-label="เล่นคลิป ${esc(f.title)}">${T.coverHtml(f, "tt-cover")}
+              <span class="tt-screen-cap"><b>@${esc(T.account)}</b><span>${esc(f.title)}</span></span></button>`
+            : `<a class="tt-screen-empty" href="${esc(T.profileUrl)}" target="_blank" rel="noopener">
+              <img src="${P && P.avatar ? esc(P.avatar) : "assets/img/logo.png"}" alt="">
+              <b>@${esc(T.account)}</b><span>คลิปคณะสีกระดังงา</span><em>กดเพื่อดูช่อง</em></a>`}
+      </div>
+    </div>`;
+  T.bindCards(document.getElementById("tt-stage"));
+
+  // คลิปเด่น
+  if (f) {
+    const sec = document.getElementById("tt-featured-sec");
+    sec.hidden = false;
+    if (KD.tiktok.featured && f.id === KD.tiktok.featured) document.getElementById("tt-featured-h").textContent = "คลิปแนะนำ";
+    const next = vids.filter(v => v !== f).slice(0, 3);
+    const box = document.getElementById("tt-featured");
+    box.innerHTML = `
+      <div class="tt-player">
+        <button type="button" class="tt-player-btn" aria-label="เล่นคลิป ${esc(f.title)}">${T.coverHtml(f, "tt-cover")}</button>
+      </div>
+      <div class="tt-featured-info">
+        <div class="tt-info">${T.infoHtml(f)}</div>
+        ${next.length ? `<h4 class="tt-next-h">คลิปถัดไป</h4><div class="tt-next">${next.map(v => `
+          <button type="button" class="tt-mini" data-tt="${esc(v.id)}">${T.coverHtml(v, "tt-cover")}<span><b>${esc(v.title)}</b><small>${T.dateOf(v)}</small></span></button>`).join("")}</div>` : ""}
+      </div>`;
+    box.querySelector(".tt-player-btn").addEventListener("click", function () {
+      this.parentNode.innerHTML = `<iframe src="${T.playerSrc(f.id)}" title="${esc(f.title)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    });
+    T.bindCards(box.querySelector(".tt-featured-info"));
+  }
+
+  // หมวด
+  if (vids.length) {
+    document.getElementById("tt-all").hidden = false;
+    const used = T.categories.map(c => ({ c, list: vids.filter(v => v.cat === c.key) })).filter(x => x.list.length);
+    const cover = list => (list.find(v => v.cover) || {}).cover;
+    document.getElementById("tt-cats").innerHTML = used.map(({ c, list }) => `
+      <button type="button" class="tt-cat reveal" data-cat="${esc(c.key)}">
+        ${cover(list) ? `<img src="${esc(cover(list))}" alt="" loading="lazy">` : ""}
+        <span class="tt-cat-body"><small>${list.length} คลิป</small><b>${esc(c.name)}</b><span>${esc(c.desc || "")}</span></span>
+      </button>`).join("");
+    const chips = document.getElementById("tt-chips");
+    chips.innerHTML = `<button class="chip active" data-cat="">ทั้งหมด (${vids.length})</button>` +
+      used.map(({ c, list }) => `<button class="chip" data-cat="${esc(c.key)}">${esc(c.name)} (${list.length})</button>`).join("");
+
+    const grid = document.getElementById("tt-grid"), more = document.getElementById("tt-more");
+    const STEP = 12;
+    let cur = "", shown = STEP;
+    function render() {
+      const list = vids.filter(v => !cur || v.cat === cur);
+      grid.innerHTML = list.slice(0, shown).map(T.cardHtml).join("");
+      more.hidden = list.length <= shown;
+      chips.querySelectorAll(".chip").forEach(b => b.classList.toggle("active", b.dataset.cat === cur));
+      T.bindCards(grid);
+      revealAll();
+    }
+    function pick(cat, scroll) {
+      cur = cat; shown = STEP; render();
+      if (scroll) chips.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    chips.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) pick(b.dataset.cat); });
+    document.getElementById("tt-cats").addEventListener("click", e => { const b = e.target.closest(".tt-cat"); if (b) pick(b.dataset.cat, true); });
+    more.onclick = () => { shown += STEP; render(); };
+    render();
+  } else {
+    document.getElementById("tt-jump").href = "#tt-live";
+    document.getElementById("tt-jump").textContent = "ดูคลิปล่าสุด";
+  }
+
+  T.embedCreator(document.getElementById("tt-live-box"));
+
+  const upd = T.updated ? `${thDate(T.updated.slice(0, 10))} เวลา ${T.updated.slice(11, 16)} น.` : "";
+  document.getElementById("tt-note").innerHTML = vids.length
+    ? `รายการคลิปในหน้านี้ดึงจาก TikTok ${esc("@" + T.account)} อัตโนมัติวันละ 2 รอบ (เช้าและเย็น)${upd ? ` อัปเดตล่าสุด ${upd}` : ""} ส่วน "หน้า TikTok ของคณะสี" ด้านบนแสดงคลิปใหม่ทันทีที่โพสต์ อยากให้คลิปไหนอยู่หมวดอื่นหรือไม่ต้องการให้ขึ้นเว็บ แจ้งครูนพพลหรือฝ่ายประชาสัมพันธ์ได้`
+    : `หน้านี้เชื่อมกับ TikTok ${esc("@" + T.account)} แล้ว รายการคลิปแยกหมวดจะขึ้นเองหลังระบบดึงคลิปรอบแรกเสร็จ ระหว่างนี้ดูคลิปล่าสุดได้จาก "หน้า TikTok ของคณะสี" ด้านบน`;
+  revealAll();
+})();
+</script>
+</body>
+</html>

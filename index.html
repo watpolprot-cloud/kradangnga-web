@@ -20,6 +20,7 @@
     <div class="hero-actions">
       <a class="btn btn-gold" href="news.html">อ่านข่าวล่าสุด</a>
       <a class="btn btn-line" href="gallery.html">ดูภาพกิจกรรม</a>
+      <a class="btn btn-line" href="tiktok.html">ดูคลิป TikTok</a>
     </div>
     <div class="countdown" id="countdown" aria-live="polite"></div>
   </div>
@@ -41,6 +42,19 @@
       <a class="btn btn-green" href="news.html">ข่าวทั้งหมด</a>
     </div>
     <div class="grid grid-3" id="latest-news"></div>
+  </div>
+</section>
+
+<section class="block dark" id="tt-home">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>คลิปล่าสุดจาก TikTok</h2><p>ติดตามสีเขียวได้ที่ @kradangnga.prot คลิปใหม่ขึ้นที่นี่ให้เอง</p></div>
+      <div class="hero-actions" style="margin-top:0">
+        <a class="btn btn-gold" href="tiktok.html">ดูคลิปทั้งหมด</a>
+        <a class="btn btn-line tt-follow-link" target="_blank" rel="noopener">ติดตามบน TikTok</a>
+      </div>
+    </div>
+    <div id="tt-home-body"></div>
   </div>
 </section>
 
@@ -84,7 +98,10 @@
 <script src="data/gallery.js"></script>
 <script src="data/teachers.js"></script>
 <script src="data/students.js"></script>
+<script src="data/tiktok.js"></script>
+<script src="data/tiktok-feed.js"></script>
 <script src="js/common.js"></script>
+<script src="js/tiktok.js"></script>
 <script>
 // นับถอยหลังบุนนาคเกมส์
 (function () {
@@ -119,7 +136,7 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
       <div class="meta"><span class="tag t-${esc(n.type)}">${esc(n.type)}</span><span>${thDate(n.date)}</span></div>
       <h3>${esc(n.title)}</h3>
       <p>${esc(n.body)}</p>
-      <a class="more-link" href="news.html">อ่านต่อ</a>
+      <a class="more-link" href="${esc(n.link || "news.html")}">${esc(n.linkText || "อ่านต่อ")}</a>
     </div>
   </article>`).join("");
 
@@ -141,6 +158,26 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
   document.getElementById("home-president").innerHTML = `<a class="mini-person" href="students.html">
     ${img ? `<img src="assets/img/students/${esc(img)}" alt="${esc(p.name)}" loading="lazy">` : ""}
     <span><b>${esc(p.name)}</b><small>${esc(KD.studentGroups[0].group)} · ${esc(p.room)}</small></span></a>`;
+})();
+
+// คลิปล่าสุดจาก TikTok (ดึงอัตโนมัติ) ถ้ายังไม่มีรายการ แสดงกล่องชวนติดตาม
+(function () {
+  const T = KDT, box = document.getElementById("tt-home-body");
+  document.querySelectorAll(".tt-follow-link").forEach(a => a.href = T.profileUrl);
+  if (T.videos.length) {
+    box.innerHTML = `<div class="tt-home-row">${T.videos.slice(0, 4).map(T.cardHtml).join("")}</div>`;
+    T.bindCards(box);
+    return;
+  }
+  const P = T.profile;
+  box.innerHTML = `<div class="tt-promo">
+    <div class="tt-phone"><div class="tt-screen"><a class="tt-screen-empty" href="tiktok.html">
+      <img src="${P && P.avatar ? esc(P.avatar) : "assets/img/logo.png"}" alt=""><b>@${esc(T.account)}</b><span>คลิปคณะสีกระดังงา</span><em>ดูคลิป</em></a></div></div>
+    <div>
+      <h3 style="color:var(--gold-pale);font-size:1.5rem">ซ้อมเชียร์ การแสดง กีฬา และบรรยากาศสีเขียว</h3>
+      <p>รวมคลิปจากช่อง TikTok ของคณะสีไว้ในหน้า "คลิป TikTok" แบ่งตามหมวดให้ดูง่าย โพสต์ใหม่เมื่อไรก็ขึ้นในเว็บให้เอง</p>
+      <div class="hero-actions"><a class="btn btn-gold" href="tiktok.html">เข้าหน้าคลิป TikTok</a></div>
+    </div></div>`;
 })();
 
 document.getElementById("home-teachers").innerHTML = [30, 24, 9].map(no => {

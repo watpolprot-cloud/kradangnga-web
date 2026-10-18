@@ -1,0 +1,59 @@
+# ดึงคลิปจาก TikTok @kradangnga.prot มาขึ้นหน้า "คลิป TikTok" ของเว็บคณะสีอัตโนมัติ
+# รันเองวันละ 2 ครั้ง (06.00 และ 18.00 น. เวลาไทย) และกดรันเองได้ที่แท็บ Actions > ดึงคลิป TikTok > Run workflow
+name: ดึงคลิป TikTok
+
+on:
+  schedule:
+    - cron: "0 11,23 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/tiktok-sync.yml"
+      - "tools/tiktok_sync.py"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: tiktok-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: ติดตั้งเครื่องมือ
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet --upgrade "yt-dlp[default,curl-cffi]" pillow
+
+      - name: ดึงคลิปจาก TikTok
+        run: |
+          "$RUNNER_TEMP/venv/bin/python" tools/tiktok_sync.py
+
+      - name: บันทึกขึ้นเว็บถ้ามีอะไรใหม่
+        id: save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/tiktok-feed.js assets/img/tiktok
+          if git diff --cached --quiet; then
+            echo "ไม่มีอะไรเปลี่ยน"
+            exit 0
+          fi
+          git commit -m "อัปเดตคลิป TikTok อัตโนมัติ"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "pushed=1" >> "$GITHUB_OUTPUT"
+
+      - name: สั่งสร้างหน้าเว็บใหม่
+        if: steps.save.outputs.pushed == '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
