@@ -453,6 +453,14 @@ ul.clean li { margin-bottom: 6px; }
 .tt-cover { position: relative; display: block; aspect-ratio: 9/16; overflow: hidden; border-radius: 14px; background: radial-gradient(circle at 50% 38%, var(--green-600), var(--green-800)); }
 .tt-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
 .tt-cover::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(transparent, rgba(3,20,13,.85)); pointer-events: none; }
+.tt-cover.fit { background: #06150E; }
+.tt-cover.fit .tt-bg { position: absolute; inset: -10%; width: 120%; height: 120%; object-fit: cover; filter: blur(16px) brightness(.55); }
+.tt-cover.fit .tt-fg { position: absolute; inset: 0; object-fit: contain; }
+.tt-toolbar { display: flex; gap: 12px 18px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 26px; }
+.tt-toolbar .filters { margin-bottom: 0; flex: 1 1 520px; }
+.tt-sort { display: inline-flex; flex: none; border: 1px solid var(--line); border-radius: 999px; background: var(--white); padding: 3px; }
+.tt-sort button { font-family: "Prompt"; font-size: .88rem; border: 0; background: none; color: var(--ink-soft); padding: 5px 14px; border-radius: 999px; cursor: pointer; }
+.tt-sort button.active { background: var(--gold); color: var(--green-900); font-weight: 600; }
 .tt-nocover { position: absolute; inset: 0 0 42%; display: flex; align-items: flex-end; justify-content: center; font-family: "Charmonman"; font-size: 1.7rem; color: var(--gold-soft); }
 .tt-play { position: absolute; z-index: 2; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px; border-radius: 50%; background: rgba(5,37,26,.55); border: 2px solid var(--gold-pale); transition: transform .2s, background .2s; }
 .tt-play::after { content: ""; position: absolute; left: 22px; top: 16px; border-style: solid; border-width: 11px 0 11px 18px; border-color: transparent transparent transparent var(--gold-pale); }
@@ -547,7 +555,8 @@ ul.clean li { margin-bottom: 6px; }
   .tt-stats div { min-width: 0; flex: 1 1 90px; padding: 10px 12px; }
   .tt-stats b { font-size: 1.15rem; }
   .tt-grid { grid-template-columns: repeat(2, 1fr); gap: 16px 12px; }
-  .tt-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -20px 22px; padding: 0 20px 6px; }
+  .tt-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -20px; padding: 0 20px 6px; }
+  .tt-toolbar .filters { flex-basis: 100%; }
   .tt-chips .chip { flex: none; }
   .tt-cats { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; scroll-padding: 0 20px; }
   .tt-cat { scroll-snap-align: start; height: 140px; }

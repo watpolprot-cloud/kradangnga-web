@@ -41,7 +41,12 @@
       <div><h2>คลิปตามหมวด</h2><p>เลือกหมวดที่อยากดู แล้วกดที่คลิปเพื่อเล่น</p></div>
     </div>
     <div class="tt-cats" id="tt-cats"></div>
-    <div class="filters tt-chips" id="tt-chips"></div>
+    <div class="tt-toolbar">
+      <div class="filters tt-chips" id="tt-chips"></div>
+      <div class="tt-sort" id="tt-sort" role="group" aria-label="เรียงคลิป">
+        <button type="button" class="active" data-sort="new">ล่าสุด</button><button type="button" data-sort="top">ยอดดูมากสุด</button>
+      </div>
+    </div>
     <div class="tt-grid" id="tt-grid"></div>
     <div style="text-align:center;margin-top:26px"><button class="btn btn-green" id="tt-more" hidden>ดูคลิปเพิ่ม</button></div>
   </div>
@@ -81,7 +86,8 @@
     .map(s => `<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("");
 
   // เวทีหน้าโทรศัพท์
-  const f = T.featured, side = vids.filter(v => v !== f && v.cover).slice(0, 2);
+  const f = T.featured;
+  const side = T.heroPicks.concat(vids.filter(v => v !== f && v.cover && !T.heroPicks.includes(v))).slice(0, 2);
   document.getElementById("tt-stage").innerHTML = `
     ${side.map((v, i) => `<button type="button" class="tt-float tt-float-${i + 1}" data-tt="${esc(v.id)}" aria-label="เล่นคลิป ${esc(v.title)}">${T.coverHtml(v, "tt-cover")}</button>`).join("")}
     <div class="tt-phone">
@@ -120,7 +126,9 @@
   // หมวด
   if (vids.length) {
     document.getElementById("tt-all").hidden = false;
-    const used = T.categories.map(c => ({ c, list: vids.filter(v => v.cat === c.key) })).filter(x => x.list.length);
+    // หมวดที่มีคลิป เรียงจากหมวดที่มีคลิปมากสุด
+    const used = T.categories.map(c => ({ c, list: vids.filter(v => v.cat === c.key) })).filter(x => x.list.length)
+      .sort((a, b) => b.list.length - a.list.length);
     const cover = list => (list.find(v => v.cover) || {}).cover;
     document.getElementById("tt-cats").innerHTML = used.map(({ c, list }) => `
       <button type="button" class="tt-cat reveal" data-cat="${esc(c.key)}">
@@ -132,10 +140,19 @@
       used.map(({ c, list }) => `<button class="chip" data-cat="${esc(c.key)}">${esc(c.name)} (${list.length})</button>`).join("");
 
     const grid = document.getElementById("tt-grid"), more = document.getElementById("tt-more");
-    const STEP = 12;
-    let cur = "", shown = STEP;
+    const STEP = 20;
+    let cur = "", shown = STEP, sort = "new";
+    const sortBox = document.getElementById("tt-sort");
+    sortBox.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      sort = b.dataset.sort; shown = STEP;
+      sortBox.querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+      render();
+    });
     function render() {
       const list = vids.filter(v => !cur || v.cat === cur);
+      if (sort === "top") list.sort((a, b) => (b.views || 0) - (a.views || 0));
       grid.innerHTML = list.slice(0, shown).map(T.cardHtml).join("");
       more.hidden = list.length <= shown;
       chips.querySelectorAll(".chip").forEach(b => b.classList.toggle("active", b.dataset.cat === cur));
@@ -144,7 +161,7 @@
     }
     function pick(cat, scroll) {
       cur = cat; shown = STEP; render();
-      if (scroll) chips.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scroll) chips.scrollIntoView({ behavior: "smooth", block: "center" });
     }
     chips.addEventListener("click", e => { const b = e.target.closest(".chip"); if (b) pick(b.dataset.cat); });
     document.getElementById("tt-cats").addEventListener("click", e => { const b = e.target.closest(".tt-cat"); if (b) pick(b.dataset.cat, true); });

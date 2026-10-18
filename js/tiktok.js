@@ -9,6 +9,7 @@
   const cats = C.categories || [];
   const fallbackCat = (cats.find(c => c.fallback) || cats[cats.length - 1] || {}).key;
   const extraOf = id => (C.clips && C.clips[id]) || {};
+  const hideWords = (C.hideWords || []).map(w => w.toLowerCase());
 
   function splitTags(desc) {
     const tags = desc.match(/#[^\s#]+/g) || [];
@@ -30,12 +31,14 @@
     return Object.assign({}, v, {
       text: parts.text, tags: parts.tags,
       title: extra.title || shortTitle(parts.text) || "คลิปคณะสีกระดังงา",
-      note: extra.note || "", cat: pickCat(v, extra), hide: !!extra.hide
+      note: extra.note || "", cat: pickCat(v, extra),
+      hide: !!extra.hide || hideWords.some(w => (v.desc || "").toLowerCase().includes(w))
     });
   }).filter(v => !v.hide);
   const byId = id => videos.find(v => v.id === id);
   const catOf = key => cats.find(c => c.key === key) || { key, name: "คลิป" };
   const featured = byId(C.featured) || videos[0] || null;
+  const heroPicks = (C.hero || []).map(byId).filter(v => v && v !== featured);
 
   function fmtNum(n) {
     if (n == null) return "";
@@ -46,9 +49,14 @@
   const fmtDur = s => s ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}` : "";
   const dateOf = v => v.date ? thDate(v.date, true) : "";
 
+  // ภาพปกที่ไม่ใช่แนวตั้ง (เช่น โพสต์ภาพนิ่ง) แสดงเต็มภาพบนพื้นเบลอ ไม่ตัดขอบ
+  const isWide = v => v.cw && v.ch && v.ch / v.cw < 1.5;
   function coverHtml(v, cls) {
-    return `<span class="${cls || "tt-cover"}">
-      ${v.cover ? `<img src="${esc(v.cover)}" alt="" loading="lazy">` : `<span class="tt-nocover">กระดังงา</span>`}
+    const img = !v.cover ? `<span class="tt-nocover">กระดังงา</span>`
+      : isWide(v) ? `<img class="tt-bg" src="${esc(v.cover)}" alt="" loading="lazy"><img class="tt-fg" src="${esc(v.cover)}" alt="" loading="lazy">`
+      : `<img src="${esc(v.cover)}" alt="" loading="lazy">`;
+    return `<span class="${cls || "tt-cover"}${isWide(v) ? " fit" : ""}">
+      ${img}
       <span class="tt-play" aria-hidden="true"></span>
       ${v.dur ? `<span class="tt-dur">${fmtDur(v.dur)}</span>` : ""}
       ${v.views != null ? `<span class="tt-views">ดู ${fmtNum(v.views)} ครั้ง</span>` : ""}
@@ -134,7 +142,7 @@
   }
 
   window.KDT = {
-    account, profileUrl, videos, featured, categories: cats, catOf, byId,
+    account, profileUrl, videos, featured, heroPicks, categories: cats, catOf, byId,
     profile: F.profile || null, updated: F.updated || "",
     fmtNum, fmtDur, dateOf, coverHtml, cardHtml, bindCards, infoHtml, openPlayer, playerSrc, embedCreator
   };

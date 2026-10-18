@@ -11,6 +11,7 @@ on:
     paths:
       - ".github/workflows/tiktok-sync.yml"
       - "tools/tiktok_sync.py"
+      - "data/tiktok.js"
 
 permissions:
   contents: write

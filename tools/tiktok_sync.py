@@ -7,6 +7,7 @@ GitHub Actions (.github/workflows/tiktok-sync.yml) รันไฟล์นี�
 ถ้าจะตั้งหมวดหรือเขียนชื่อเรื่อง/คำอธิบายคลิปเพิ่ม ให้แก้ data/tiktok.js
 
 ถ้าดึงจาก TikTok ไม่สำเร็จ จะคงข้อมูลเดิมไว้ ไม่ลบคลิปที่เคยขึ้นเว็บ
+คลิปที่ใส่ hide: true หรือมีคำใน hideWords ของ data/tiktok.js จะไม่ถูกดึงขึ้นเว็บเลย (ไม่เก็บภาพปกด้วย)
 ต้องใช้: pip install "yt-dlp[default,curl-cffi]" pillow
 """
 import datetime
@@ -21,6 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ACCOUNT = "kradangnga.prot"
 PROFILE_URL = f"https://www.tiktok.com/@{ACCOUNT}"
 FEED = ROOT / "data" / "tiktok-feed.js"
+CURATED = ROOT / "data" / "tiktok.js"
 IMG_DIR = ROOT / "assets" / "img" / "tiktok"
 MAX_CLIPS = 60
 COVER_WIDTH = 480
@@ -59,6 +61,27 @@ def load_old():
         return json.loads(txt[start:txt.rindex("}") + 1])
     except (OSError, ValueError):
         return {}
+
+
+def load_rules():
+    # อ่านรายการคลิปที่ซ่อน และคำที่ทำให้คลิปไม่ขึ้นเว็บ จาก data/tiktok.js
+    try:
+        txt = CURATED.read_text("utf-8")
+    except OSError:
+        return set(), []
+    hide = set(re.findall(r'"(\d{15,25})"\s*:\s*\{[^{}]*?\bhide\s*:\s*true', txt))
+    m = re.search(r'hideWords\s*:\s*\[([^\]]*)\]', txt)
+    words = [w.lower() for w in re.findall(r'"([^"]+)"', m.group(1))] if m else []
+    return hide, words
+
+
+def image_size(path):
+    from PIL import Image
+    try:
+        with Image.open(path) as im:
+            return im.size
+    except OSError:
+        return None, None
 
 
 def to_int(x):
@@ -211,6 +234,11 @@ def main():
                     "error": " | ".join(errors)[:600]})
         return
 
+    hide, words = load_rules()
+    clips = [c for c in clips if c["id"] not in hide
+             and not any(w in (c.get("desc") or "").lower() for w in words)]
+    log(f"เหลือ {len(clips)} คลิปหลังตัดคลิปที่ซ่อนไว้")
+
     # คลิปเดิมที่วิธีสำรองให้ข้อมูลไม่ครบ ใช้ค่าเดิมเติม
     for c in clips:
         prev = old_clips.get(c["id"]) or {}
@@ -226,6 +254,7 @@ def main():
         cover = IMG_DIR / f"{c['id']}.jpg"
         if not cover.exists():
             save_image(c.get("coverUrl"), cover, COVER_WIDTH)
+        cw, ch = image_size(cover) if cover.exists() else (None, None)
         videos.append({
             "id": c["id"],
             "url": f"{PROFILE_URL}/video/{c['id']}",
@@ -239,6 +268,8 @@ def main():
             "shares": c.get("shares"),
             "music": c.get("music") or "",
             "cover": f"assets/img/tiktok/{c['id']}.jpg" if cover.exists() else "",
+            "cw": cw,
+            "ch": ch,
         })
 
     # ลบภาพปกของคลิปที่ไม่อยู่ในรายการแล้ว (เช่น ช่องลบคลิป)
