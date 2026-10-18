@@ -17,22 +17,31 @@
       <h3>ฝ่ายที่กำลังรวบรวมรายชื่อ</h3>
       <div class="pending" id="pending"></div>
     </div>
-    <p class="note">เพื่อความปลอดภัยของนักเรียน ทำเนียบนี้แสดงเฉพาะชื่อ ชื่อเล่น ห้อง และหน้าที่ในคณะสี ถ้าข้อมูลไม่ถูกต้องหรือต้องการเพิ่มรายชื่อ แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
+    <p class="note">เพื่อความปลอดภัยของนักเรียน ทำเนียบนี้แสดงเฉพาะรูป ชื่อ ชื่อเล่น ห้อง และหน้าที่ในคณะสี ไม่แสดงเลขประจำตัวหรือข้อมูลติดต่อ ถ้าข้อมูลไม่ถูกต้อง ต้องการเปลี่ยนรูปหรือไม่ต้องการให้แสดงรูป หรือต้องการเพิ่มรายชื่อ แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
   </div>
 </section>
 <script src="data/site.js"></script>
 <script src="data/students.js"></script>
 <script src="js/common.js"></script>
 <script>
+// ไม่ให้นามสกุลถูกตัดกลางคำเมื่อขึ้นบรรทัดใหม่
+function nameHtml(n) {
+  const i = n.lastIndexOf(" ");
+  return i < 0 ? esc(n) : `${esc(n.slice(0, i))} <span style="white-space:nowrap">${esc(n.slice(i + 1))}</span>`;
+}
 document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
   <div class="st-group reveal">
     <h3>${esc(g.group)}</h3>
-    <div class="st-cards">${g.members.map(m => `
-      <div class="st-card">
-        <span class="room-badge" style="margin:0">${esc(m.room)}</span>
-        <div class="nm">${esc(m.name)}</div>
-        ${m.nick ? `<div class="nick">ชื่อเล่น ${esc(m.nick)}</div>` : ""}
-        <div class="sub" style="color:var(--ink-soft)">${esc(m.role)}</div>
+    <div class="people">${g.members.map(m => `
+      <div class="person">
+        <div class="ph">${m.photo ? `<img src="assets/img/students/${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy">`
+          : `<div class="initial">${esc(m.name.replace(/^(นางสาว|นาง|นาย|เด็กหญิง|เด็กชาย)/, "").charAt(0))}</div>`}</div>
+        <div class="pb">
+          <span class="room-badge">${esc(m.room)}</span>
+          <div class="nm">${nameHtml(m.name)}</div>
+          ${m.nick ? `<div class="nick">ชื่อเล่น ${esc(m.nick)}</div>` : ""}
+          <div class="rl"><span class="tag">${esc(m.role)}</span></div>
+        </div>
       </div>`).join("")}
     </div>
   </div>`).join("");

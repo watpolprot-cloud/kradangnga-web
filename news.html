@@ -22,6 +22,11 @@
 <script>
 const types = ["ทั้งหมด", ...new Set(KD.news.map(n => n.type))];
 const F = document.getElementById("filters"), L = document.getElementById("news-list");
+// ป้ายหัวคอลัมน์ที่แสดงเฉพาะบนมือถือ (ตารางเรียงเป็นบรรทัด)
+function tableLabel(head, i, c) {
+  if (i === 0) return /^\d+$/.test(c) ? `<span class="m-lab">${esc(head[0])} </span>` : "";
+  return `<span class="m-lab">${esc(head[i])}: </span>`;
+}
 function render(t) {
   F.innerHTML = types.map(x => `<button class="chip${x === t ? " active" : ""}" data-t="${esc(x)}">${esc(x)}</button>`).join("");
   F.querySelectorAll(".chip").forEach(b => b.onclick = () => render(b.dataset.t));
@@ -33,6 +38,9 @@ function render(t) {
           <div class="meta"><span class="tag t-${esc(n.type)}">${esc(n.type)}</span><span>${thDate(n.date)}</span></div>
           <h3>${esc(n.title)}</h3>
           <p>${esc(n.body)}</p>
+          ${n.table ? `<details class="news-table"><summary>${esc(n.table.summary || "ดูรายละเอียด")}</summary>
+            <div class="tbl-wrap"><table class="tbl"><thead><tr>${n.table.head.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+            <tbody>${n.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${tableLabel(n.table.head, i, c)}${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>` : ""}
           ${n.link ? `<a class="more-link" href="${esc(n.link)}">${esc(n.linkText || "อ่านต่อ")}</a>` : ""}
           ${n.album ? `<a class="more-link" href="gallery.html#${esc(n.album)}">ดูอัลบั้มภาพ</a>` : ""}
         </div>

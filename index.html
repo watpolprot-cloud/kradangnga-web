@@ -60,6 +60,7 @@
       <div class="eyebrow" style="color:var(--gold-deep)">หัวหน้าคณะสี</div>
       <h2 style="font-size:2rem">ครูไชยพงศ์ ปานมีศรี</h2>
       <p>หัวหน้าคณะสีกระดังงา (สีเขียว) ดูแลการดำเนินงานของคณะสีร่วมกับคณะครูที่ปรึกษา 32 ท่าน และประธานคณะสี นางสาววณัฏฐ์ศิตา แพลอย ชั้น ม.5/4</p>
+      <div id="home-president"></div>
       <div class="hero-actions">
         <a class="btn btn-green" href="teachers.html">ทำเนียบครู</a>
         <a class="btn btn-gold" href="students.html">ทำเนียบนักเรียน</a>
@@ -82,6 +83,7 @@
 <script src="data/news.js"></script>
 <script src="data/gallery.js"></script>
 <script src="data/teachers.js"></script>
+<script src="data/students.js"></script>
 <script src="js/common.js"></script>
 <script>
 // นับถอยหลังบุนนาคเกมส์
@@ -131,6 +133,16 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
 })();
 
 // ครูแกนนำ
+// ประธานคณะสี (คนแรกของกลุ่มแรกใน data/students.js)
+(function () {
+  const p = KD.studentGroups[0] && KD.studentGroups[0].members[0];
+  if (!p) return;
+  const img = p.face || p.photo;
+  document.getElementById("home-president").innerHTML = `<a class="mini-person" href="students.html">
+    ${img ? `<img src="assets/img/students/${esc(img)}" alt="${esc(p.name)}" loading="lazy">` : ""}
+    <span><b>${esc(p.name)}</b><small>${esc(KD.studentGroups[0].group)} · ${esc(p.room)}</small></span></a>`;
+})();
+
 document.getElementById("home-teachers").innerHTML = [30, 24, 9].map(no => {
   const t = KD.teachers.find(x => x.no === no);
   return `<div class="person"><div class="ph"><img src="${t.photo}" alt="${esc(t.name)}" loading="lazy"></div>
