@@ -136,6 +136,7 @@
   function grow() {
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 112) + "px";
+    input.style.overflowY = input.scrollHeight > 112 ? "auto" : "hidden";
   }
 
   function bubble(m) {

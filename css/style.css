@@ -779,7 +779,7 @@ ul.clean li { margin-bottom: 6px; }
 .kc-sugs button:nth-child(2) { animation-delay: .06s; } .kc-sugs button:nth-child(3) { animation-delay: .12s; } .kc-sugs button:nth-child(4) { animation-delay: .18s; } .kc-sugs button:nth-child(5) { animation-delay: .24s; }
 .kc-sugs button:hover { background: var(--gold-pale); }
 .kc-form { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px; background: var(--white); border-top: 1px solid var(--line); }
-.kc-input { flex: 1; resize: none; min-height: 42px; max-height: 112px; padding: 9px 14px; border: 1.5px solid var(--line); border-radius: 21px; font-family: "Sarabun"; font-size: 1rem; line-height: 1.5; color: var(--ink); background: var(--green-50); outline: none; }
+.kc-input { flex: 1; resize: none; overflow-y: hidden; min-height: 42px; max-height: 112px; padding: 9px 14px; border: 1.5px solid var(--line); border-radius: 21px; font-family: "Sarabun"; font-size: 1rem; line-height: 1.5; color: var(--ink); background: var(--green-50); outline: none; }
 .kc-input:focus { border-color: var(--green-500); background: var(--white); }
 .kc-send { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 50%; background: linear-gradient(135deg, var(--gold-soft), var(--gold-deep)); color: var(--green-900); cursor: pointer; transition: transform .15s; }
 .kc-send:hover { transform: scale(1.07); }
