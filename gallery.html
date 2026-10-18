@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ภาพกิจกรรม · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="อัลบั้มภาพบรรยากาศกิจกรรมของคณะสีกระดังงา กดที่ภาพเพื่อดูภาพขนาดใหญ่">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ภาพกิจกรรม</h1><p>อัลบั้มภาพบรรยากาศกิจกรรมของคณะสีกระดังงา กดที่ภาพเพื่อดูภาพขนาดใหญ่</p></div></section>
+<section class="block">
+  <div class="wrap">
+    <div id="albums" class="grid grid-3"></div>
+    <div id="album-view" hidden>
+      <div class="album-head">
+        <button class="back-btn" id="back">‹ กลับไปหน้าอัลบั้ม</button>
+        <div><h2 id="al-title"></h2><div class="credit" id="al-meta"></div></div>
+      </div>
+      <p id="al-desc"></p>
+      <div class="masonry" id="al-photos"></div>
+    </div>
+    <p class="note" style="margin-top:40px">ภาพจากกลุ่ม LINE คณะสีและกลุ่ม PR.สีเขียว กำลังทยอยรวบรวมเพิ่ม ถ้ามีภาพกิจกรรมสีเขียวที่อยากให้ขึ้นเว็บ ส่งให้ครูนพพลหรือฝ่ายประชาสัมพันธ์ได้เลย</p>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/gallery.js"></script>
+<script src="js/common.js"></script>
+<script>
+const A = document.getElementById("albums"), V = document.getElementById("album-view");
+const albums = [...KD.albums].sort((a, b) => b.date.localeCompare(a.date));
+A.innerHTML = albums.map(a => {
+  const n = KD.photos.filter(p => p.album === a.id).length;
+  return `<article class="card album-card reveal" data-id="${esc(a.id)}">
+    <div class="card-img"><img src="assets/img/thumbs/${esc(a.cover)}" alt="" loading="lazy"><span class="album-count">${n} ภาพ</span></div>
+    <div class="card-body"><div class="meta">${thDate(a.date)}</div><h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p></div>
+  </article>`;
+}).join("");
+A.querySelectorAll(".album-card").forEach(c => c.onclick = () => { location.hash = c.dataset.id; });
+function route() {
+  const id = location.hash.slice(1), a = KD.albums.find(x => x.id === id);
+  if (!a) { A.hidden = false; V.hidden = true; revealAll(); return; }
+  A.hidden = true; V.hidden = false;
+  document.getElementById("al-title").textContent = a.title;
+  document.getElementById("al-meta").textContent = thDate(a.date) + (a.credit ? " · " + a.credit : "");
+  document.getElementById("al-desc").textContent = a.desc;
+  const ps = KD.photos.filter(p => p.album === id);
+  const items = ps.map(p => ({ src: "assets/img/gallery/" + p.file, cap: p.caption || a.title }));
+  const box = document.getElementById("al-photos");
+  box.innerHTML = ps.map((p, i) => `<figure data-i="${i}"><img src="assets/img/thumbs/${esc(p.file)}" width="${p.w}" height="${p.h}" alt="${esc(p.caption || a.title)}" loading="lazy"></figure>`).join("");
+  box.querySelectorAll("figure").forEach(f => f.onclick = () => openLightbox(items, +f.dataset.i));
+  window.scrollTo({ top: 0 });
+}
+document.getElementById("back").onclick = () => { history.pushState("", "", location.pathname); route(); };
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

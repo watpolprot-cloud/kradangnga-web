@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ความทรงจำ · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="ผลงาน รางวัล และเรื่องเล่าที่ครูและนักเรียนสีเขียวสร้างร่วมกัน">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ความทรงจำ</h1><p>ผลงาน รางวัล และเรื่องเล่าที่ครูและนักเรียนสีเขียวสร้างร่วมกัน</p></div></section>
+<section class="block dark">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>ผลงานและหมุดหมายของสีเรา</h2><p>สิ่งที่สีเขียวภูมิใจในปีการศึกษา 2569</p></div></div>
+    <div class="awards" id="awards"></div>
+  </div>
+</section>
+<section class="block">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>เรื่องเล่าความทรงจำ</h2><p>ช่วงเวลาเล็ก ๆ ที่ทำให้สีเขียวเป็นครอบครัวเดียวกัน</p></div></div>
+    <div id="stories"></div>
+    <p class="note">อยากแบ่งปันความทรงจำในคณะสี ส่งเรื่องเล่าสั้น ๆ พร้อมภาพให้ครูนพพล แล้วเราจะนำมาลงในหน้านี้</p>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/memories.js"></script>
+<script src="js/common.js"></script>
+<script>
+document.getElementById("awards").innerHTML = KD.achievements.map(a => `
+  <div class="award reveal"><div class="yr">ปีการศึกษา ${esc(a.year)}</div><b>${esc(a.title)}</b><span>${esc(a.event)}</span></div>`).join("");
+document.getElementById("stories").innerHTML = KD.memories.map((m, k) => {
+  const imgs = m.images.length
+    ? m.images.slice(0, 3).map((f, i) => `<img src="assets/img/thumbs/${esc(f)}" data-s="${k}" data-i="${i}" alt="" loading="lazy">`).join("")
+    : `<div class="empty">รอภาพจากกลุ่ม LINE</div>`;
+  return `<article class="story reveal">
+    <div class="story-imgs${m.images.length === 1 ? " one" : ""}">${imgs}</div>
+    <div><div class="date">${thDate(m.date)}</div><h3>${esc(m.title)}</h3><p>${esc(m.text)}</p></div>
+  </article>`;
+}).join("");
+document.querySelectorAll(".story-imgs img").forEach(im => im.onclick = () => {
+  const m = KD.memories[+im.dataset.s];
+  openLightbox(m.images.map(f => ({ src: "assets/img/gallery/" + f, cap: m.title })), +im.dataset.i);
+});
+revealAll();
+</script>
+</body>
+</html>

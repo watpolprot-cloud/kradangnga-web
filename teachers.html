@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ทำเนียบครู · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบครู</h1><p>คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน</p></div></section>
+<section class="block">
+  <div class="wrap">
+    <div class="leader reveal" id="leader"></div>
+    <div class="sec-title"><div><h2>ครูที่ปรึกษาคณะสี</h2><p>เรียงตามระดับชั้นที่เป็นครูที่ปรึกษา</p></div></div>
+    <div class="filters" id="filters"></div>
+    <div class="people" id="people"></div>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/teachers.js"></script>
+<script src="js/common.js"></script>
+<script>
+const head = KD.teachers.find(t => t.role === "หัวหน้าคณะสี");
+document.getElementById("leader").innerHTML = `
+  <img src="${head.photo}" alt="${esc(head.name)}">
+  <div class="info">
+    <div class="role">หัวหน้าคณะสีกระดังงา (สีเขียว)</div>
+    <h2>${esc(head.name)}</h2>
+    <div>กลุ่มสาระการเรียนรู้${esc(head.group)} · ครูที่ปรึกษาชั้น ${esc(head.room)}</div>
+    <blockquote>ทุกน้ำใจคือพลัง<br>ทุกการสนับสนุนคือกำลังใจ</blockquote>
+  </div>`;
+const levels = ["ทั้งหมด", "ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"];
+const F = document.getElementById("filters"), P = document.getElementById("people");
+function card(t) {
+  const ph = t.photo ? `<img src="${t.photo}" alt="${esc(t.name)}" loading="lazy">`
+                     : `<div class="initial">${esc(t.name.replace(/^(ครู|Mr\. )/, "").charAt(0))}</div>`;
+  return `<div class="person reveal"><div class="ph">${ph}</div><div class="pb">
+    <span class="room-badge">${esc(t.room)}</span>
+    <div class="nm">${esc(t.name)}</div>
+    <div class="sub">${t.group === "ครูชาวต่างชาติ" ? "ครูชาวต่างชาติ" : "กลุ่มสาระ" + esc(t.group)}</div>
+    ${t.role ? `<div class="rl"><span class="tag">${esc(t.role)}</span></div>` : ""}
+  </div></div>`;
+}
+function render(lv) {
+  F.innerHTML = levels.map(x => `<button class="chip${x === lv ? " active" : ""}" data-l="${x}">${x}</button>`).join("");
+  F.querySelectorAll(".chip").forEach(b => b.onclick = () => render(b.dataset.l));
+  P.innerHTML = KD.teachers.filter(t => lv === "ทั้งหมด" || t.room.startsWith(lv + "/")).map(card).join("");
+  revealAll();
+}
+render("ทั้งหมด");
+</script>
+</body>
+</html>

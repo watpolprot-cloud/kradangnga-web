@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ข่าวสารและความเคลื่อนไหว · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="ประกาศ กิจกรรม และผลการแข่งขันของคณะสีกระดังงา เรียงจากล่าสุด">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ข่าวสารและความเคลื่อนไหว</h1><p>ประกาศ กิจกรรม และผลการแข่งขันของคณะสีกระดังงา เรียงจากล่าสุด</p></div></section>
+<section class="block">
+  <div class="wrap">
+    <div class="filters" id="filters"></div>
+    <div class="timeline" id="news-list"></div>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/news.js"></script>
+<script src="js/common.js"></script>
+<script>
+const types = ["ทั้งหมด", ...new Set(KD.news.map(n => n.type))];
+const F = document.getElementById("filters"), L = document.getElementById("news-list");
+function render(t) {
+  F.innerHTML = types.map(x => `<button class="chip${x === t ? " active" : ""}" data-t="${esc(x)}">${esc(x)}</button>`).join("");
+  F.querySelectorAll(".chip").forEach(b => b.onclick = () => render(b.dataset.t));
+  L.innerHTML = KD.news.filter(n => t === "ทั้งหมด" || n.type === t).map(n => `
+    <div class="tl-item reveal">
+      <article class="tl-card${n.image ? " has-img" : ""}">
+        ${n.image ? `<img src="assets/img/thumbs/${esc(n.image)}" alt="" loading="lazy">` : ""}
+        <div class="card-body">
+          <div class="meta"><span class="tag t-${esc(n.type)}">${esc(n.type)}</span><span>${thDate(n.date)}</span></div>
+          <h3>${esc(n.title)}</h3>
+          <p>${esc(n.body)}</p>
+          ${n.link ? `<a class="more-link" href="${esc(n.link)}">${esc(n.linkText || "อ่านต่อ")}</a>` : ""}
+          ${n.album ? `<a class="more-link" href="gallery.html#${esc(n.album)}">ดูอัลบั้มภาพ</a>` : ""}
+        </div>
+      </article>
+    </div>`).join("");
+  revealAll();
+}
+render("ทั้งหมด");
+</script>
+</body>
+</html>

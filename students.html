@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ทำเนียบนักเรียน · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบนักเรียน</h1><p>นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569</p></div></section>
+<section class="block">
+  <div class="wrap">
+    <div id="groups"></div>
+    <div class="st-group reveal">
+      <h3>ฝ่ายที่กำลังรวบรวมรายชื่อ</h3>
+      <div class="pending" id="pending"></div>
+    </div>
+    <p class="note">เพื่อความปลอดภัยของนักเรียน ทำเนียบนี้แสดงเฉพาะชื่อ ชื่อเล่น ห้อง และหน้าที่ในคณะสี ถ้าข้อมูลไม่ถูกต้องหรือต้องการเพิ่มรายชื่อ แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/students.js"></script>
+<script src="js/common.js"></script>
+<script>
+document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
+  <div class="st-group reveal">
+    <h3>${esc(g.group)}</h3>
+    <div class="st-cards">${g.members.map(m => `
+      <div class="st-card">
+        <span class="room-badge" style="margin:0">${esc(m.room)}</span>
+        <div class="nm">${esc(m.name)}</div>
+        ${m.nick ? `<div class="nick">ชื่อเล่น ${esc(m.nick)}</div>` : ""}
+        <div class="sub" style="color:var(--ink-soft)">${esc(m.role)}</div>
+      </div>`).join("")}
+    </div>
+  </div>`).join("");
+document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span>${esc(p)}</span>`).join("");
+revealAll();
+</script>
+</body>
+</html>

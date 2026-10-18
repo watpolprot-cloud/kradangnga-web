@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คณะสีกระดังงา (สีเขียว) · โรงเรียนพรตพิทยพยัต</title>
+<meta name="description" content="เว็บไซต์ของครูและนักเรียนคณะสีกระดังงา (สีเขียว) โรงเรียนพรตพิทยพยัต รวมข่าวสาร ภาพกิจกรรม ความทรงจำ ทำเนียบครูและนักเรียน">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg" style="background-image:url('assets/img/gallery/IMG_0265.jpg')"></div>
+  <div class="wrap">
+    <div class="eyebrow">โรงเรียนพรตพิทยพยัต · ปีการศึกษา 2569</div>
+    <h1>คณะสีกระดังงา</h1>
+    <p class="lead">บ้านของครูและนักเรียนสีเขียว ที่นี่รวมข่าวสาร ภาพกิจกรรม และความทรงจำทุกช่วงเวลาที่เราได้ทำร่วมกัน</p>
+    <div class="theme-chip">ธีมบุนนาคเกมส์ 2569 · พระสุธนมโนราห์</div>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="news.html">อ่านข่าวล่าสุด</a>
+      <a class="btn btn-line" href="gallery.html">ดูภาพกิจกรรม</a>
+    </div>
+    <div class="countdown" id="countdown" aria-live="polite"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat reveal"><b>32</b><span>ครูที่ปรึกษาในคณะสี</span></div>
+    <div class="stat reveal"><b>ลำดับ 3</b><span>ลำดับการแสดงบุนนาคเกมส์ 2569</span></div>
+    <div class="stat reveal"><b>12–13 พ.ย.</b><span>วันแข่งขันบุนนาคเกมส์ 2569</span></div>
+    <div class="stat reveal"><b>2570</b><span>ปีที่กระดังงาเป็นเจ้าภาพครั้งแรก</span></div>
+  </div>
+</div>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>ข่าวสารล่าสุด</h2><p>ความเคลื่อนไหวของคณะสีกระดังงา</p></div>
+      <a class="btn btn-green" href="news.html">ข่าวทั้งหมด</a>
+    </div>
+    <div class="grid grid-3" id="latest-news"></div>
+  </div>
+</section>
+
+<section class="block alt">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>ภาพกิจกรรม</h2><p>บรรยากาศที่สีเขียวทำด้วยกัน</p></div>
+      <a class="btn btn-green" href="gallery.html">ดูทุกอัลบั้ม</a>
+    </div>
+    <div class="masonry" id="home-gallery"></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap grid grid-2" style="align-items:center">
+    <div class="reveal">
+      <div class="eyebrow" style="color:var(--gold-deep)">หัวหน้าคณะสี</div>
+      <h2 style="font-size:2rem">ครูไชยพงศ์ ปานมีศรี</h2>
+      <p>หัวหน้าคณะสีกระดังงา (สีเขียว) ดูแลการดำเนินงานของคณะสีร่วมกับคณะครูที่ปรึกษา 32 ท่าน และประธานคณะสี นางสาววณัฏฐ์ศิตา แพลอย ชั้น ม.5/4</p>
+      <div class="hero-actions">
+        <a class="btn btn-green" href="teachers.html">ทำเนียบครู</a>
+        <a class="btn btn-gold" href="students.html">ทำเนียบนักเรียน</a>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="people" style="grid-template-columns:repeat(3,1fr)" id="home-teachers"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block dark quote-band">
+  <div class="wrap">
+    <div class="q">ทุกน้ำใจคือพลัง<br>ทุกการสนับสนุนคือกำลังใจ</div>
+    <p style="margin-top:14px">ร่วมเป็นส่วนหนึ่งของพลังสีเขียว</p>
+  </div>
+</section>
+
+<script src="data/site.js"></script>
+<script src="data/news.js"></script>
+<script src="data/gallery.js"></script>
+<script src="data/teachers.js"></script>
+<script src="js/common.js"></script>
+<script>
+// นับถอยหลังบุนนาคเกมส์
+(function () {
+  const box = document.getElementById("countdown");
+  const target = new Date(KD.site.gamesStart).getTime();
+  function tick() {
+    let diff = target - Date.now();
+    if (diff <= 0) {
+      const end = target + 2 * 86400000;
+      box.innerHTML = Date.now() < end
+        ? '<div class="cd-label">บุนนาคเกมส์ 2569 กำลังแข่งขัน สู้ ๆ สีเขียว!</div>'
+        : '<div class="cd-label">ขอบคุณทุกพลังในบุนนาคเกมส์ 2569</div>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+    const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+    const m = Math.floor(diff / 60000);
+    box.innerHTML = `<div class="cd-label">นับถอยหลังสู่บุนนาคเกมส์ 2569 (${KD.site.gamesDates})</div>
+      <div class="cd-box"><b>${d}</b><span>วัน</span></div>
+      <div class="cd-box"><b>${h}</b><span>ชั่วโมง</span></div>
+      <div class="cd-box"><b>${m}</b><span>นาที</span></div>`;
+  }
+  tick(); setInterval(tick, 30000);
+})();
+
+// ข่าว 3 รายการล่าสุด
+document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => `
+  <article class="card reveal">
+    ${n.image ? `<div class="card-img"><img src="assets/img/thumbs/${esc(n.image)}" alt="" loading="lazy"></div>`
+              : `<div class="card-img placeholder"><span>กระดังงา</span></div>`}
+    <div class="card-body">
+      <div class="meta"><span class="tag t-${esc(n.type)}">${esc(n.type)}</span><span>${thDate(n.date)}</span></div>
+      <h3>${esc(n.title)}</h3>
+      <p>${esc(n.body)}</p>
+      <a class="more-link" href="news.html">อ่านต่อ</a>
+    </div>
+  </article>`).join("");
+
+// ภาพเด่น 8 ภาพ
+(function () {
+  const pick = ["IMG_9644.jpg","IMG_7446.jpg","IMG_0269.jpg","IMG_9769.jpg","IMG_7529.jpg","IMG_0125.jpg","IMG_9761.jpg","IMG_7469.jpg"];
+  const items = pick.map(f => ({ src: "assets/img/gallery/" + f, cap: "" }));
+  const el = document.getElementById("home-gallery");
+  el.innerHTML = pick.map((f, i) => `<figure class="reveal" data-i="${i}"><img src="assets/img/thumbs/${f}" alt="ภาพกิจกรรมคณะสีกระดังงา" loading="lazy"></figure>`).join("");
+  el.querySelectorAll("figure").forEach(fg => fg.onclick = () => openLightbox(items, +fg.dataset.i));
+})();
+
+// ครูแกนนำ
+document.getElementById("home-teachers").innerHTML = [30, 24, 9].map(no => {
+  const t = KD.teachers.find(x => x.no === no);
+  return `<div class="person"><div class="ph"><img src="${t.photo}" alt="${esc(t.name)}" loading="lazy"></div>
+    <div class="pb"><div class="nm">${esc(t.name)}</div><div class="rl"><span class="tag">${esc(t.role)}</span></div></div></div>`;
+}).join("");
+revealAll();
+</script>
+</body>
+</html>
