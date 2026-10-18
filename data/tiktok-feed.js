@@ -6,8 +6,8 @@ KD.tiktokFeed = {
  "profile": {
   "name": "สีเขียว(กระดังงา)- พรตพิทยพยัต",
   "bio": "คณะสีกระดังงา (เขียว) 🟢โรงเรียนพรตพิทยพยัต 💛💜",
-  "followers": 811,
-  "likes": 29495,
+  "followers": 810,
+  "likes": 29496,
   "videos": 17,
   "avatar": "assets/img/tiktok/avatar.jpg"
  },
@@ -19,8 +19,8 @@ KD.tiktokFeed = {
    "date": "2026-09-23",
    "ts": 1790162099,
    "dur": 33,
-   "views": 5288,
-   "likes": 284,
+   "views": 5290,
+   "likes": 285,
    "comments": 6,
    "shares": 64,
    "music": "เสียงต้นฉบับ - หมิวมิวมิ้ว",
@@ -35,7 +35,7 @@ KD.tiktokFeed = {
    "date": "2026-08-31",
    "ts": 1788164902,
    "dur": 61,
-   "views": 5508,
+   "views": 5511,
    "likes": 143,
    "comments": 0,
    "shares": 71,
@@ -253,5 +253,5 @@ KD.tiktokFeed = {
    "ch": 480
   }
  ],
- "updated": "2026-10-18T13:10+07:00"
+ "updated": "2026-10-18T13:20+07:00"
 };
