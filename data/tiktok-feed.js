@@ -6,7 +6,7 @@ KD.tiktokFeed = {
  "profile": {
   "name": "สีเขียว(กระดังงา)- พรตพิทยพยัต",
   "bio": "คณะสีกระดังงา (เขียว) 🟢โรงเรียนพรตพิทยพยัต 💛💜",
-  "followers": 810,
+  "followers": 811,
   "likes": 29495,
   "videos": 17,
   "avatar": "assets/img/tiktok/avatar.jpg"
@@ -19,12 +19,14 @@ KD.tiktokFeed = {
    "date": "2026-09-23",
    "ts": 1790162099,
    "dur": 33,
-   "views": 5287,
-   "likes": 284,
-   "comments": 6,
-   "shares": 64,
+   "views": 5288,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "เสียงต้นฉบับ - หมิวมิวมิ้ว",
-   "cover": "assets/img/tiktok/7688687654199725333.jpg"
+   "cover": "assets/img/tiktok/7688687654199725333.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7680109744148827412",
@@ -34,11 +36,13 @@ KD.tiktokFeed = {
    "ts": 1788164902,
    "dur": 61,
    "views": 5508,
-   "likes": 143,
-   "comments": 0,
-   "shares": 71,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "original sound - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7680109744148827412.jpg"
+   "cover": "assets/img/tiktok/7680109744148827412.jpg",
+   "cw": 480,
+   "ch": 861
   },
   {
    "id": "7675690375863962888",
@@ -48,39 +52,13 @@ KD.tiktokFeed = {
    "ts": 1787135938,
    "dur": 13,
    "views": 7990,
-   "likes": 450,
-   "comments": 21,
-   "shares": 59,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7675690375863962888.jpg"
-  },
-  {
-   "id": "7674527177014037767",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7674527177014037767",
-   "desc": "#พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #เทรนด์วันนี้ ",
-   "date": "2026-08-16",
-   "ts": 1786865109,
-   "dur": null,
-   "views": 4526,
-   "likes": 60,
-   "comments": 0,
-   "shares": 13,
-   "music": "original sound - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7674527177014037767.jpg"
-  },
-  {
-   "id": "7674526739413929223",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7674526739413929223",
-   "desc": "ซัพพอร์ตสีเขียวหน่อยได้มั้ยคะะ  #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #เทรนด์วันนี้ ",
-   "date": "2026-08-16",
-   "ts": 1786865007,
-   "dur": 60,
-   "views": 200800,
-   "likes": 22200,
-   "comments": 25,
-   "shares": 2882,
-   "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7674526739413929223.jpg"
+   "cover": "assets/img/tiktok/7675690375863962888.jpg",
+   "cw": 480,
+   "ch": 270
   },
   {
    "id": "7670419322996559124",
@@ -90,11 +68,13 @@ KD.tiktokFeed = {
    "ts": 1785908674,
    "dur": 65,
    "views": 5183,
-   "likes": 87,
-   "comments": 1,
-   "shares": 20,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "original sound - viyanexe",
-   "cover": "assets/img/tiktok/7670419322996559124.jpg"
+   "cover": "assets/img/tiktok/7670419322996559124.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7665657296826961172",
@@ -104,11 +84,13 @@ KD.tiktokFeed = {
    "ts": 1784799930,
    "dur": 61,
    "views": 5962,
-   "likes": 157,
-   "comments": 3,
-   "shares": 90,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "original sound - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7665657296826961172.jpg"
+   "cover": "assets/img/tiktok/7665657296826961172.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7661821783552707860",
@@ -118,11 +100,13 @@ KD.tiktokFeed = {
    "ts": 1783906913,
    "dur": 72,
    "views": 5952,
-   "likes": 210,
-   "comments": 10,
-   "shares": 60,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "original sound - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7661821783552707860.jpg"
+   "cover": "assets/img/tiktok/7661821783552707860.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7660902857754955028",
@@ -132,11 +116,13 @@ KD.tiktokFeed = {
    "ts": 1783692949,
    "dur": 16,
    "views": 10700,
-   "likes": 536,
-   "comments": 8,
-   "shares": 87,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7660902857754955028.jpg"
+   "cover": "assets/img/tiktok/7660902857754955028.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7660430447331069205",
@@ -146,95 +132,13 @@ KD.tiktokFeed = {
    "ts": 1783582958,
    "dur": 29,
    "views": 11000,
-   "likes": 480,
-   "comments": 10,
-   "shares": 1212,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7660430447331069205.jpg"
-  },
-  {
-   "id": "7658296298474360084",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7658296298474360084",
-   "desc": "วันนี้ ม.5/11 สีเขียวมาทำอะไรกัน?🤔 #พรตพิทยพยัต #สีเขียวกระดังงา #กีฬาสี #เทรนด์วันนี้ ",
-   "date": "2026-07-03",
-   "ts": 1783086062,
-   "dur": 25,
-   "views": 6489,
-   "likes": 289,
-   "comments": 5,
-   "shares": 125,
-   "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7658296298474360084.jpg"
-  },
-  {
-   "id": "7657820934916574484",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7657820934916574484",
-   "desc": "บรรยากาศงานเปิดตัว Kick Off “Live Clean Challenge ไลฟ์สร้างสรรค์ โรงเรียนสะอาด” กับคณะสีกระดังงา 💚✨ #พรตพิทยพยัต #สีเขียวกระดังงา #กีฬาสี #fyp #เทรนด์วันนี้ ",
-   "date": "2026-07-02",
-   "ts": 1782975390,
-   "dur": 18,
-   "views": 8518,
-   "likes": 517,
-   "comments": 10,
-   "shares": 171,
-   "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
-   "cover": "assets/img/tiktok/7657820934916574484.jpg"
-  },
-  {
-   "id": "7655174680705371412",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7655174680705371412",
-   "desc": "เเข่ง Coverdance สีเขียวได้ที่เท่าไหร่ไปดู 🤔  #พรตพิทยพยัต #สีเขียวกระดังงา #สีเขียว #กีฬาสี #coverdance ",
-   "date": "2026-06-25",
-   "ts": 1782359257,
-   "dur": 45,
-   "views": 14700,
-   "likes": 931,
-   "comments": 15,
-   "shares": 140,
-   "music": "เสียงต้นฉบับ - คณะสีเขียว(กระดังงา)",
-   "cover": "assets/img/tiktok/7655174680705371412.jpg"
-  },
-  {
-   "id": "7654598959469497621",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7654598959469497621",
-   "desc": "เเข่งฟุตซอลสีเขียวเป็นไงไปดู  #พรตพิทยพยัต #สีเขียวกระดังงา #กีฬาสี #สีเขียว #ฟุตซอล ",
-   "date": "2026-06-23",
-   "ts": 1782225208,
-   "dur": 94,
-   "views": 17700,
-   "likes": 1167,
-   "comments": 12,
-   "shares": 311,
-   "music": "เสียงต้นฉบับ - คณะสีเขียว(กระดังงา)",
-   "cover": "assets/img/tiktok/7654598959469497621.jpg"
-  },
-  {
-   "id": "7652713247648271637",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7652713247648271637",
-   "desc": "วันนี้สีเขียวทำอะไรกัน ? 🤔  #พรตพิทยพยัต #สีเขียวกระดังงา #กีฬาสี #สีเขียว #เทรนด์วันนี้ ",
-   "date": "2026-06-18",
-   "ts": 1781786156,
-   "dur": 21,
-   "views": 24600,
-   "likes": 1459,
-   "comments": 15,
-   "shares": 356,
-   "music": "เสียงต้นฉบับ - คณะสีเขียว(กระดังงา)",
-   "cover": "assets/img/tiktok/7652713247648271637.jpg"
-  },
-  {
-   "id": "7652332431562804498",
-   "url": "https://www.tiktok.com/@kradangnga.prot/video/7652332431562804498",
-   "desc": "ใกล้เข้ามาอีกครั้งกับงานบุญนาคเกมส์ครั้งที่ 26 (คณะสีกระดังงา🟢) #โรงเรียนพรตพิทยพยัต #คณะสีกระดังงา #ฟ้าใส #fyp ",
-   "date": "2026-06-17",
-   "ts": 1781697492,
-   "dur": 40,
-   "views": 5001,
-   "likes": 262,
-   "comments": 8,
-   "shares": 123,
-   "music": "son original",
-   "cover": "assets/img/tiktok/7652332431562804498.jpg"
+   "cover": "assets/img/tiktok/7660430447331069205.jpg",
+   "cw": 480,
+   "ch": 853
   },
   {
    "id": "7649721783783984405",
@@ -244,12 +148,14 @@ KD.tiktokFeed = {
    "ts": 1781089653,
    "dur": 59,
    "views": 7618,
-   "likes": 218,
-   "comments": 13,
-   "shares": 102,
+   "likes": null,
+   "comments": null,
+   "shares": null,
    "music": "no signal (slowed)",
-   "cover": "assets/img/tiktok/7649721783783984405.jpg"
+   "cover": "assets/img/tiktok/7649721783783984405.jpg",
+   "cw": 480,
+   "ch": 480
   }
  ],
- "updated": "2026-10-18T12:57+07:00"
+ "updated": "2026-10-18T13:06+07:00"
 };
