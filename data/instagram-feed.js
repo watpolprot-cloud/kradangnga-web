@@ -31,23 +31,6 @@ KD.instagramFeed = {
    "comments": 0
   },
   {
-   "id": "DeRUidzpXPU",
-   "url": "https://www.instagram.com/p/DeRUidzpXPU/",
-   "kind": "image",
-   "reel": false,
-   "caption": "🙇🏻‍♀️💚 #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี",
-   "date": "2026-10-09",
-   "ts": 1791542587,
-   "images": [
-    "assets/img/instagram/DeRUidzpXPU.jpg"
-   ],
-   "cw": 960,
-   "ch": 1280,
-   "alt": "",
-   "likes": 39,
-   "comments": 0
-  },
-  {
    "id": "DdoMQBPs3OA",
    "url": "https://www.instagram.com/p/DdoMQBPs3OA/",
    "kind": "video",
@@ -97,25 +80,10 @@ KD.instagramFeed = {
    "alt": "",
    "likes": 303,
    "comments": 0
-  },
-  {
-   "id": "DcF7nd8quie",
-   "url": "https://www.instagram.com/p/DcF7nd8quie/",
-   "kind": "image",
-   "reel": false,
-   "caption": "💚🙏 #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี",
-   "date": "2026-08-16",
-   "ts": 1786865531,
-   "images": [
-    "assets/img/instagram/DcF7nd8quie.jpg"
-   ],
-   "cw": 960,
-   "ch": 1280,
-   "alt": "",
-   "likes": 28,
-   "comments": 0
   }
  ],
+ "skipped": [],
+ "qr": 1,
  "via": "embed",
- "updated": "2026-10-18T17:47+07:00"
+ "updated": "2026-10-18T18:05+07:00"
 };

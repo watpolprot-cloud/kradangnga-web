@@ -1,2 +1,0 @@
-HTTP 401
-{"message":"โปรดรอสักครู่แล้วจึงลองอีกครั้ง","require_login":true,"igweb_rollout":true,"status":"fail"}
