@@ -2,6 +2,8 @@
 """ดึงโพสต์จาก Instagram @green.prot มาไว้ในเว็บคณะสี
 
 GitHub Actions (.github/workflows/instagram-sync.yml) รันไฟล์นี้ทุก 2 ชั่วโมงช่วง 06.00–22.00 น. แล้วบันทึกผลขึ้นเว็บเอง
+วิธีหลักคือหน้า embed ของบัญชี (เปิดได้โดยไม่ต้องล็อกอิน ได้โพสต์ล่าสุด 6 โพสต์) โพสต์ที่เคยดึงได้จะเก็บสะสมไว้เรื่อย ๆ
+โพสต์เก่าที่อยากให้ขึ้นเว็บด้วย ใส่รหัสโพสต์ไว้ใน posts ของ data/instagram.js แล้วบอทจะไปดึงมาให้
 - รายการโพสต์ คำบรรยาย และข้อมูลบัญชี -> data/instagram-feed.js (ไฟล์นี้สร้างอัตโนมัติ ห้ามแก้ด้วยมือ)
 - ภาพของโพสต์ -> assets/img/instagram/<รหัสโพสต์>.jpg (ภาพแรก) และ <รหัสโพสต์>-2.jpg, -3.jpg ... (โพสต์หลายภาพ)
 ถ้าจะเขียนชื่อเรื่อง ปักหมุดประกาศด่วน หรือซ่อนโพสต์ ให้แก้ data/instagram.js
@@ -87,12 +89,6 @@ class Http:
         except urllib.error.HTTPError as exc:
             return exc.code, exc.read()
 
-    def cookie(self, name):
-        try:
-            return self.s.cookies.get(name) if self.s is not None else None
-        except Exception:
-            return None
-
 
 def load_old():
     try:
@@ -108,11 +104,13 @@ def load_rules():
     try:
         txt = CURATED.read_text("utf-8")
     except OSError:
-        return set(), []
+        return set(), [], []
     hide = set(re.findall(r'"([A-Za-z0-9_-]{5,20})"\s*:\s*\{[^{}]*?\bhide\s*:\s*true', txt))
     m = re.search(r'hideWords\s*:\s*\[([^\]]*)\]', txt)
     words = [w.lower() for w in re.findall(r'"([^"]+)"', m.group(1))] if m else []
-    return hide, words
+    m = re.search(r'\bposts\s*:\s*\{', txt)
+    listed = re.findall(r'"([A-Za-z0-9_-]{8,40})"\s*:\s*\{', txt[m.end():]) if m else []
+    return hide, words, [c for c in listed if c not in hide]
 
 
 def to_int(x):
@@ -135,14 +133,18 @@ def from_graph(n):
     caption = caps[0]["node"].get("text", "") if caps else ""
     kids = [e.get("node") or {} for e in ((n.get("edge_sidecar_to_children") or {}).get("edges") or [])]
     imgs = [k.get("display_url") for k in kids if k.get("display_url")] or [n.get("display_url") or n.get("thumbnail_src")]
+    likes = (n.get("edge_liked_by") or n.get("edge_media_preview_like") or {}).get("count")
     return {
         "id": sc,
         "caption": caption,
         "ts": to_int(n.get("taken_at_timestamp")),
-        "kind": "carousel" if kids else ("video" if n.get("is_video") else "image"),
+        "kind": "carousel" if kids or n.get("__typename") == "GraphSidecar" else ("video" if n.get("is_video") else "image"),
         "reel": n.get("product_type") == "clips",
         "alt": n.get("accessibility_caption") or "",
         "imageUrls": [u for u in imgs if u][:MAX_IMAGES],
+        "likes": to_int(likes),
+        "comments": to_int((n.get("edge_media_to_comment") or {}).get("count")),
+        "pinned": bool(n.get("pinned_for_users")),
     }
 
 
@@ -165,6 +167,9 @@ def from_v1(it):
         "reel": it.get("product_type") == "clips",
         "alt": it.get("accessibility_caption") or "",
         "imageUrls": [u for u in imgs if u][:MAX_IMAGES],
+        "likes": to_int(it.get("like_count")),
+        "comments": to_int(it.get("comment_count")),
+        "pinned": bool(it.get("timeline_pinned_user_ids")),
     }
 
 
@@ -184,26 +189,15 @@ def parse_user(user):
 
 
 # ---------- วิธีดึง ----------
-def fetch_web_profile(http, host, warm=False):
+def fetch_web_profile(http, host):
     headers = dict(API_HEADERS)
     if host.startswith("i."):
         headers["User-Agent"] = MOBILE_UA
-    tag = host.split(".")[0] + ("-warm" if warm else "")
-    if warm:
-        # เปิดหน้าบัญชีก่อนเพื่อรับคุกกี้ แล้วค่อยขอข้อมูล
-        st, body = http.get(PROFILE_URL, {"Accept": "text/html,application/xhtml+xml", "Accept-Language": "th-TH,th;q=0.9,en;q=0.8"})
-        dump("profile-page", st, body)
-        token = http.cookie("csrftoken")
-        if token:
-            headers["X-CSRFToken"] = token
     st, body = http.get(f"https://{host}/api/v1/users/web_profile_info/?username={ACCOUNT}", headers)
-    if st != 200:
-        dump(f"web_profile_info-{tag}", st, body)
-        raise RuntimeError(f"HTTP {st} {body[:80]!r}")
-    user = (json.loads(body).get("data") or {}).get("user")
+    user = (json.loads(body).get("data") or {}).get("user") if st == 200 else None
     if not user:
-        dump(f"web_profile_info-{tag}", st, body)
-        raise RuntimeError("ไม่พบข้อมูลบัญชีในผลลัพธ์")
+        dump("web_profile_info-" + host.split(".")[0], st, body)
+        raise RuntimeError(f"HTTP {st} {body[:60].decode('utf-8', 'replace')!r}")
     return parse_user(user)
 
 
@@ -226,24 +220,43 @@ def fetch_more(http, user_id, cursor, need):
     return posts
 
 
+def embed_context(body):
+    # หน้า embed เก็บข้อมูลโพสต์ไว้ใน contextJSON (เป็น JSON ซ้อนอยู่ในสตริง)
+    m = re.search(rb'"contextJSON":"((?:\\.|[^"\\])*)"', body)
+    if not m:
+        return None
+    try:
+        ctx = json.loads(json.loads(b'"' + m.group(1) + b'"'))
+    except ValueError:
+        return None
+    return ctx.get("context") or ctx
+
+
+def find_media(obj, code):
+    if isinstance(obj, dict):
+        if (obj.get("shortcode") or obj.get("code")) == code and ("display_url" in obj or "edge_media_to_caption" in obj):
+            return obj
+        obj = list(obj.values())
+    if isinstance(obj, list):
+        for v in obj:
+            hit = find_media(v, code)
+            if hit:
+                return hit
+    return None
+
+
 def fetch_post_embed(http, code):
-    # หน้า embed ของโพสต์เดี่ยว เปิดได้โดยไม่ต้องล็อกอิน มีคำบรรยายและภาพ
+    # หน้า embed ของโพสต์เดี่ยว เปิดได้โดยไม่ต้องล็อกอิน มีคำบรรยายและภาพทุกภาพของโพสต์
     st, body = http.get(f"https://www.instagram.com/p/{code}/embed/captioned/", {"Referer": "https://watpolprot-cloud.github.io/"})
     if DEBUG and not (DEBUG_DIR / "post-embed.txt").exists():
         dump("post-embed", st, body)
     if st != 200:
         raise RuntimeError(f"HTTP {st}")
+    media = find_media(embed_context(body), code)
+    p = from_graph(media) if media else None
+    if p:
+        return p
     text = body.decode("utf-8", "replace")
-    m = re.search(r'"contextJSON":"((?:\\.|[^"\\])*)"', text)
-    if m:
-        try:
-            ctx = json.loads(json.loads('"' + m.group(1) + '"'))
-            media = ((ctx.get("gql_data") or {}).get("shortcode_media")) or ctx.get("media")
-            p = from_graph(media or {}) if media else None
-            if p:
-                return p
-        except ValueError:
-            pass
     cap = re.search(r'<div class="Caption">(.*?)<div class="CaptionComments">', text, re.S)
     caption = ""
     if cap:
@@ -263,37 +276,36 @@ def fetch_post_embed(http, code):
             "imageUrls": [html.unescape(img.group(1))] if img else []}
 
 
-def fetch_profile_embed(http, known):
-    # สำรอง: หน้า embed ของบัญชี มีลิงก์โพสต์ล่าสุด แล้วเปิด embed ของแต่ละโพสต์ที่ยังไม่มี
+def fetch_profile_embed(http):
+    # หน้า embed ของบัญชี: ชื่อบัญชี ยอดผู้ติดตาม จำนวนโพสต์ และโพสต์ล่าสุด 6 โพสต์
     st, body = http.get(f"https://www.instagram.com/{ACCOUNT}/embed/", {"Referer": "https://watpolprot-cloud.github.io/"})
     dump("profile-embed", st, body)
     if st != 200:
         raise RuntimeError(f"HTTP {st}")
-    # ลิงก์โพสต์อาจอยู่ใน JSON ที่ใส่ \/ แทน / หรืออยู่ในช่อง shortcode
-    found = re.findall(rb'\\?/(?:p|reel|tv)\\?/([A-Za-z0-9_-]{10,14})(?![A-Za-z0-9_-])', body)
-    found += re.findall(rb'"(?:shortcode|code)"\s*:\s*"([A-Za-z0-9_-]{10,14})"', body)
-    codes = list(dict.fromkeys(c.decode() for c in found))
-    if not codes:
-        raise RuntimeError(f"ไม่พบลิงก์โพสต์ในหน้า embed ({len(body)} ไบต์)")
-    posts = []
-    for code in codes[:12]:
-        if code in known:
-            posts.append(dict(known[code], imageUrls=[]))
-            continue
-        try:
-            posts.append(fetch_post_embed(http, code))
-        except Exception as exc:
-            warn(f"embed โพสต์ {code}: {exc}")
-    return posts
+    ctx = embed_context(body)
+    if not ctx or ctx.get("graphql_media") is None:
+        raise RuntimeError(f"ไม่พบข้อมูลโพสต์ในหน้า embed ({len(body)} ไบต์)")
+    profile = {
+        "name": ctx.get("full_name") or "",
+        "bio": None,
+        "avatarUrl": ctx.get("profile_pic_url") or "",
+        "followers": to_int(ctx.get("followers_count")),
+        "following": None,
+        "posts": to_int(ctx.get("posts_count")),
+    }
+    posts = [p for p in (from_graph(g.get("shortcode_media") or g) for g in ctx["graphql_media"]) if p]
+    return profile, posts, ctx.get("owner_id")
 
 
-def probe(http):
-    # โหมดตรวจสาเหตุ: ลองเปิดหน้าอื่น ๆ ของบัญชีแล้วเก็บผลไว้ดู (ไม่ใช้ข้อมูลจริง)
-    tries = [
-        ("a1", PROFILE_URL + "?__a=1&__d=dis", API_HEADERS),
-        ("page-fbhit", PROFILE_URL, {"User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"}),
-        ("page-googlebot", PROFILE_URL, {"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}),
-    ]
+def probe(http, code, owner_id):
+    # โหมดตรวจสาเหตุ: ลองเปิดหน้าอื่น ๆ แล้วเก็บผลไว้ดู (ไม่ใช้ข้อมูลจริง)
+    tries = []
+    if owner_id:
+        var = json.dumps({"id": str(owner_id), "first": 12}, separators=(",", ":"))
+        tries.append(("graphql", "https://www.instagram.com/graphql/query/?query_hash=" + TIMELINE_HASH
+                      + "&variables=" + urllib.parse.quote(var), API_HEADERS))
+    if code:
+        tries.append(("post-embed", f"https://www.instagram.com/p/{code}/embed/captioned/", {"Referer": "https://watpolprot-cloud.github.io/"}))
     for name, url, headers in tries:
         try:
             st, body = http.get(url, headers)
@@ -350,39 +362,65 @@ def main():
         shutil.rmtree(DEBUG_DIR)
     old = load_old()
     old_posts = {p["id"]: p for p in old.get("posts") or []}
+    hide, words, listed = load_rules()
     http = Http()
     errors = []
+    profile, found, via, owner_id, page_complete = None, {}, [], None, False
 
-    profile, found, via, page_complete = None, [], "", False
-    for host, warm in (("www.instagram.com", False), ("i.instagram.com", False), ("www.instagram.com", True)):
+    # 1) หน้า embed ของบัญชี (วิธีหลัก)
+    try:
+        profile, posts, owner_id = fetch_profile_embed(http)
+        found.update((p["id"], p) for p in posts)
+        via.append("embed")
+        log(f"embed: ได้ {len(posts)} โพสต์ บัญชีมี {profile['posts']} โพสต์ ผู้ติดตาม {profile['followers']}")
+    except Exception as exc:
+        errors.append(f"embed: {exc}")
+    window = list(found.values())   # โพสต์ล่าสุดที่เรียงต่อกัน ใช้ตรวจว่าโพสต์ไหนถูกลบ
+
+    # 2) ถ้ายังเก็บโพสต์ไม่ครบ ลอง API ของหน้าเว็บ (มักถูกจำกัดเมื่อเรียกจากเซิร์ฟเวอร์ แต่ถ้าได้จะได้โพสต์เก่าด้วย)
+    total = (profile or {}).get("posts") or 0
+    if not found or len(set(old_posts) | set(found)) < min(total, MAX_POSTS):
+        for host in ("www.instagram.com", "i.instagram.com"):
+            try:
+                prof2, posts, user_id, cursor = fetch_web_profile(http, host)
+                profile = dict(prof2, followers=prof2["followers"] or (profile or {}).get("followers"))
+                total = profile.get("posts") or total
+                if cursor and len(old_posts) < min(total, MAX_POSTS):
+                    try:
+                        more = fetch_more(http, user_id, cursor, MAX_POSTS - len(posts))
+                        posts += more
+                        log(f"ดึงโพสต์เก่าเพิ่มอีก {len(more)} โพสต์")
+                    except Exception as exc:
+                        errors.append(f"โพสต์เก่า: {exc}")
+                found.update((p["id"], p) for p in posts)
+                window = posts
+                page_complete = bool(total) and len(posts) >= total
+                via.append("web_profile_info")
+                log(f"web_profile_info@{host}: ได้ {len(posts)} โพสต์")
+                break
+            except Exception as exc:
+                errors.append(f"web_profile_info@{host}: {exc}")
+
+    # 3) โพสต์เก่าที่ใส่รหัสไว้ใน data/instagram.js และโพสต์หลายภาพที่ยังได้ภาพไม่ครบ เปิด embed ของโพสต์นั้น
+    todo = [c for c in listed if c not in found and c not in old_posts][:15]
+    todo += [p["id"] for p in found.values() if p["kind"] == "carousel" and len(p.get("imageUrls") or []) < 2
+             and len((old_posts.get(p["id"]) or {}).get("images") or []) < 2][:6]
+    for code in todo:
         try:
-            profile, found, user_id, cursor = fetch_web_profile(http, host, warm)
-            via = "web_profile_info@" + host + ("+cookie" if warm else "")
-            log(f"{via}: ได้ {len(found)} โพสต์ บัญชีมี {profile['posts']} โพสต์ ผู้ติดตาม {profile['followers']}")
-            # ครั้งแรก (หรือยังเก็บไม่ครบ) ดึงหน้าถัดไปด้วย เพื่อเอาโพสต์เก่ามาทั้งหมด
-            total = profile.get("posts") or 0
-            if cursor and len(old_posts) < min(total, MAX_POSTS):
-                try:
-                    more = fetch_more(http, user_id, cursor, MAX_POSTS - len(found))
-                    found += more
-                    log(f"ดึงโพสต์เก่าเพิ่มอีก {len(more)} โพสต์")
-                except Exception as exc:
-                    errors.append(f"โพสต์เก่า: {exc}")
-            page_complete = bool(total) and len(found) >= total
-            break
+            got = fetch_post_embed(http, code)
+            if code in found:
+                prev = found[code]
+                if len(got.get("imageUrls") or []) > len(prev.get("imageUrls") or []):
+                    prev["imageUrls"] = got["imageUrls"]
+            else:
+                found[code] = got
+            log(f"embed โพสต์ {code}: ได้ {len(got.get('imageUrls') or [])} ภาพ")
         except Exception as exc:
-            errors.append(f"web_profile_info@{host}{'+cookie' if warm else ''}: {exc}")
-    if not found:
-        try:
-            found = fetch_profile_embed(http, old_posts)
-            via = "embed"
-            log(f"embed: ได้ {len(found)} โพสต์")
-        except Exception as exc:
-            errors.append(f"embed: {exc}")
+            errors.append(f"embed โพสต์ {code}: {exc}")
     for e in errors:
         warn(e)
     if DEBUG:
-        probe(http)
+        probe(http, next(iter(found), None), owner_id)
 
     if not found:
         log("ดึงโพสต์ไม่สำเร็จ")
@@ -392,30 +430,34 @@ def main():
                     "error": " | ".join(errors)[:600]})
         return
 
-    # โพสต์ที่หายไปจากช่วงเวลาที่ดึงได้ = บัญชีลบแล้ว ส่วนโพสต์เก่ากว่านั้นคงไว้
-    newest = {p["id"]: p for p in found}
-    oldest_ts = min((p.get("ts") or 0) for p in found)
+    # โพสต์ที่หายไปจากช่วงโพสต์ล่าสุดที่ดึงได้ = บัญชีลบแล้ว ส่วนโพสต์เก่ากว่านั้นคงไว้ (ไม่นับโพสต์ปักหมุด)
+    span = [p.get("ts") or 0 for p in window if not p.get("pinned")]
+    oldest_ts = min(span) if len(span) >= 3 else None
+    newest = dict(found)
     for pid, prev in old_posts.items():
         if pid in newest:
             continue
-        if page_complete or (prev.get("ts") or 0) >= oldest_ts > 0:
+        if page_complete or (oldest_ts and (prev.get("ts") or 0) >= oldest_ts):
             log(f"โพสต์ {pid} ไม่อยู่ในบัญชีแล้ว")
             continue
         newest[pid] = dict(prev, imageUrls=[])
 
-    hide, words = load_rules()
     posts = [p for p in newest.values() if p["id"] not in hide
              and not any(w in (p.get("caption") or "").lower() for w in words)]
     log(f"เหลือ {len(posts)} โพสต์หลังตัดโพสต์ที่ซ่อนไว้")
+    today = datetime.datetime.now(TZ_TH).strftime("%Y-%m-%d")
+    same_day = (old.get("profile") or {}).get("day") == today
     for p in posts:
         prev = old_posts.get(p["id"]) or {}
-        for k in ("caption", "ts", "alt"):
-            if not p.get(k) and prev.get(k):
+        for k in ("caption", "ts", "alt", "likes", "comments"):
+            if p.get(k) in (None, "") and prev.get(k) not in (None, ""):
                 p[k] = prev[k]
+        # ยอดถูกใจอัปเดตวันละครั้ง จะได้ไม่บันทึกขึ้นเว็บทุกรอบ
+        if same_day and prev.get("likes") is not None:
+            p["likes"], p["comments"] = prev.get("likes"), prev.get("comments")
     posts.sort(key=lambda p: p.get("ts") or 0, reverse=True)
     posts = posts[:MAX_POSTS]
 
-    IMG_DIR.mkdir(parents=True, exist_ok=True)
     out = []
     for p in posts:
         prev = old_posts.get(p["id"]) or {}
@@ -429,12 +471,12 @@ def main():
             if dest.exists():
                 images.append(f"assets/img/instagram/{dest.name}")
         cw, ch = image_size(ROOT / images[0]) if images else (None, None)
-        kind = p.get("kind") or prev.get("kind") or "image"
+        reel = bool(p.get("reel") or prev.get("reel"))
         out.append({
             "id": p["id"],
-            "url": f"https://www.instagram.com/{'reel' if p.get('reel') else 'p'}/{p['id']}/",
-            "kind": kind,
-            "reel": bool(p.get("reel")),
+            "url": f"https://www.instagram.com/{'reel' if reel else 'p'}/{p['id']}/",
+            "kind": p.get("kind") or prev.get("kind") or "image",
+            "reel": reel,
             "caption": p.get("caption") or "",
             "date": th_date(p.get("ts")),
             "ts": p.get("ts"),
@@ -442,6 +484,8 @@ def main():
             "cw": cw,
             "ch": ch,
             "alt": p.get("alt") or "",
+            "likes": p.get("likes"),
+            "comments": p.get("comments"),
         })
 
     # ลบภาพของโพสต์ที่ไม่อยู่ในรายการแล้ว
@@ -450,21 +494,20 @@ def main():
         if f.name not in keep:
             f.unlink()
 
-    today = datetime.datetime.now(TZ_TH).strftime("%Y-%m-%d")
     prof = old.get("profile")
     if profile:
+        o = old.get("profile") or {}
         avatar = IMG_DIR / "avatar.jpg"
         if not avatar.exists():
             save_image(http, profile.get("avatarUrl"), avatar)
-        prof = {k: profile[k] for k in ("name", "bio", "followers", "following", "posts")}
+        prof = {k: profile[k] if profile.get(k) is not None else o.get(k) for k in ("name", "bio", "followers", "following", "posts")}
         prof["avatar"] = "assets/img/instagram/avatar.jpg" if avatar.exists() else ""
         prof["day"] = today
-        # ยอดผู้ติดตามอัปเดตวันละครั้ง จะได้ไม่บันทึกขึ้นเว็บทุกรอบ
-        o = old.get("profile") or {}
+        # ยอดผู้ติดตามอัปเดตวันละครั้ง
         if o.get("day") == today and o.get("posts") == prof["posts"]:
             prof["followers"], prof["following"] = o.get("followers"), o.get("following")
 
-    feed = {"account": ACCOUNT, "profile": prof, "posts": out, "via": via}
+    feed = {"account": ACCOUNT, "profile": prof, "posts": out, "via": "+".join(via)}
     if all(old.get(k) == feed[k] for k in ("account", "profile", "posts")) and not old.get("error"):
         log("ข้อมูลเหมือนเดิม ไม่ต้องอัปเดต")
         return
