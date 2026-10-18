@@ -1,0 +1,64 @@
+# ดึงโพสต์จาก Instagram @green.prot มาขึ้นเว็บคณะสีอัตโนมัติ (รวมถึงแถบประกาศด่วนด้านบนทุกหน้า)
+# รันเองทุก 2 ชั่วโมงช่วง 06.15–22.15 น. เวลาไทย และกดรันเองได้ที่แท็บ Actions > ดึงโพสต์ Instagram > Run workflow
+name: ดึงโพสต์ Instagram
+
+on:
+  schedule:
+    - cron: "15 23,1,3,5,7,9,11,13,15 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/instagram-sync.yml"
+      - "tools/instagram_sync.py"
+      - "data/instagram.js"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: instagram-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: ติดตั้งเครื่องมือ
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet --upgrade curl_cffi pillow
+
+      - name: ดึงโพสต์จาก Instagram
+        run: |
+          "$RUNNER_TEMP/venv/bin/python" tools/instagram_sync.py
+
+      - name: บันทึกขึ้นเว็บถ้ามีอะไรใหม่
+        id: save
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/instagram-feed.js assets/img/instagram
+          if git diff --cached --quiet; then
+            echo "ไม่มีอะไรเปลี่ยน"
+            exit 0
+          fi
+          git commit -m "อัปเดตโพสต์ Instagram อัตโนมัติ"
+          # บอท TikTok อาจบันทึกขึ้นพร้อมกัน จึงลองซ้ำได้ 3 ครั้ง
+          ok=0
+          for i in 1 2 3; do
+            if git pull --rebase origin main && git push origin HEAD:main; then ok=1; break; fi
+            sleep 10
+          done
+          [ "$ok" = 1 ] && echo "pushed=1" >> "$GITHUB_OUTPUT"
+
+      - name: สั่งสร้างหน้าเว็บใหม่
+        if: steps.save.outputs.pushed == '1'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
