@@ -1,4 +1,4 @@
-// ทำเนียบครูที่ปรึกษาคณะสีกระดังงา (ข้อมูล 17 ต.ค. 2569)
+// ทำเนียบครูที่ปรึกษาคณะสีกระดังงา (ข้อมูล 19 ต.ค. 2569)
 window.KD = window.KD || {};
 KD.teachers = [
  {
@@ -8,14 +8,6 @@ KD.teachers = [
   "group": "วิทยาศาสตร์และเทคโนโลยี",
   "role": "ทีมงานคณะสี",
   "photo": "assets/img/teachers/t01.jpg"
- },
- {
-  "no": 2,
-  "room": "ม.1/4",
-  "name": "ครูไกรวิชญ์ วังคะฮาต",
-  "group": "การงานอาชีพ",
-  "role": "",
-  "photo": "assets/img/teachers/t02.jpg"
  },
  {
   "no": 3,
@@ -152,14 +144,6 @@ KD.teachers = [
   "group": "คณิตศาสตร์",
   "role": "",
   "photo": "assets/img/teachers/t19.jpg"
- },
- {
-  "no": 20,
-  "room": "ม.4/8",
-  "name": "ครูกุลสตรี มีอัฐมั่น",
-  "group": "สังคมศึกษา ศาสนา และวัฒนธรรม",
-  "role": "ทีมงานคณะสี",
-  "photo": "assets/img/teachers/t20.jpg"
  },
  {
   "no": 21,
