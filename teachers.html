@@ -38,7 +38,7 @@ const DUTY = KD.duty || [];
 function card(t) {
   const duty = DUTY.filter(d => d.teachers.includes(t.name));
   const ph = t.photo ? `<img src="${t.photo}" alt="${esc(t.name)}" loading="lazy">`
-                     : `<div class="initial">${esc(t.name.replace(/^(ครู|Mr\. )/, "").charAt(0))}</div>`;
+                     : `<img class="no-photo" src="assets/img/logo.png" alt="${esc(t.name)} (ยังไม่มีรูป)" loading="lazy">`;
   return `<div class="person reveal"><div class="ph">${ph}</div><div class="pb">
     <span class="room-badge">${esc(t.room)}</span>
     <div class="nm">${esc(t.name)}</div>

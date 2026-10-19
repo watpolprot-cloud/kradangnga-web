@@ -132,7 +132,7 @@ KD.teachers = [
  {
   "no": 18,
   "room": "ม.4/2",
-  "name": "Mr. Mustafa Sertac",
+  "name": "Mr. Craig Anthony Martin",
   "group": "ครูชาวต่างชาติ",
   "role": "",
   "photo": ""
