@@ -45,6 +45,25 @@
   </div>
 </section>
 
+<section class="block dark" id="zone">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>พื้นที่รับผิดชอบของคณะสี</h2><p id="zone-desc"></p></div>
+      <a class="btn btn-gold" href="duty.html#duty-map">ดูผังจุดเวรครู</a>
+    </div>
+    <div class="zone-grid">
+      <div class="reveal"><div class="kmap" id="zmap"><img id="zmap-img" alt="ผังโรงเรียน เน้นพื้นที่โซน 1 ของคณะสีกระดังงา" width="1055" height="897" loading="lazy"></div>
+        <p class="kmap-cap">ผังบริเวณโรงเรียนพรตพิทยพยัต มาตราส่วน 1:1000 พื้นที่ประมาณ 137 ไร่ · เส้นทองคือขอบเขตโซน 1</p></div>
+      <div class="zone-card reveal">
+        <h3 id="zone-head"></h3>
+        <div class="zc-sub" id="zone-sub"></div>
+        <ol id="zone-list"></ol>
+        <div class="zc-foot" id="zone-others"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="block alt" id="ig-home" hidden>
   <div class="wrap">
     <div class="sec-title">
@@ -146,6 +165,7 @@
 <script src="data/tiktok-feed.js"></script>
 <script src="data/instagram.js"></script>
 <script src="data/instagram-feed.js"></script>
+<script src="data/duty-map.js"></script>
 <script src="js/common.js"></script>
 <script src="js/tiktok.js"></script>
 <script src="js/instagram.js"></script>
@@ -186,6 +206,25 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
       <a class="more-link" href="${esc(n.link || "news.html")}">${esc(n.linkText || "อ่านต่อ")}</a>
     </div>
   </article>`).join("");
+
+// พื้นที่รับผิดชอบของคณะสีบนผังโรงเรียน (data/duty-map.js) ชี้หรือแตะรายการแล้วเลขบนผังจะเด่นขึ้น
+(function () {
+  const Z = KD.zone, sec = document.getElementById("zone");
+  if (!Z || !Z.areas) { sec.hidden = true; return; }
+  document.getElementById("zone-desc").textContent = Z.desc || "";
+  document.getElementById("zmap-img").src = Z.image;
+  document.getElementById("zone-head").textContent = `พื้นที่ใน${Z.zone || "โซนของคณะสี"}`;
+  document.getElementById("zone-sub").textContent = `${Z.areas.length} บริเวณ · ชี้หรือแตะที่รายการเพื่อดูตำแหน่งบนผัง`;
+  document.getElementById("zone-others").textContent = Z.others || "";
+  const map = document.getElementById("zmap"), list = document.getElementById("zone-list");
+  map.insertAdjacentHTML("beforeend", Z.areas.map((a, i) => `<span class="amark" data-i="${i}" style="left:${a.x}%;top:${a.y}%">${i + 1}</span>`).join(""));
+  list.innerHTML = Z.areas.map((a, i) => `<li data-i="${i}" tabindex="0"><span>${i + 1}</span>${esc(a.name)}</li>`).join("");
+  const mark = i => sec.querySelectorAll(".amark, #zone-list li").forEach(e => e.classList.toggle("on", e.dataset.i === String(i)));
+  list.querySelectorAll("li").forEach(li => {
+    li.onmouseenter = li.onfocus = li.onclick = () => mark(li.dataset.i);
+    li.onmouseleave = li.onblur = () => mark(-1);
+  });
+})();
 
 // ภาพเด่น 8 ภาพ
 (function () {

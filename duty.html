@@ -23,6 +23,15 @@
       <div class="filters" id="duty-filters"></div>
     </div>
     <div class="duty-result" id="duty-result" hidden></div>
+    <div class="dmap-sec" id="duty-map">
+      <div class="dp-head reveal"><h2>ผังจุดเวรในโรงเรียน</h2><span>กดที่หมุดเพื่อดูครูประจำจุด</span></div>
+      <div class="dmap-grid reveal">
+        <div><div class="kmap" id="dmap"><img id="dmap-img" alt="ผังโรงเรียนพร้อมหมุดจุดเวรประจำจุดของครูคณะสีกระดังงา" width="1055" height="897"></div>
+          <p class="kmap-cap">ตัวเลขบนหมุดคือเลขจุดเวร · เลือกช่วงเวลาหรือชื่อครูด้านบน ผังจะแสดงเฉพาะจุดที่เลือกให้เด่นขึ้น</p></div>
+        <aside class="dmap-panel" id="dmap-panel" aria-live="polite"></aside>
+      </div>
+      <div class="dmap-legend" id="dmap-legend"></div>
+    </div>
     <div id="duty-list"></div>
     <p class="duty-note">หัวหน้าคณะสี (ครูไชยพงศ์) ไม่มีเวร · ครูต่างชาติ (Mr. Craig Anthony Martin) ลงเวรจุดที่ 5 คู่กับครูณัฐนนท์ · ข้อมูลจากชีตลงเวร ตรวจเมื่อ 19 ต.ค. 2569 ถ้าข้อมูลไม่ถูกต้อง แจ้งครูไชยพงศ์ ปานมีศรี หัวหน้าคณะสี</p>
   </div>
@@ -36,6 +45,7 @@
 <script src="data/site.js"></script>
 <script src="data/teachers.js"></script>
 <script src="data/duty.js"></script>
+<script src="data/duty-map.js"></script>
 <script src="js/common.js"></script>
 <script>
 const M = KD.dutyMeta || {}, D = KD.duty || [];
@@ -62,6 +72,45 @@ function card(d, sel) {
   </article>`;
 }
 
+// ผังจุดเวร: หมุดบนผังโรงเรียน ใช้ช่วงเวลาและครูที่เลือกชุดเดียวกับรายการเวรด้านล่าง
+const norm = s => String(s).replace(/\s/g, "");
+const MP = ((KD.dutyMap || {}).places || []).map(p => ({ ...p, slots: D.filter(d => norm(d.place) === norm(p.place)) })).filter(p => p.slots.length);
+const MB = document.getElementById("dmap"), MPN = document.getElementById("dmap-panel"), MLG = document.getElementById("dmap-legend");
+const spots = p => { const s = [...new Set(p.slots.map(d => d.spot))].sort((a, b) => a - b); return s.length > 1 ? `${s[0]}–${s[s.length - 1]}` : `${s[0]}`; };
+let mapSel = 0;
+if (MP.length) document.getElementById("dmap-img").src = KD.dutyMap.image; else document.getElementById("duty-map").hidden = true;
+function mini(n, sel) {
+  const ph = photo[n] ? `<img src="${esc(photo[n])}" alt="" loading="lazy">` : `<img class="no-photo" src="assets/img/logo.png" alt="" loading="lazy">`;
+  return `<div class="dm-t${n === sel ? " me" : ""}"><span class="dm-ph">${ph}</span><b>${esc(n)}</b></div>`;
+}
+function renderMap(sel) {
+  if (!MP.length) return;
+  const inP = d => period === "ทั้งหมด" || d.period === period;
+  const active = p => p.slots.some(d => inP(d) && (!sel || d.teachers.includes(sel)));
+  if (!active(MP[mapSel])) mapSel = Math.max(0, MP.findIndex(active));
+  MB.querySelectorAll(".dpin, .dpin-label").forEach(e => e.remove());
+  MP.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = spots(p);
+    b.className = "dpin" + (i === mapSel ? " sel" : "") + (active(p) ? (sel ? " mine" : "") : " dim");
+    b.style.left = p.x + "%"; b.style.top = p.y + "%";
+    b.setAttribute("aria-label", `จุดที่ ${spots(p)} ${p.place}`);
+    b.onclick = () => { mapSel = i; renderMap(S.value); };
+    MB.append(b);
+  });
+  const p = MP[mapSel], list = p.slots.filter(inP);
+  MB.insertAdjacentHTML("beforeend", `<span class="dpin-label" style="left:${Math.min(Math.max(p.x, 14), 86)}%;top:${Math.max(p.y, 9)}%">${esc(p.place)}</span>`);
+  const lb = MB.querySelector(".dpin-label"), mr = MB.getBoundingClientRect(), lr = lb.getBoundingClientRect();
+  if (lr.left < mr.left + 4) lb.style.left = `${lr.width / 2 + 4}px`;
+  else if (lr.right > mr.right - 4) lb.style.left = `${mr.width - lr.width / 2 - 4}px`;
+  MPN.innerHTML = `<h3>${esc(p.place)}</h3><div class="dm-meta">จุดที่ ${spots(p)} · ${p.slots.length} ช่วงเวร${p.note ? `<em>${esc(p.note)}</em>` : ""}</div>` +
+    (list.length ? list.map(d => `<div class="dm-slot"><div class="dm-slot-top"><span class="dc-spot">จุดที่ ${d.spot}</span><span class="dm-per">ช่วง${esc(d.period)}</span><span class="dc-time">${esc(d.time)}</span></div>
+      <div class="dm-people">${d.teachers.length ? d.teachers.map(n => mini(n, sel)).join("") : `<p class="dm-empty">ยังไม่มีครูลงเวร</p>`}</div></div>`).join("")
+      : `<p class="dm-empty">จุดนี้ไม่มีเวรในช่วง${esc(period)}</p>`);
+  MLG.innerHTML = MP.map((q, i) => `<button type="button" class="${i === mapSel ? "sel" : ""}${active(q) ? "" : " dim"}" data-i="${i}"><span class="n">${spots(q)}</span><span class="nm">${esc(q.place)}<small>${q.slots.filter(inP).length} ช่วงเวร${period === "ทั้งหมด" ? "" : "ในช่วง" + period} · ครู ${new Set(q.slots.flatMap(d => d.teachers)).size} ท่าน</small></span></button>`).join("");
+  MLG.querySelectorAll("button").forEach(b => b.onclick = () => { mapSel = +b.dataset.i; renderMap(S.value); MB.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
+}
+
 const F = document.getElementById("duty-filters"), L = document.getElementById("duty-list");
 const S = document.getElementById("duty-teacher"), R = document.getElementById("duty-result");
 S.innerHTML += names.map(n => `<option>${esc(n)}</option>`).join("");
@@ -85,11 +134,12 @@ function render() {
       <div class="duty-grid">${list.map(d => card(d, sel)).join("")}</div>
     </section>`;
   }).join("") || `<p class="duty-note">ไม่มีเวรในช่วงนี้</p>`;
+  renderMap(sel);
   revealAll();
 }
-S.onchange = () => { period = "ทั้งหมด"; render(); if (S.value) R.scrollIntoView({ behavior: "smooth", block: "center" }); };
+S.onchange = () => { period = "ทั้งหมด"; if (S.value) mapSel = Math.max(0, MP.findIndex(p => p.slots.some(d => d.teachers.includes(S.value)))); render(); if (S.value) R.scrollIntoView({ behavior: "smooth", block: "center" }); };
 const want = new URLSearchParams(location.search).get("t");
-if (want && names.includes(want)) S.value = want;
+if (want && names.includes(want)) { S.value = want; mapSel = Math.max(0, MP.findIndex(p => p.slots.some(d => d.teachers.includes(want)))); }
 render();
 
 const CAPS = ["ภาพรวม", "ช่วงเช้า", "ช่วงกลางวัน", "ช่วงบ่าย"];
