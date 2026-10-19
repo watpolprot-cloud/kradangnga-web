@@ -10,7 +10,7 @@ const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "data", "chatbot-knowledge.json");
-const DATA = ["site", "news", "teachers", "students", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
+const DATA = ["site", "news", "teachers", "duty", "students", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
 const PAGES = [
   ["index.html", "หน้าแรก"],
   ["news.html", "ข่าวสาร"],
@@ -19,6 +19,7 @@ const PAGES = [
   ["instagram.html", "Instagram"],
   ["memories.html", "ความทรงจำ"],
   ["teachers.html", "ทำเนียบครู"],
+  ["duty.html", "เวรประจำจุด"],
   ["students.html", "ทำเนียบนักเรียน"],
   ["games.html", "บุนนาคเกมส์ 2569"]
 ];
@@ -134,6 +135,20 @@ function build() {
   const T = KD.teachers || [];
   if (T.length) add(`ทำเนียบครูที่ปรึกษาคณะสีกระดังงา (${T.length} ท่าน)`, "teachers.html",
     T.map(t => `- ${t.name} ครูที่ปรึกษา ${t.room}${t.group ? ` กลุ่มสาระ/ฝ่าย ${t.group}` : ""}${t.role ? ` หน้าที่ ${t.role}` : ""}`).join("\n"));
+
+  // เวรประจำจุดของครู
+  const DU = KD.duty || [], DM = KD.dutyMeta || {};
+  if (DU.length) {
+    const who = [...new Set(DU.flatMap(d => d.teachers))];
+    add(`${DM.title || "เวรประจำจุดของครูคณะสี"} (${DM.day || ""})`, "duty.html", [
+      `ครูคณะสีกระดังงาลงเวรประจำจุด${DM.day || ""} ${new Set(DU.map(d => d.spot)).size} จุด ${DU.length} ช่วงเวร คุณครู ${who.length} ท่าน${DM.note ? ` ${DM.note}` : ""}`,
+      "แยกตามจุด:",
+      ...DU.map(d => `- จุดที่ ${d.spot} ${d.place} เวลา ${d.time} (ช่วง${d.period}): ${d.teachers.length ? d.teachers.join(", ") : "ยังไม่มีครูลงเวร"}`),
+      "แยกตามครู:",
+      ...who.map(n => `- ${n}: ` + DU.filter(d => d.teachers.includes(n)).map(d => `จุดที่ ${d.spot} ${d.place} ${d.time}`).join(" และ ")),
+      DM.checked && `ข้อมูลตรวจเมื่อ ${DM.checked} ถ้าข้อมูลไม่ถูกต้องให้แจ้งหัวหน้าคณะสี`
+    ].filter(Boolean).join("\n"));
+  }
 
   // ทำเนียบนักเรียน
   const G = KD.studentGroups || [];

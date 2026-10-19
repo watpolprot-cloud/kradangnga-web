@@ -8,6 +8,7 @@
     ["instagram.html", "Instagram"],
     ["memories.html", "ความทรงจำ"],
     ["teachers.html", "ทำเนียบครู"],
+    ["duty.html", "เวรประจำจุด"],
     ["students.html", "ทำเนียบนักเรียน"],
     ["games.html", "บุนนาคเกมส์ 2569"]
   ];

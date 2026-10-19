@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เวรประจำจุด · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="เวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 28 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="page-head duty-head">
+  <div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>เวรประจำจุด</h1><p id="duty-sub">ภาคเรียนที่ 2/2569 · ทุกวันพุธ · 20 จุด · คุณครู 28 ท่าน</p></div>
+  <img class="duty-flower f1" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
+  <img class="duty-flower f2" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
+</section>
+<section class="block">
+  <div class="wrap">
+    <div class="duty-tools reveal">
+      <label class="duty-find"><span>หาเวรของครู</span>
+        <select id="duty-teacher"><option value="">เลือกชื่อครู</option></select>
+      </label>
+      <div class="filters" id="duty-filters"></div>
+    </div>
+    <div class="duty-result" id="duty-result" hidden></div>
+    <div id="duty-list"></div>
+    <p class="duty-note">หัวหน้าคณะสี (ครูไชยพงศ์) ไม่มีเวร และครูต่างชาติไม่ลงเวร · ข้อมูลจากชีตลงเวร ตรวจเมื่อ 19 ต.ค. 2569 ถ้าข้อมูลไม่ถูกต้อง แจ้งครูไชยพงศ์ ปานมีศรี หัวหน้าคณะสี</p>
+  </div>
+</section>
+<section class="block alt">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>ภาพเวรสำหรับส่งกลุ่ม LINE</h2><p>กดที่ภาพเพื่อดูภาพใหญ่ หรือดาวน์โหลดไปส่งต่อได้</p></div></div>
+    <div class="duty-imgs" id="duty-imgs"></div>
+  </div>
+</section>
+<script src="data/site.js"></script>
+<script src="data/teachers.js"></script>
+<script src="data/duty.js"></script>
+<script src="js/common.js"></script>
+<script>
+const M = KD.dutyMeta || {}, D = KD.duty || [];
+const PERIODS = ["เช้า", "กลางวัน", "บ่าย"];
+const photo = Object.fromEntries((KD.teachers || []).map(t => [t.name, t.photo]));
+const names = [...new Set(D.flatMap(d => d.teachers))].sort((a, b) => a.localeCompare(b, "th"));
+const cardId = d => `d${d.spot}-${d.time.slice(0, 5).replace(".", "")}`;
+const start = d => d.time.split("–")[0].trim();
+const end = d => d.time.split("–")[1].replace("น.", "").trim();
+document.getElementById("duty-sub").textContent =
+  `ภาคเรียนที่ ${M.term || ""} · ${M.day || ""} · ${new Set(D.map(d => d.spot)).size} จุด · คุณครู ${names.length} ท่าน`;
+
+function person(n, sel) {
+  const nm = n.replace(/^ครู/, ""), sp = nm.indexOf(" ");
+  const first = sp > 0 ? nm.slice(0, sp) : nm, last = sp > 0 ? nm.slice(sp + 1) : "";
+  const ph = photo[n] ? `<img src="${esc(photo[n])}" alt="${esc(n)}" loading="lazy">` : `<i>${esc(first.charAt(0))}</i>`;
+  return `<div class="dt${n === sel ? " me" : ""}"><span class="dt-ph">${ph}</span><b>ครู${esc(first)}</b><small>${esc(last)}</small></div>`;
+}
+function card(d, sel) {
+  return `<article class="duty-card reveal${d.teachers.length ? "" : " empty"}" id="${cardId(d)}">
+    <div class="dc-top"><span class="dc-spot">จุดที่ ${d.spot}</span><span class="dc-time">${esc(d.time)}</span></div>
+    <h3 class="dc-place">${esc(d.place)}</h3>
+    <div class="dc-people">${d.teachers.length ? d.teachers.map(n => person(n, sel)).join("") : `<div class="dc-empty">ยังไม่มีครูลงเวร</div>`}</div>
+  </article>`;
+}
+
+const F = document.getElementById("duty-filters"), L = document.getElementById("duty-list");
+const S = document.getElementById("duty-teacher"), R = document.getElementById("duty-result");
+S.innerHTML += names.map(n => `<option>${esc(n)}</option>`).join("");
+let period = "ทั้งหมด";
+function render() {
+  const sel = S.value;
+  F.innerHTML = ["ทั้งหมด", ...PERIODS].map(x => `<button class="chip${x === period ? " active" : ""}" data-p="${x}">${x === "ทั้งหมด" ? x : "ช่วง" + x}</button>`).join("");
+  F.querySelectorAll(".chip").forEach(b => b.onclick = () => { period = b.dataset.p; render(); });
+  const mine = sel ? D.filter(d => d.teachers.includes(sel)) : [];
+  R.hidden = !sel;
+  if (sel) R.innerHTML = `${person(sel)}<div><b>${esc(sel)}</b>${mine.map(d =>
+    `<p>เวร${esc(M.day || "")}: จุดที่ ${d.spot} ${esc(d.place)} เวลา ${esc(d.time)}</p>`).join("")}
+    <button type="button" class="back-btn" id="duty-clear">ดูเวรทั้งหมด</button></div>`;
+  if (sel) document.getElementById("duty-clear").onclick = () => { S.value = ""; render(); };
+  L.innerHTML = PERIODS.filter(p => period === "ทั้งหมด" || p === period).map(p => {
+    const all = D.filter(d => d.period === p), list = sel ? all.filter(d => d.teachers.includes(sel)) : all;
+    if (!list.length) return "";
+    const range = `${all.map(start).sort()[0]} – ${all.map(end).sort().pop()} น.`;
+    return `<section class="duty-period">
+      <div class="dp-head reveal"><h2>ช่วง${p}</h2><span>${range} · ${all.length} ช่วงเวร</span></div>
+      <div class="duty-grid">${list.map(d => card(d, sel)).join("")}</div>
+    </section>`;
+  }).join("") || `<p class="duty-note">ไม่มีเวรในช่วงนี้</p>`;
+  revealAll();
+}
+S.onchange = () => { period = "ทั้งหมด"; render(); if (S.value) R.scrollIntoView({ behavior: "smooth", block: "center" }); };
+const want = new URLSearchParams(location.search).get("t");
+if (want && names.includes(want)) S.value = want;
+render();
+
+const CAPS = ["ภาพรวม", "ช่วงเช้า", "ช่วงกลางวัน", "ช่วงบ่าย"];
+const imgs = (M.images || []).map((f, i) => ({ src: `assets/img/duty/${f}`, cap: `${M.title || "เวรประจำจุด"} · ${CAPS[i] || i + 1}` }));
+const G = document.getElementById("duty-imgs");
+G.innerHTML = imgs.map((m, i) => `<figure class="reveal">
+  <button type="button" data-i="${i}" aria-label="ดูภาพ ${esc(CAPS[i] || "")} ขนาดใหญ่"><img src="${esc(m.src.replace(/\.jpg$/, "-s.jpg"))}" alt="${esc(m.cap)}" loading="lazy"></button>
+  <figcaption><span>${esc(CAPS[i] || "")}</span><a href="${esc(m.src)}" download="${esc(m.cap)}.jpg">ดาวน์โหลด</a></figcaption>
+</figure>`).join("");
+G.querySelectorAll("button").forEach(b => b.onclick = () => openLightbox(imgs, +b.dataset.i));
+revealAll();
+</script>
+</body>
+</html>
