@@ -1,5 +1,5 @@
 // ตัวช่วยโพสต์ Instagram: รวมโพสต์ที่ดึงอัตโนมัติ (data/instagram-feed.js) กับหมวดและคำอธิบายที่เขียนเอง (data/instagram.js)
-// ใช้ในหน้าแรก หน้า instagram.html หน้าข่าวสาร และแถบประกาศด่วนทุกหน้า ต้องโหลดหลัง js/common.js
+// ใช้ในหน้าแรก หน้า instagram.html หน้าข่าวสาร และแถบประกาศ/ประกาศด่วนทุกหน้า ต้องโหลดหลัง js/common.js
 (function () {
   const C = (window.KD && KD.instagram) || { categories: [], posts: {} };
   const F = (window.KD && KD.instagramFeed) || { posts: [] };
@@ -41,6 +41,8 @@
     const hay = (p.caption || "").toLowerCase();
     return urgentWords.some(w => hay.includes(w));
   }
+  // ปักหมุดเป็นประกาศด้านบนเว็บ (pin: true) จนถึงวัน until
+  const isPinned = extra => extra.pin === true && (!extra.until || todayIso() <= extra.until);
 
   const posts = (F.posts || []).map(p => {
     const extra = extraOf(p.id), parts = splitTags(p.caption || "");
@@ -48,13 +50,15 @@
       text: parts.text, tags: parts.tags,
       title: extra.title || shortTitle(parts.text) || kindName(p),
       note: extra.note || "", cat: pickCat(p, extra),
-      urgent: isUrgent(p, extra),
+      urgent: isUrgent(p, extra), pin: isPinned(extra),
       hide: !!extra.hide || hideWords.some(w => (p.caption || "").toLowerCase().includes(w))
     });
   }).filter(p => !p.hide && p.images && p.images.length);
   const byId = id => posts.find(p => p.id === id);
   const catOf = key => cats.find(c => c.key === key) || { key, name: "โพสต์" };
   const urgentPosts = posts.filter(p => p.urgent);
+  // แถบด้านบน: ประกาศด่วนก่อน ตามด้วยประกาศที่ปักหมุด
+  const barPosts = posts.filter(p => p.urgent || p.pin).sort((a, b) => (b.urgent - a.urgent) || ((b.ts || 0) - (a.ts || 0)));
   const P = F.profile || null;
 
   function fmtNum(n) {
@@ -168,8 +172,11 @@
     document.body.style.overflow = "";
   }
 
-  // ---------- แถบประกาศด่วน (ใต้เมนูทุกหน้า) ----------
+  // ---------- แถบประกาศด้านบน (ใต้เมนูทุกหน้า) แบบประกาศในกลุ่ม LINE ----------
+  // ประกาศด่วน (urgent) ขึ้นป้ายสีแดง ประกาศที่ปักหมุด (pin) ขึ้นไอคอนโทรโข่ง กดลูกศรเพื่ออ่านรายละเอียด กด × เพื่อปิด (จำไว้ในเครื่องผู้ชม)
   const DISMISS_KEY = "kd-urgent-closed";
+  const ICON_ANN = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.2v3.6c0 .6.4 1 1 1h2.2L12 19V5L6.2 9.2H4c-.6 0-1 .4-1 1z"/><path d="M15.5 8.6a4.6 4.6 0 0 1 0 6.8M18.2 6a8.4 8.4 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  const ICON_DOWN = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   function readClosed() {
     try { return JSON.parse(localStorage.getItem(DISMISS_KEY) || "[]"); } catch (e) { return []; }
   }
@@ -178,34 +185,45 @@
   }
   function renderUrgentBar(header) {
     const closed = readClosed();
-    const list = urgentPosts.filter(p => !closed.includes(p.id)).slice(0, 3);
+    const list = barPosts.filter(p => !closed.includes(p.id)).slice(0, 3);
     if (!list.length || document.querySelector(".urgent-bar")) return;
     const bar = document.createElement("div");
-    bar.className = "urgent-bar";
+    bar.className = "urgent-bar" + (list.some(p => p.urgent) ? "" : " ann-only");
     bar.setAttribute("role", "region");
-    bar.setAttribute("aria-label", "ประกาศด่วน");
-    bar.innerHTML = list.map(p => `<div class="wrap urgent-row" data-id="${esc(p.id)}">
-      <span class="urgent-pill"><i></i>ประกาศด่วน</span>
+    bar.setAttribute("aria-label", "ประกาศจากคณะสี");
+    bar.innerHTML = list.map(p => `<div class="wrap urgent-row${p.urgent ? "" : " ann"}" data-id="${esc(p.id)}">
+      ${p.urgent ? `<span class="urgent-pill"><i></i>ประกาศด่วน</span>` : `<span class="ann-ico">${ICON_ANN}</span>`}
       <img src="${esc(p.images[0])}" alt="">
-      <span class="urgent-text"><b>${esc(p.title)}</b><small>จาก Instagram @${esc(account)}${p.date ? " · " + dateOf(p) : ""}</small></span>
+      <span class="urgent-text">${p.urgent ? "" : `<em>ประกาศ</em>`}<b>${esc(p.title)}</b><small>จาก Instagram @${esc(account)}${p.date ? " · " + dateOf(p) : ""}</small></span>
+      ${p.note ? `<button type="button" class="ann-more" aria-expanded="false" aria-label="อ่านรายละเอียด">${ICON_DOWN}</button>` : ""}
       <button type="button" class="urgent-open">ดูประกาศ</button>
       <button type="button" class="urgent-x" aria-label="ปิดประกาศนี้">×</button>
+      ${p.note ? `<p class="ann-note" hidden>${esc(p.note)}</p>` : ""}
     </div>`).join("");
     (header || document.body.firstChild).after(bar);
     bar.querySelectorAll(".urgent-row").forEach(row => {
-      const id = row.dataset.id;
+      const id = row.dataset.id, more = row.querySelector(".ann-more");
       row.querySelector(".urgent-open").onclick = () => openPost(id);
       row.querySelector("img").onclick = () => openPost(id);
+      if (more) more.onclick = () => {
+        const open = more.getAttribute("aria-expanded") !== "true";
+        more.setAttribute("aria-expanded", open);
+        row.classList.toggle("open", open);
+        row.querySelector(".ann-note").hidden = !open;
+      };
       row.querySelector(".urgent-x").onclick = () => {
         saveClosed(readClosed().concat(id));
-        row.remove();
-        if (!bar.querySelector(".urgent-row")) bar.remove();
+        row.classList.add("closing");
+        setTimeout(() => {
+          row.remove();
+          if (!bar.querySelector(".urgent-row")) bar.remove();
+        }, 250);
       };
     });
   }
 
   window.KDI = {
-    account, profileUrl, posts, urgentPosts, profile: P, categories: cats, catOf, byId,
+    account, profileUrl, posts, urgentPosts, barPosts, profile: P, categories: cats, catOf, byId,
     total: (P && P.posts) || posts.length, updated: F.updated || "",
     fmtNum, dateOf, cardHtml, thumbHtml, bindCards, openPost, renderUrgentBar
   };

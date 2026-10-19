@@ -619,7 +619,30 @@ ul.clean li { margin-bottom: 6px; }
   .urgent-text b { white-space: normal; }
   .urgent-open { margin-left: auto; padding: 5px 14px; font-size: .85rem; }
 }
-@media (prefers-reduced-motion: reduce) { .urgent-bar, .urgent-pill, .urgent-pill i { animation: none; } }
+/* ประกาศที่ปักหมุด (pin) แบบประกาศในกลุ่ม LINE */
+.urgent-row { flex-wrap: wrap; }
+.urgent-bar.ann-only { background: linear-gradient(90deg, var(--white), var(--green-50) 60%, var(--green-100)); border-bottom: 1px solid var(--line); box-shadow: 0 6px 18px rgba(5,37,26,.10); }
+.ann-ico { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--green-700); color: var(--gold-pale); box-shadow: 0 0 0 4px rgba(47,140,85,.16); }
+.ann-ico svg { width: 22px; height: 22px; fill: currentColor; transform-origin: 30% 50%; animation: ann-ring 3.2s ease-in-out infinite; }
+.urgent-text em { font-style: normal; font-family: "Prompt"; font-size: .78rem; font-weight: 600; color: var(--gold-deep); letter-spacing: .03em; padding-top: 2px; }
+.ann-only .urgent-text small { color: var(--ink-soft); }
+.ann-more { flex: none; width: 32px; height: 32px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--white); color: var(--green-700); cursor: pointer; display: grid; place-items: center; }
+.ann-more svg { width: 18px; height: 18px; transition: transform .25s ease; }
+.urgent-row.open .ann-more svg { transform: rotate(180deg); }
+.ann-note { flex-basis: 100%; margin: 0 0 2px; padding: 10px 14px; background: var(--white); border-left: 3px solid var(--gold); border-radius: 10px; color: var(--ink); font-size: .95rem; line-height: 1.65; animation: kc-up .3s ease; }
+.ann-only .urgent-x { border-color: var(--line); background: var(--white); color: var(--ink-soft); }
+.urgent-row.closing { opacity: 0; transform: translateY(-8px); transition: opacity .25s ease, transform .25s ease; }
+@keyframes ann-ring { 0%, 70%, 100% { transform: rotate(0); } 75% { transform: rotate(-14deg); } 80% { transform: rotate(12deg); } 85% { transform: rotate(-8deg); } 90% { transform: rotate(5deg); } }
+@media (max-width: 640px) {
+  .ann-ico { width: 34px; height: 34px; } .ann-ico svg { width: 19px; height: 19px; }
+  /* มือถือ: แถวแรก ไอคอน ข้อความ ปุ่มปิด แถวสอง ปุ่มอ่านรายละเอียดและดูประกาศ */
+  .urgent-row.ann .urgent-text { order: 1; flex: 0 0 calc(100% - 96px); }
+  .urgent-row.ann .urgent-x { order: 2; }
+  .urgent-row.ann .ann-more { order: 3; margin-left: 44px; }
+  .urgent-row.ann .urgent-open { order: 4; }
+  .ann-note { order: 5; }
+}
+@media (prefers-reduced-motion: reduce) { .urgent-bar, .urgent-pill, .urgent-pill i, .ann-ico svg, .ann-note { animation: none; } }
 
 /* ---------- โพสต์ Instagram ---------- */
 .ig-card { display: flex; flex-direction: column; gap: 8px; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; transition: transform .2s; }
