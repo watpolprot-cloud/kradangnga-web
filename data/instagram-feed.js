@@ -6,11 +6,11 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 509,
+  "followers": 508,
   "following": null,
-  "posts": 43,
+  "posts": 36,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-10-20"
+  "day": "2026-10-22"
  },
  "posts": [
   {
@@ -27,7 +27,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 1280,
    "alt": "",
-   "likes": 48,
+   "likes": 49,
    "comments": 0
   },
   {
@@ -67,11 +67,11 @@ KD.instagramFeed = {
   {
    "id": "DcN_nlbKezN",
    "url": "https://www.instagram.com/p/DcN_nlbKezN/",
-   "kind": "video",
+   "kind": "image",
    "reel": false,
    "caption": "5/7 เก็บขยะกันคร้าบ #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #fyp",
    "date": "2026-08-19",
-   "ts": 1787136034,
+   "ts": 1787135986,
    "images": [
     "assets/img/instagram/DcN_nlbKezN.jpg"
    ],
@@ -79,11 +79,28 @@ KD.instagramFeed = {
    "ch": 405,
    "alt": "",
    "likes": 303,
+   "comments": null
+  },
+  {
+   "id": "DcF7cm-qaKn",
+   "url": "https://www.instagram.com/p/DcF7cm-qaKn/",
+   "kind": "video",
+   "reel": false,
+   "caption": "ซัพพอร์ตสีเขียวหน่อยได้มั้ยคะะ #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #fyp",
+   "date": "2026-08-16",
+   "ts": 1786865409,
+   "images": [
+    "assets/img/instagram/DcF7cm-qaKn.jpg"
+   ],
+   "cw": 720,
+   "ch": 1280,
+   "alt": "",
+   "likes": 697,
    "comments": 0
   }
  ],
  "skipped": [],
  "qr": 1,
  "via": "embed",
- "updated": "2026-10-20T08:51+07:00"
+ "updated": "2026-10-22T08:32+07:00"
 };
