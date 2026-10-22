@@ -10,7 +10,7 @@ const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "data", "chatbot-knowledge.json");
-const DATA = ["site", "news", "teachers", "duty", "students", "athletes", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
+const DATA = ["site", "news", "teachers", "duty", "students", "athletes", "rooms", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
 const PAGES = [
   ["index.html", "หน้าแรก"],
   ["news.html", "ข่าวสาร"],
@@ -174,6 +174,18 @@ function build() {
       ].join("\n")),
       "จำนวนนักกีฬาแต่ละห้อง: " + Object.keys(rooms).sort((a, b) => a.localeCompare(b, "th", { numeric: true })).map(r => `${r} ${rooms[r]} คน`).join(", "),
       "ถ้าชื่อ ห้อง หรือรูปไม่ถูกต้อง แจ้งหัวหน้าคณะสีหรือครูนพพล ภาณุสุวัฒน์"
+    ].join("\n"));
+  }
+
+  // ห้องเรียนคณะสีเขียวและผังการเข้าแถว (data/rooms.js)
+  const RM = KD.rooms || [], RMM = KD.roomMeta || {};
+  if (RM.length) {
+    const TT = KD.teachers || [], nAth = {};
+    Object.values(KD.athletes || {}).forEach(a => { nAth[a.room] = (nAth[a.room] || 0) + 1; });
+    add(`ห้องเรียนคณะสีกระดังงา ${RM.length} ห้อง ครูที่ปรึกษา จำนวนนักเรียน และผังการเข้าแถว`, "students.html#rooms", [
+      `การเข้าแถวเคารพธงชาติตามคณะสี ภาคเรียนที่ 2/2569${RMM.assemblyStart ? ` เริ่ม ${thDate(RMM.assemblyStart)} วันเปิดภาคเรียน` : ""}: หันหน้าไปทางเวที เรียงแถวคณะสีจากฝั่งอาคาร 1 ไปฝั่งเสาธงชาติ ${(KD.assemblyHouses || []).map((h, i) => `แถวที่ ${i + 1} ${h.name} (${h.color})`).join(", ")} สีเขียวอยู่แถวที่ 3 (แถวกลาง) ในแถวเรียงจาก ม.6 ฝั่งอาคาร 1 ไปจนถึง ม.1 ฝั่งเสาธงชาติ ในช่องของแต่ละชั้น ห้องเลขน้อยอยู่ขวา ห้องเลขมากอยู่ซ้าย (เช่น ช่อง ม.1 จากซ้ายไปขวา ม.1/10 แล้ว ม.1/4)`,
+      ...RM.map(r => `- ${r.room}: นักเรียน ${r.total} คน (ชาย ${r.boys} หญิง ${r.girls}) ครูที่ปรึกษา ${TT.filter(t => t.room === r.room).map(t => t.name).join(", ") || "-"}${nAth[r.room] ? ` นักกีฬาบุนนาคเกมส์ ${nAth[r.room]} คน` : ""}`),
+      `รวม ${RM.reduce((s, r) => s + r.total, 0)} คน จำนวนนักเรียนจาก${RMM.countSource || "ระบบของโรงเรียน"}${RMM.countDate ? ` (ข้อมูลวันที่ ${thDate(RMM.countDate)})` : ""}`
     ].join("\n"));
   }
 

@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ทำเนียบนักเรียน · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 และทะเบียนนักกีฬาบุนนาคเกมส์ 2569 ทุกชนิดกีฬา">
+<meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 ห้องเรียน 17 ห้องพร้อมครูที่ปรึกษาและผังการเข้าแถว และทะเบียนนักกีฬาบุนนาคเกมส์ 2569 ทุกชนิดกีฬา">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <section class="page-head ath-head">
   <div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบนักเรียน</h1><p>นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 และทะเบียนนักกีฬาบุนนาคเกมส์ 2569</p>
-    <a class="btn btn-gold ath-jump" href="#athletes">ดูทะเบียนนักกีฬา <span id="ath-total"></span></a></div>
+    <a class="btn btn-gold ath-jump" href="#athletes">ดูทะเบียนนักกีฬา <span id="ath-total"></span></a>
+    <a class="btn btn-line ath-jump" href="#rooms">ห้องเรียนและผังการเข้าแถว</a></div>
   <img class="duty-flower f1" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
   <img class="duty-flower f2" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
 </section>
@@ -23,6 +24,27 @@
       <div class="pending" id="pending"></div>
     </div>
     <p class="note">เพื่อความปลอดภัยของนักเรียน ทำเนียบนี้แสดงเฉพาะรูป ชื่อ ชื่อเล่น ห้อง และหน้าที่ในคณะสี ไม่แสดงเลขประจำตัวหรือข้อมูลติดต่อ ถ้าข้อมูลไม่ถูกต้อง ต้องการเปลี่ยนรูปหรือไม่ต้องการให้แสดงรูป หรือต้องการเพิ่มรายชื่อ แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
+  </div>
+</section>
+
+<section class="block rooms-sec" id="rooms">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>ห้องเรียนคณะสีเขียว และผังการเข้าแถว</h2><p id="rm-sub"></p></div></div>
+    <div class="rm-stats" id="rm-stats"></div>
+    <div class="rm-layout">
+      <div class="rm-map reveal">
+        <div class="rm-stage">เวที</div>
+        <div class="rm-cols" id="rm-cols"></div>
+        <div class="rm-sides"><span>◀ ฝั่งอาคาร 1 · ม.6</span><span>ม.1 · ฝั่งเสาธงชาติ ▶</span></div>
+        <p class="rm-hint">กดที่ห้องในแถวสีเขียวเพื่อดูครูที่ปรึกษาและจำนวนนักเรียน</p>
+      </div>
+      <div class="rm-detail" id="rm-detail" aria-live="polite"></div>
+    </div>
+    <details class="rm-table">
+      <summary>ดูข้อมูลทุกห้องในตารางเดียว</summary>
+      <div style="overflow-x:auto"><table id="rm-table"></table></div>
+    </details>
+    <p class="note" id="rm-note"></p>
   </div>
 </section>
 
@@ -46,6 +68,8 @@
 <script src="data/site.js"></script>
 <script src="data/students.js"></script>
 <script src="data/athletes.js"></script>
+<script src="data/teachers.js"></script>
+<script src="data/rooms.js"></script>
 <script src="js/common.js"></script>
 <script>
 // ไม่ให้นามสกุลถูกตัดกลางคำเมื่อขึ้นบรรทัดใหม่
@@ -89,6 +113,95 @@ document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
     </div>
   </div>`).join("");
 document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span>${esc(p)}</span>`).join("");
+
+// ---------- ห้องเรียนคณะสีเขียว และผังการเข้าแถว ----------
+(function () {
+  const R = KD.rooms || [], M = KD.roomMeta || {}, H = KD.assemblyHouses || [];
+  if (!R.length) { document.getElementById("rooms").hidden = true; return; }
+  const T = KD.teachers || [], G = KD.studentGroups || [];
+  const grade = r => +r.room.match(/ม\.(\d)/)[1];
+  const grades = [6, 5, 4, 3, 2, 1];
+  const athN = {};
+  Object.values(AT).forEach(a => athN[a.room] = (athN[a.room] || 0) + 1);
+  const tOf = room => T.filter(t => t.room === room);
+  const total = R.reduce((s, r) => s + r.total, 0);
+  const nT = new Set(R.flatMap(r => tOf(r.room).map(t => t.name))).size;
+
+  document.getElementById("rm-sub").textContent =
+    `สีเขียวมี ${R.length} ห้อง เข้าแถวเคารพธงชาติเป็นแถวที่ 3 (แถวกลาง) เริ่ม${M.assemblyStart ? ` ${thDate(M.assemblyStart)}` : ""} วันเปิดภาคเรียนที่ 2 กดที่ห้องเพื่อตรวจสอบข้อมูล`;
+  document.getElementById("rm-stats").innerHTML = [[R.length, "ห้องเรียน"], [total, "นักเรียน (คน)"], [nT, "ครูที่ปรึกษา"]]
+    .map(([n, t]) => `<div class="rm-stat reveal"><b>${n}</b><span>${t}</span></div>`).join("");
+
+  // ผัง: แถวคณะสีจากฝั่งอาคาร 1 ไปฝั่งเสาธงชาติ แถวสีเขียวแบ่งช่อง ม.6 → ม.1
+  document.getElementById("rm-cols").innerHTML = H.map((h, i) => h.me ? `
+    <div class="rm-col me"><div class="rowno">แถวที่ ${i + 1} · สีเขียวของเรา</div>
+      <div class="rm-green">${grades.map(g => { const rs = R.filter(r => grade(r) === g).reverse();  // ในช่องชั้น: เลขห้องน้อยอยู่ขวา เลขมากอยู่ซ้าย
+        return `<div class="rm-grade" style="flex:${rs.length}"><span class="g">ม.${g}</span><div class="rm-lanes">${
+        rs.map(r => `<button class="rm-btn" data-room="${esc(r.room)}" aria-label="ห้อง ${esc(r.room)}"><span>${esc(r.room)}</span></button>`).join("")}</div></div>`; }).join("")}</div>
+      <div class="hn">กระดังงา (สี${esc(h.color)})</div></div>` : `
+    <div class="rm-col"><div class="rowno">แถวที่ ${i + 1}</div><div class="bar" style="background:${h.hex}"></div>
+      <div class="hn">${esc(h.name)}<br><small>สี${esc(h.color)}</small></div></div>`).join("") +
+    `<div class="rm-flag" aria-label="เสาธงชาติ"><i></i><b></b></div>`;
+
+  const detail = document.getElementById("rm-detail");
+  const btns = [...document.querySelectorAll(".rm-btn")];
+  let cur = -1;
+  function empty() {
+    detail.innerHTML = `<div class="rm-empty"><b>เลือกห้องจากผังด้านซ้าย</b>กดที่เลขห้องในแถวสีเขียว เช่น 5/4 ระบบจะแสดงครูที่ปรึกษา จำนวนนักเรียน นักเรียนผู้มีหน้าที่ในคณะสี และจำนวนนักกีฬาของห้องนั้น</div>`;
+  }
+  function show(i, scroll) {
+    cur = i; const r = R[i], g = grade(r);
+    btns.forEach(b => b.classList.toggle("active", b.dataset.room === r.room));
+    const ts = tOf(r.room), ss = G.flatMap(gr => gr.members.filter(m => m.room === r.room).map(m => m));
+    const nA = athN[r.room] || 0;
+    detail.innerHTML = `
+      <div class="rm-dh"><h3>${esc(r.room)}</h3>
+        <p>แถวสีเขียว ช่อง ม.${g} (ช่องที่ ${7 - g} จากฝั่งอาคาร 1)${(() => { const rs = R.filter(x => grade(x) === g); return rs.length > 1 ? ` · ห้องที่ ${rs.length - rs.indexOf(r)} จากซ้ายในช่องนี้` : ""; })()}</p>
+        <div class="rm-nav"><button data-go="-1" aria-label="ห้องก่อนหน้า">‹</button><button data-go="1" aria-label="ห้องถัดไป">›</button></div></div>
+      <div class="rm-db">
+        <div class="rm-nums"><div><b>${r.total}</b><span>นักเรียน (คน)</span></div><div><b>${r.boys}</b><span>ชาย</span></div><div><b>${r.girls}</b><span>หญิง</span></div></div>
+        <h4>ครูที่ปรึกษา</h4>
+        <div class="rm-tch">${ts.length ? ts.map(t => `<div class="rm-t">${t.photo ? `<img src="${esc(t.photo)}" alt="${esc(t.name)}" loading="lazy">`
+          : `<img class="no-photo" src="assets/img/logo.png" alt="">`}<div><div class="nm">${esc(t.name)}</div><small>${esc(t.group || "")}${t.role ? ` · ${esc(t.role)}` : ""}</small></div></div>`).join("")
+          : `<div class="rm-t"><small>ยังไม่มีข้อมูลครูที่ปรึกษา</small></div>`}</div>
+        ${ss.length ? `<h4>นักเรียนผู้มีหน้าที่ในคณะสี</h4><ul class="rm-list">${ss.map(m => `<li>${esc(m.name)}${m.nick ? ` (${esc(m.nick)})` : ""} · ${esc(m.role)}</li>`).join("")}</ul>` : ""}
+        <h4>นักกีฬาบุนนาคเกมส์ 2569</h4>
+        <div>${nA ? `${nA} คน ตามทะเบียนนักกีฬา` : "ยังไม่มีนักกีฬาในทะเบียน"}</div>
+        <div class="rm-actions">${nA ? `<button class="btn btn-green" data-ath="${esc(r.room)}">ดูนักกีฬาห้องนี้</button>` : ""}
+          <a class="btn btn-outline" href="teachers.html">ดูทำเนียบครู</a></div>
+      </div>`;
+    detail.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show((cur + +b.dataset.go + R.length) % R.length));
+    const ab = detail.querySelector("[data-ath]");
+    if (ab) ab.onclick = () => {
+      const all = document.querySelector('#ath-chips .chip[data-s=""]'); if (all) all.click();
+      const q = document.getElementById("ath-q"); q.value = r.room.replace("ม.", ""); q.dispatchEvent(new Event("input"));
+      document.getElementById("athletes").scrollIntoView({ behavior: "smooth" });
+    };
+    history.replaceState(null, "", `?room=${encodeURIComponent(r.room.replace("ม.", ""))}#rooms`);
+    if (scroll && window.matchMedia("(max-width: 900px)").matches) detail.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  btns.forEach(b => b.onclick = () => show(R.findIndex(r => r.room === b.dataset.room), true));
+
+  // ตารางรวมทุกห้อง
+  document.getElementById("rm-table").innerHTML =
+    `<thead><tr><th>ห้อง</th><th>ครูที่ปรึกษา</th><th class="n">นักเรียน</th><th class="n">ชาย</th><th class="n">หญิง</th><th class="n">นักกีฬา</th></tr></thead><tbody>` +
+    R.map(r => `<tr data-room="${esc(r.room)}"><td><b>${esc(r.room)}</b></td><td>${tOf(r.room).map(t => esc(t.name)).join("<br>") || "-"}</td>
+      <td class="n">${r.total}</td><td class="n">${r.boys}</td><td class="n">${r.girls}</td><td class="n">${athN[r.room] || 0}</td></tr>`).join("") +
+    `</tbody><tfoot><tr><td>รวม ${R.length} ห้อง</td><td>${nT} ท่าน</td><td class="n">${total}</td><td class="n">${R.reduce((s, r) => s + r.boys, 0)}</td>
+      <td class="n">${R.reduce((s, r) => s + r.girls, 0)}</td><td class="n">${R.reduce((s, r) => s + (athN[r.room] || 0), 0)}</td></tr></tfoot>`;
+  document.querySelectorAll("#rm-table tr[data-room]").forEach(tr => tr.onclick = () => {
+    show(R.findIndex(r => r.room === tr.dataset.room));
+    document.getElementById("rooms").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("rm-note").innerHTML =
+    `จำนวนนักเรียนนับจาก${esc(M.countSource || "ระบบของโรงเรียน")}${M.countDate ? ` (ข้อมูลวันที่ ${thDate(M.countDate)})` : ""} อาจต่างจากปัจจุบันเล็กน้อยถ้ามีนักเรียนย้ายเข้าหรือออก แสดงเฉพาะจำนวน ไม่แสดงรายชื่อหรือเลขประจำตัวนักเรียน` +
+    `${M.assemblyImage ? ` · <a href="${esc(M.assemblyImage)}" target="_blank" rel="noopener">ดาวน์โหลดภาพผังการเข้าแถว</a>` : ""} · ถ้าข้อมูลห้องหรือครูที่ปรึกษาไม่ถูกต้อง แจ้งครูนพพลหรือหัวหน้าคณะสีได้`;
+
+  const want = (new URLSearchParams(location.search).get("room") || "").replace(/^ม\.?/, "");
+  const wi = R.findIndex(r => r.room === `ม.${want}`);
+  if (wi >= 0) { show(wi); setTimeout(() => document.getElementById("rooms").scrollIntoView(), 50); } else empty();
+})();
 
 // ---------- ทะเบียนนักกีฬา ----------
 (function () {

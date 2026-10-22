@@ -1008,3 +1008,90 @@ ul.clean li { margin-bottom: 6px; }
 .sports-tbl td:first-child { font-family: "Prompt"; font-weight: 600; color: var(--green-700); text-align: center; }
 .sports-tbl .n { font-family: "Prompt"; font-weight: 600; white-space: nowrap; }
 .sports-tbl .miss { color: #8A3412; font-size: .88rem; }
+
+/* ---------- ห้องเรียนคณะสีเขียว และผังการเข้าแถว (students.html#rooms) ---------- */
+.rm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.rm-stat { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; text-align: center; }
+.rm-stat b { display: block; font-family: "Prompt"; font-size: 1.9rem; color: var(--green-700); line-height: 1.2; }
+.rm-stat span { color: var(--ink-soft); font-size: .92rem; }
+.rm-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 900px) { .rm-layout { grid-template-columns: 1fr; } }
+.rm-map { background: #FBF8EC; border: 3px solid var(--gold); border-radius: 22px; padding: 18px 16px 16px; box-shadow: var(--shadow); }
+.rm-stage { margin: 0 auto 30px; width: 62%; background: linear-gradient(180deg, var(--green-700), var(--green-800)); color: var(--gold-soft);
+  font-family: "Prompt"; font-weight: 600; text-align: center; border-radius: 10px; padding: 8px 0; letter-spacing: 2px; }
+.rm-cols { display: grid; grid-template-columns: .7fr .7fr 6fr .7fr .7fr 26px; gap: 8px; align-items: stretch; }
+.rm-col { display: flex; flex-direction: column; align-items: stretch; min-width: 0; }
+.rm-col .bar { flex: 1; min-height: 230px; border-radius: 8px; opacity: .32; }
+.rm-col .hn { text-align: center; font-family: "Prompt"; font-size: .7rem; margin-left: -6px; margin-right: -6px; color: #6B6B5E; line-height: 1.25; margin-top: 8px; }
+.rm-col .rowno { text-align: center; font-family: "Prompt"; font-size: .7rem; white-space: nowrap; color: #9A9A8C; margin-bottom: 6px; }
+.rm-col.me .rowno { color: var(--green-700); font-weight: 600; }
+.rm-col.me .hn { color: var(--green-700); font-weight: 600; font-size: .9rem; }
+.rm-green { flex: 1; display: flex; border-radius: 10px; overflow: hidden; min-height: 250px;
+  background: linear-gradient(180deg, #3FA066, #1E6B40); box-shadow: 0 0 0 4px var(--gold), 0 8px 18px rgba(5,37,26,.25); }
+.rm-grade { display: flex; flex-direction: column; border-right: 2px solid rgba(255,255,255,.6); min-width: 0; }
+.rm-grade:last-child { border-right: 0; }
+.rm-grade .g { font-family: "Prompt"; font-weight: 700; color: var(--gold-pale); font-size: .95rem; text-align: center; padding: 9px 0 7px; border-bottom: 1.5px solid rgba(255,255,255,.45); }
+.rm-lanes { flex: 1; display: flex; }
+/* ห้องละหนึ่งแถวยาว (เหมือนแถวนักเรียน) กดได้ทั้งแถว */
+.rm-btn { flex: 1; min-width: 0; border: 0; border-left: 1.5px dashed rgba(255,255,255,.4); background: transparent; cursor: pointer;
+  display: flex; justify-content: center; align-items: flex-start; padding: 10px 0; transition: background .15s; }
+.rm-btn:first-child { border-left: 0; }
+.rm-btn span { writing-mode: vertical-rl; transform: rotate(180deg); background: #FBF8EC; color: var(--green-800); font-family: "Prompt"; font-weight: 600;
+  font-size: .88rem; border-radius: 7px; padding: 8px 2px; line-height: 1.2; transition: background .15s, box-shadow .15s; }
+.rm-btn:hover { background: rgba(255,255,255,.12); }
+.rm-btn:hover span { background: var(--gold-pale); }
+.rm-btn.active { background: rgba(243,210,122,.35); }
+.rm-btn.active span { background: linear-gradient(90deg, var(--gold-pale), var(--gold)); box-shadow: 0 0 0 2px var(--white), 0 4px 10px rgba(0,0,0,.3); }
+.rm-btn:focus-visible { outline: 3px solid var(--gold-deep); outline-offset: -3px; }
+.rm-flag { position: relative; }
+.rm-flag i { position: absolute; left: 4px; top: 30%; width: 3px; height: 110px; background: #9AA0A6; border-radius: 2px; }
+.rm-flag b { position: absolute; left: 7px; top: 30%; width: 22px; height: 15px;
+  background: linear-gradient(180deg, #A51931 0 16.6%, #F4F5F8 16.6% 33.3%, #2D2A4A 33.3% 66.6%, #F4F5F8 66.6% 83.3%, #A51931 83.3%); }
+.rm-sides { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; }
+.rm-sides span { background: var(--gold-soft); color: var(--green-900); font-family: "Prompt"; font-weight: 600; font-size: .85rem; border-radius: 10px; padding: 6px 12px; }
+.rm-hint { text-align: center; color: var(--ink-soft); font-size: .88rem; margin: 12px 0 0; }
+.rm-detail { background: var(--white); border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; scroll-margin-top: 90px; }
+.rm-dh { background: linear-gradient(120deg, var(--green-800), var(--green-600)); color: var(--white); padding: 20px 22px; position: relative; }
+.rm-dh h3 { color: var(--gold-pale); font-size: 2.1rem; margin: 0; line-height: 1.2; }
+.rm-dh p { margin: 4px 0 0; color: #CFE6B4; font-size: .92rem; }
+.rm-nav { position: absolute; right: 16px; top: 18px; display: flex; gap: 6px; }
+.rm-nav button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.1); color: var(--white); font-size: 1.1rem; cursor: pointer; }
+.rm-nav button:hover { background: var(--gold); color: var(--green-900); }
+.rm-db { padding: 18px 22px 22px; }
+.rm-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+.rm-nums div { background: var(--green-50); border: 1px solid var(--line); border-radius: 14px; text-align: center; padding: 10px 6px; }
+.rm-nums b { display: block; font-family: "Prompt"; font-size: 1.6rem; color: var(--green-700); line-height: 1.2; }
+.rm-nums span { font-size: .85rem; color: var(--ink-soft); }
+.rm-db h4 { font-size: 1rem; margin: 14px 0 8px; }
+.rm-tch { display: flex; flex-direction: column; gap: 10px; }
+.rm-t { display: flex; align-items: center; gap: 12px; }
+.rm-t img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; object-position: top; border: 3px solid var(--gold); background: radial-gradient(circle, var(--green-600), var(--green-800)); flex: none; }
+.rm-t img.no-photo { object-fit: contain; padding: 9px; }
+.rm-t .nm { font-family: "Prompt"; font-weight: 600; color: var(--green-800); line-height: 1.3; }
+.rm-t small { display: block; color: var(--ink-soft); font-size: .84rem; }
+.rm-list { margin: 0; padding-left: 18px; color: var(--ink); font-size: .95rem; }
+.rm-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.rm-actions .btn { font-size: .9rem; padding: 9px 16px; }
+.rm-empty { padding: 28px 22px; text-align: center; color: var(--ink-soft); }
+.rm-empty b { display: block; font-family: "Prompt"; color: var(--green-800); font-size: 1.15rem; margin-bottom: 6px; }
+.rm-table { margin-top: 22px; }
+.rm-table summary { cursor: pointer; font-family: "Prompt"; font-weight: 600; color: var(--green-700); padding: 6px 0; }
+.rm-table table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); font-size: .92rem; margin-top: 10px; }
+.rm-table th { background: var(--green-700); color: var(--white); font-family: "Prompt"; font-weight: 500; padding: 9px 10px; text-align: left; }
+.rm-table td { padding: 8px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+.rm-table td.n { text-align: right; white-space: nowrap; }
+.rm-table tr[data-room] { cursor: pointer; }
+.rm-table tr[data-room]:hover td { background: var(--green-50); }
+.rm-table tfoot td { font-weight: 600; background: var(--green-50); }
+@media (max-width: 640px) {
+  .rm-stats { gap: 8px; } .rm-stat { padding: 12px 6px; } .rm-stat b { font-size: 1.5rem; } .rm-stat span { font-size: .8rem; }
+  .rm-map { padding: 14px 8px 12px; }
+  .rm-cols { grid-template-columns: .35fr .35fr 6fr .35fr .35fr 16px; gap: 4px; }
+  .rm-col .hn small, .rm-col:not(.me) .hn { display: none; }
+  .rm-col .rowno { font-size: .68rem; }
+  .rm-col:not(.me) .rowno { visibility: hidden; }
+  .rm-grade .g { font-size: .78rem; } .rm-btn span { font-size: .74rem; padding: 6px 1px; border-radius: 5px; }
+  .rm-flag i { left: 2px; } .rm-flag b { left: 5px; width: 14px; height: 10px; }
+  .rm-sides span { font-size: .78rem; padding: 5px 8px; }
+  .rm-dh h3 { font-size: 1.8rem; } .rm-db { padding: 16px; } .rm-table table { font-size: .84rem; }
+}
