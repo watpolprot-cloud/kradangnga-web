@@ -214,11 +214,11 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
   document.getElementById("zone-desc").textContent = Z.desc || "";
   document.getElementById("zmap-img").src = Z.image;
   document.getElementById("zone-head").textContent = `พื้นที่ใน${Z.zone || "โซนของคณะสี"}`;
-  document.getElementById("zone-sub").textContent = `${Z.areas.length} บริเวณ · ชี้หรือแตะที่รายการเพื่อดูตำแหน่งบนผัง`;
+  document.getElementById("zone-sub").textContent = `${Z.areas.length} บริเวณ พร้อมห้องที่ดูแล · ชี้หรือแตะที่รายการเพื่อดูตำแหน่งบนผัง`;
   document.getElementById("zone-others").textContent = Z.others || "";
   const map = document.getElementById("zmap"), list = document.getElementById("zone-list");
-  map.insertAdjacentHTML("beforeend", Z.areas.map((a, i) => `<span class="amark" data-i="${i}" style="left:${a.x}%;top:${a.y}%">${i + 1}</span>`).join(""));
-  list.innerHTML = Z.areas.map((a, i) => `<li data-i="${i}" tabindex="0"><span>${i + 1}</span>${esc(a.name)}</li>`).join("");
+  map.insertAdjacentHTML("beforeend", Z.areas.map((a, i) => `<span class="amark" data-i="${i}" style="left:${a.x}%;top:${a.y}%" title="${esc(a.name + (a.who ? " · " + a.who : ""))}">${i + 1}</span>`).join(""));
+  list.innerHTML = Z.areas.map((a, i) => `<li data-i="${i}" tabindex="0"><span>${i + 1}</span><div>${esc(a.name)}${a.who ? `<small class="zc-who">${esc(a.who)}</small>` : ""}</div></li>`).join("");
   const mark = i => sec.querySelectorAll(".amark, #zone-list li").forEach(e => e.classList.toggle("on", e.dataset.i === String(i)));
   list.querySelectorAll("li").forEach(li => {
     li.onmouseenter = li.onfocus = li.onclick = () => mark(li.dataset.i);

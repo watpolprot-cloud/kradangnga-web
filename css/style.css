@@ -938,6 +938,7 @@ ul.clean li { margin-bottom: 6px; }
 .zone-card li { display: flex; gap: 12px; align-items: center; padding: 6px 8px; border-radius: 10px; line-height: 1.5; }
 .zone-card li:hover, .zone-card li.on { background: rgba(233,185,73,.14); }
 .zone-card li span { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: var(--green-900); font: 600 .85rem/28px "Prompt", sans-serif; text-align: center; }
+.zone-card .zc-who { display: block; color: var(--gold-soft); font-size: .88rem; line-height: 1.5; margin-top: 1px; }
 .zone-card .zc-foot { border-top: 1px solid rgba(233,185,73,.35); margin-top: 14px; padding-top: 12px; font-size: .9rem; color: #CFE6B4; }
 .zone-card .btn { margin-top: 16px; }
 
