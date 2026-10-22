@@ -1095,3 +1095,57 @@ ul.clean li { margin-bottom: 6px; }
   .rm-sides span { font-size: .78rem; padding: 5px 8px; }
   .rm-dh h3 { font-size: 1.8rem; } .rm-db { padding: 16px; } .rm-table table { font-size: .84rem; }
 }
+
+/* ===== ครูผู้ควบคุมนักกีฬา (games.html#coaches · teachers.html) 22 ต.ค. 2569 ===== */
+.co-days { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 12px; align-items: stretch; margin-bottom: 18px; }
+.co-days-h { font-family: "Prompt"; font-weight: 600; color: var(--green-800); display: flex; align-items: center; padding-right: 6px; }
+.co-day { background: linear-gradient(160deg, var(--green-700), var(--green-900)); color: var(--cream); border: 2px solid var(--gold); border-radius: 14px; padding: 12px 16px; display: flex; flex-direction: column; gap: 2px; }
+.co-day .k { font-family: "Prompt"; font-size: .85rem; color: var(--gold-soft); }
+.co-day b { font-family: "Prompt"; font-weight: 600; font-size: 1.08rem; }
+.co-day.past { opacity: .55; }
+.co-duties { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.co-duty { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; box-shadow: var(--shadow); }
+.co-duty .num { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: var(--green-900); font-family: "Prompt"; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; }
+.co-duty h4 { margin: 2px 0 4px; font-family: "Prompt"; font-weight: 600; color: var(--green-800); font-size: 1.05rem; }
+.co-duty p { margin: 0; color: var(--ink-soft); font-size: .95rem; line-height: 1.55; }
+.co-rule { margin: 16px 0 18px; padding: 12px 16px; border-left: 5px solid var(--gold-deep); background: var(--gold-pale); color: #5B3B07; border-radius: 10px; font-weight: 500; }
+.co-search input { width: 100%; max-width: 420px; padding: 11px 16px; border: 1px solid var(--line); border-radius: 999px; font: inherit; font-size: 1rem; background: var(--white); }
+.co-search input:focus { outline: 2px solid var(--green-500); border-color: transparent; }
+.co-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin-top: 16px; }
+.co-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); display: flex; gap: 12px; padding: 12px; align-items: flex-start; box-shadow: 0 4px 14px rgba(5, 37, 26, .07); }
+.co-card .ph { flex: none; width: 76px; height: 76px; border-radius: 50%; overflow: hidden; border: 3px solid var(--gold); background: radial-gradient(circle at 50% 38%, var(--green-600), var(--green-800)); }
+.co-card .ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.co-card .ph img.no-photo { object-fit: contain; padding: 18%; }
+.co-card .cb { min-width: 0; }
+.co-card .nm { font-family: "Prompt"; font-weight: 600; color: var(--green-800); line-height: 1.35; }
+.co-card .sub { font-size: .85rem; color: var(--ink-soft); }
+.co-card ul { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.co-card li { font-size: .92rem; line-height: 1.4; }
+.co-card li a { color: var(--ink); text-decoration: none; background: var(--green-50); border: 1px solid var(--green-100); border-radius: 8px; padding: 3px 8px; display: inline-block; }
+.co-card li a:hover { border-color: var(--green-500); }
+.co-card li b { color: var(--green-700); font-weight: 600; }
+.co-card .nw { white-space: nowrap; }
+.co-card.wait { background: var(--cream); border-style: dashed; border-color: var(--gold-deep); }
+.co-card.wait li { color: var(--ink-soft); }
+.co-welfare { margin-top: 20px; }
+.co-welfare h4 { margin: 0 0 8px; font-family: "Prompt"; font-weight: 600; color: var(--green-800); }
+.co-wf { display: flex; flex-wrap: wrap; gap: 8px; }
+.co-wp { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 4px 14px 4px 4px; font-size: .93rem; }
+.co-wp img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; object-position: top; border: 2px solid var(--gold); }
+.co-note { margin: 10px 0 0; color: var(--green-700); font-size: .95rem; }
+.co-wp.wait { padding-left: 14px; color: var(--ink-soft); background: var(--cream); }
+.sports-tbl .ev + .ev { margin-top: 4px; }
+.sports-tbl .co-who { display: block; font-size: .86rem; color: var(--green-600); font-weight: 500; line-height: 1.4; }
+.sports-tbl .co-who::before { content: "ครูผู้ควบคุม: "; color: var(--ink-soft); font-weight: 400; }
+.sports-tbl .co-who.wait::before { content: none; }
+.sports-tbl .co-who.wait { color: #8A5A0C; }
+.person .coach-line { display: block; margin-top: 6px; font-size: .84rem; line-height: 1.45; color: #6E4A0C; background: var(--gold-pale); border-radius: 8px; padding: 4px 8px; text-decoration: none; }
+@media (max-width: 860px) {
+  .co-days { grid-template-columns: repeat(3, 1fr); }
+  .co-days-h { grid-column: 1 / -1; }
+  .co-duties { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .co-days { grid-template-columns: 1fr; gap: 8px; }
+  .co-day { flex-direction: row; align-items: baseline; gap: 10px; padding: 10px 14px; }
+}

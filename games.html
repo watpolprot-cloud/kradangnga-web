@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>บุนนาคเกมส์ 2569 · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="สรุปสิ่งที่คณะสีกระดังงาต้องรู้ จากการประชุมคณะสีวันที่ 18 กันยายน 2569 และรายการแข่งกีฬา 11 ชนิดพร้อมครูผู้รับผิดชอบ">
+<meta name="description" content="สรุปสิ่งที่คณะสีกระดังงาต้องรู้ จากการประชุมคณะสีวันที่ 18 กันยายน 2569 รายการแข่งกีฬา 11 ชนิดพร้อมครูผู้รับผิดชอบ และหน้าที่ครูผู้ควบคุมนักกีฬาของสีเขียว">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -114,6 +114,18 @@
   </div>
 </section>
 
+<section class="block alt" id="coaches">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>ครูผู้ควบคุมนักกีฬา</h2><p>หน้าที่ของคุณครูคณะสีกระดังงาที่ดูแลนักกีฬาแต่ละรายการ และวันแข่งขันกีฬา 3 วัน</p></div><a class="btn btn-green" href="#sports">ดูตารางกีฬาทั้ง 11 ชนิด</a></div>
+    <div class="co-days reveal" id="co-days"></div>
+    <div class="co-duties" id="co-duties"></div>
+    <p class="co-rule reveal" id="co-rule"></p>
+    <div class="co-search reveal"><input type="search" id="co-q" placeholder="พิมพ์ชื่อครูหรือชนิดกีฬา เช่น ฟุตซอล" aria-label="ค้นหาครูหรือชนิดกีฬา"></div>
+    <div class="co-grid" id="co-grid"></div>
+    <div class="co-welfare reveal" id="co-welfare"></div>
+  </div>
+</section>
+
 <section class="block" id="sports">
   <div class="wrap">
     <div class="sec-title"><div><h2>การแข่งขันกีฬา 11 ชนิด</h2><p>รายการแข่งขันกีฬาระหว่างคณะสี ปีการศึกษา 2569 และนักกีฬากระดังงาที่ส่งชื่อในทะเบียนแล้ว</p></div><a class="btn btn-green" href="students.html#athletes">ดูทะเบียนนักกีฬาพร้อมรูป</a></div>
@@ -123,6 +135,8 @@
 
 <script src="data/site.js"></script>
 <script src="data/athletes.js"></script>
+<script src="data/teachers.js"></script>
+<script src="data/coaches.js"></script>
 <script src="js/common.js"></script>
 <script>
 const CK = [
@@ -155,14 +169,60 @@ ib.querySelectorAll("img").forEach(im => im.onclick = () => openLightbox(items, 
 // ตารางรายการแข่งขันกีฬา จาก data/athletes.js
 const SPT = KD.sports || [];
 if (!SPT.length) document.getElementById("sports").hidden = true;
-document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ชนิดกีฬา</th><th>รายการที่กระดังงาส่งชื่อ</th><th>รูปแบบ</th><th>ผู้รับผิดชอบการแข่งขัน</th><th>นักกีฬา</th></tr>` +
+const COA = KD.coaches || [];
+function coachOf(s, e) {
+  // รายการผลัด 4×100 รวมเป็นแถวเดียวในข้อมูลครู
+  const c = COA.find(c => c.no === s.no && (c.div === e.div || (e.div.startsWith("4×100") && c.div.startsWith("4×100"))));
+  if (!c) return "";
+  const t = c.teachers.map(esc).join(", ");
+  return t ? `<span class="co-who">${t}${c.pending ? " และครูอีก " + c.pending + " ท่าน (รอประกาศ)" : ""}</span>`
+           : (c.pending ? `<span class="co-who wait">ครูผู้ควบคุม: รอประกาศชื่อ</span>` : "");
+}
+document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ชนิดกีฬา</th><th>รายการที่กระดังงาส่งชื่อ · ครูสีเขียวผู้ควบคุม</th><th>รูปแบบ</th><th>ผู้รับผิดชอบการแข่งขัน</th><th>นักกีฬา</th></tr>` +
   SPT.map(s => {
     const n = new Set(s.events.flatMap(e => e.team)).size;
     return `<tr><td>${s.no}</td><td><b>${esc(s.sport)}</b></td>
-      <td>${s.events.map(e => e.team.length ? `${esc(e.div)} <span class="n">${e.team.length} คน</span>` : `${esc(e.div)} <span class="miss">ยังไม่มีรายชื่อ</span>`).join("<br>")}</td>
+      <td>${s.events.map(e => `<div class="ev">${e.team.length ? `${esc(e.div)} <span class="n">${e.team.length} คน</span>` : `${esc(e.div)} <span class="miss">ยังไม่มีรายชื่อ</span>`}${coachOf(s, e)}</div>`).join("")}</td>
       <td>${esc(s.format)}</td><td>${s.teachers.map(esc).join("<br>")}</td>
       <td class="n"><a href="students.html?sport=${encodeURIComponent(s.sport)}#athletes">${n} คน</a></td></tr>`;
   }).join("");
+
+// ครูผู้ควบคุมนักกีฬา จาก data/coaches.js (รูปครูดึงจาก data/teachers.js ตามชื่อ)
+(function () {
+  const M = KD.coachMeta, CO = KD.coaches || [];
+  if (!M || !CO.length) { document.getElementById("coaches").hidden = true; return; }
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById("co-days").innerHTML = `<div class="co-days-h">วันแข่งขันกีฬา</div>` + M.days.map((d, i) =>
+    `<div class="co-day${d.date < today ? " past" : ""}"><span class="k">วันที่ ${i + 1}</span><b>${esc(d.label)}</b></div>`).join("");
+  document.getElementById("co-duties").innerHTML = M.duties.map((d, i) =>
+    `<div class="co-duty reveal"><div class="num">${i + 1}</div><div><h4>${esc(d.title)}</h4><p>${esc(d.detail)}</p></div></div>`).join("");
+  document.getElementById("co-rule").textContent = M.rule;
+  const T = {}; (KD.teachers || []).forEach(t => T[t.name] = t);
+  const by = {};
+  CO.forEach(c => c.teachers.forEach(n => (by[n] = by[n] || []).push(c)));
+  const names = Object.keys(by).sort((a, b) => by[a][0].no - by[b][0].no);
+  const grid = document.getElementById("co-grid");
+  grid.innerHTML = names.map(n => {
+    const t = T[n] || {}, ev = by[n];
+    const ph = t.photo ? `<img src="${t.photo}" alt="${esc(n)}" loading="lazy">` : `<img class="no-photo" src="assets/img/logo.png" alt="${esc(n)} (ยังไม่มีรูป)" loading="lazy">`;
+    const key = (n + " " + ev.map(c => c.sport + " " + c.div).join(" ")).toLowerCase();
+    return `<div class="co-card reveal" data-k="${esc(key)}"><div class="ph">${ph}</div><div class="cb">
+      <div class="nm">${esc(n)}</div>${t.room ? `<div class="sub">ครูที่ปรึกษา ${esc(t.room)}</div>` : ""}
+      <ul>${ev.map(c => `<li><a href="students.html?sport=${encodeURIComponent(sportName(c))}#athletes"><b>${esc(c.sport)}</b> <span class="nw">${esc(c.div)}</span></a></li>`).join("")}</ul>
+    </div></div>`;
+  }).join("") + (CO.some(c => c.pending) ? `<div class="co-card wait reveal" data-k=""><div class="cb"><div class="nm">รอประกาศรายชื่อครูเพิ่มเติม</div>
+      <ul>${CO.filter(c => c.pending).map(c => `<li><b>${esc(c.sport)}</b> ${esc(c.div)}</li>`).join("")}</ul></div></div>` : "");
+  function sportName(c) { const s = SPT.find(s => s.no === c.no); return s ? s.sport : c.sport; }
+  document.getElementById("co-q").addEventListener("input", e => {
+    const q = e.target.value.trim().toLowerCase();
+    grid.querySelectorAll(".co-card").forEach(el => el.hidden = q && !el.dataset.k.includes(q));
+  });
+  const W = M.welfare || [];
+  document.getElementById("co-welfare").innerHTML = W.length ? `<h4>ฝ่ายสวัสดิการ</h4><div class="co-wf">${W.map(n => {
+    const t = T[n] || {};
+    return `<span class="co-wp">${t.photo ? `<img src="${t.photo}" alt="" loading="lazy">` : ""}${esc(n)}</span>`;
+  }).join("")}${M.welfarePending ? `<span class="co-wp wait">และอีก ${M.welfarePending} ท่าน (รอประกาศ)</span>` : ""}</div>${M.welfareNote ? `<p class="co-note">${esc(M.welfareNote)}</p>` : ""}` : "";
+})();
 revealAll();
 </script>
 </body>

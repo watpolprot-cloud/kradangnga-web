@@ -10,7 +10,7 @@ const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "data", "chatbot-knowledge.json");
-const DATA = ["site", "news", "teachers", "duty", "students", "athletes", "rooms", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
+const DATA = ["site", "news", "teachers", "duty", "students", "athletes", "coaches", "rooms", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
 const PAGES = [
   ["index.html", "หน้าแรก"],
   ["news.html", "ข่าวสาร"],
@@ -175,6 +175,22 @@ function build() {
       "จำนวนนักกีฬาแต่ละห้อง: " + Object.keys(rooms).sort((a, b) => a.localeCompare(b, "th", { numeric: true })).map(r => `${r} ${rooms[r]} คน`).join(", "),
       "ถ้าชื่อ ห้อง หรือรูปไม่ถูกต้อง แจ้งหัวหน้าคณะสีหรือครูนพพล ภาณุสุวัฒน์"
     ].join("\n"));
+  }
+
+  // ครูผู้ควบคุมนักกีฬา (data/coaches.js)
+  const CO = KD.coaches || [], CM = KD.coachMeta || {};
+  if (CO.length) {
+    const by = {};
+    CO.forEach(c => c.teachers.forEach(n => (by[n] = by[n] || []).push(`${c.sport} ${c.div}`)));
+    add(`${CM.title || "ครูผู้ควบคุมนักกีฬา"} หน้าที่ครูและวันแข่งขัน`, "games.html#coaches", [
+      `วันแข่งขันกีฬา 3 วัน: ${(CM.days || []).map(d => "วัน" + d.label).join(", ")}`,
+      `หน้าที่ของครูผู้ควบคุมนักกีฬา: ${(CM.duties || []).map((d, i) => `${i + 1}) ${d.title} ${d.detail}`).join(" ")}`,
+      CM.rule || "",
+      "ครูสีเขียวที่ควบคุมแต่ละรายการ:",
+      ...CO.map(c => `- ${c.sport} ${c.div}: ${c.teachers.join(" และ ") || ""}${c.pending ? `${c.teachers.length ? " และครูอีก " + c.pending + " ท่าน" : "ครูผู้ควบคุม"} (รอประกาศชื่อ)` : ""}${!c.teachers.length && !c.pending ? "ยังไม่ได้กำหนดครูผู้ควบคุม" : ""}`),
+      "รายการที่ครูแต่ละท่านควบคุม: " + Object.keys(by).map(n => `${n} (${by[n].join(", ")})`).join("; "),
+      (CM.welfare || []).length ? `ฝ่ายสวัสดิการ: ${CM.welfare.join(", ")}${CM.welfarePending ? ` และอีก ${CM.welfarePending} ท่าน (รอประกาศชื่อ)` : ""}${CM.welfareNote ? ` (${CM.welfareNote})` : ""}` : ""
+    ].filter(Boolean).join("\n"));
   }
 
   // ห้องเรียนคณะสีเขียวและผังการเข้าแถว (data/rooms.js)

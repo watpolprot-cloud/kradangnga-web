@@ -13,7 +13,7 @@
 <section class="block">
   <div class="wrap">
     <div class="leader reveal" id="leader"></div>
-    <div class="sec-title"><div><h2>ครูที่ปรึกษาคณะสี</h2><p>เรียงตามระดับชั้นที่เป็นครูที่ปรึกษา ใต้ชื่อครูมีจุดเวรประจำจุดของภาคเรียนนี้</p></div><a class="btn btn-green" href="duty.html">ดูเวรประจำจุดทั้งหมด</a></div>
+    <div class="sec-title"><div><h2>ครูที่ปรึกษาคณะสี</h2><p>เรียงตามระดับชั้นที่เป็นครูที่ปรึกษา ใต้ชื่อครูมีรายการกีฬาที่ควบคุมนักกีฬา และจุดเวรประจำจุดของภาคเรียนนี้</p></div><a class="btn btn-green" href="duty.html">ดูเวรประจำจุดทั้งหมด</a></div>
     <div class="filters" id="filters"></div>
     <div class="people" id="people"></div>
   </div>
@@ -21,6 +21,7 @@
 <script src="data/site.js"></script>
 <script src="data/teachers.js"></script>
 <script src="data/duty.js"></script>
+<script src="data/coaches.js"></script>
 <script src="js/common.js"></script>
 <script>
 const head = KD.teachers.find(t => t.role === "หัวหน้าคณะสี");
@@ -34,7 +35,11 @@ document.getElementById("leader").innerHTML = `
   </div>`;
 const levels = ["ทั้งหมด", "ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"];
 const F = document.getElementById("filters"), P = document.getElementById("people");
-const DUTY = KD.duty || [];
+const DUTY = KD.duty || [], COA = KD.coaches || [];
+function coach(name) {
+  const c = COA.filter(c => c.teachers.includes(name));
+  return c.length ? `<a class="coach-line" href="games.html#coaches">คุมนักกีฬา: ${c.map(c => esc(c.sport + " " + c.div)).join(" · ")}</a>` : "";
+}
 function card(t) {
   const duty = DUTY.filter(d => d.teachers.includes(t.name));
   const ph = t.photo ? `<img src="${t.photo}" alt="${esc(t.name)}" loading="lazy">`
@@ -44,6 +49,7 @@ function card(t) {
     <div class="nm">${esc(t.name)}</div>
     <div class="sub">${t.group === "ครูชาวต่างชาติ" ? "ครูชาวต่างชาติ" : "กลุ่มสาระ" + esc(t.group)}</div>
     ${t.role ? `<div class="rl"><span class="tag">${esc(t.role)}</span></div>` : ""}
+    ${coach(t.name)}
     ${duty.length ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}">${duty.map(d => `เวร: จุดที่ ${d.spot} ${esc(d.place)} ${esc(d.time)}`).join("<br>")}</a>` : ""}
   </div></div>`;
 }
