@@ -119,6 +119,7 @@ function build() {
     }
     if (n.album) lines.push(`มีภาพในอัลบั้มที่หน้าภาพกิจกรรม (gallery.html)`);
     if (n.link) lines.push(`ลิงก์ที่เกี่ยวข้อง: ${n.linkText || ""} (${n.link})`);
+    if (n.link2) lines.push(`ลิงก์ที่เกี่ยวข้อง: ${n.linkText2 || ""} (${n.link2})`);
     add(`ข่าว: ${n.title}`, "news.html", lines.filter(Boolean).join("\n"));
   });
 

@@ -52,6 +52,7 @@ function render(t) {
             <div class="tbl-wrap"><table class="tbl"><thead><tr>${n.table.head.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead>
             <tbody>${n.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${tableLabel(n.table.head, i, c)}${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>` : ""}
           ${n.link ? `<a class="more-link" href="${esc(n.link)}">${esc(n.linkText || "อ่านต่อ")}</a>` : ""}
+          ${n.link2 ? `<a class="more-link" href="${esc(n.link2)}"${/^https?:/.test(n.link2) ? ' target="_blank" rel="noopener"' : ""}>${esc(n.linkText2 || "อ่านต่อ")}</a>` : ""}
           ${n.album ? `<a class="more-link" href="gallery.html#${esc(n.album)}">ดูอัลบั้มภาพ</a>` : ""}
         </div>
       </article>
