@@ -947,3 +947,64 @@ ul.clean li { margin-bottom: 6px; }
   .amark { width: 20px; height: 20px; font-size: .68rem; line-height: 17px; }
 }
 @media (prefers-reduced-motion: reduce) { .dpin.sel::after { animation: none; opacity: .7; } .dpin, .amark { transition: none; } }
+
+/* ---------- ทะเบียนนักกีฬา (students.html#athletes และ games.html#sports) ---------- */
+.ath-head .wrap { position: relative; z-index: 2; }
+.ath-jump { margin-top: 20px; }
+.person .rl .ath-tag { background: var(--green-100); color: var(--green-700); margin-top: 4px; }
+.ath-intro { position: relative; overflow: hidden; padding-bottom: 96px; }
+.ath-intro::after { content: ""; position: absolute; right: -80px; bottom: -120px; width: 360px; height: 360px; border-radius: 50%; border: 2px solid rgba(233,185,73,.22); box-shadow: 0 0 0 34px rgba(233,185,73,.05); pointer-events: none; }
+.ath-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; z-index: 1; }
+.ath-stat { background: rgba(255,255,255,.07); border: 1px solid rgba(233,185,73,.35); border-radius: var(--radius); padding: 20px 18px; text-align: center; }
+.ath-stat b { display: block; font-family: "Prompt"; font-weight: 700; font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.25; color: var(--gold-soft); }
+.ath-stat span { color: var(--cream); font-size: .95rem; }
+.ath-intro + .block { margin-top: -48px; border-radius: 28px 28px 0 0; position: relative; }
+.ath-tools { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+@media (min-width: 861px) { .ath-tools { position: sticky; top: 75px; z-index: 20; background: rgba(255,255,255,.96); padding: 12px 0; box-shadow: 0 10px 14px -14px rgba(5,37,26,.35); } }
+.ath-tools .filters { margin: 0; }
+.ath-tools .chip small { font-size: .78rem; opacity: .7; margin-left: 2px; }
+.ath-search { display: flex; align-items: center; gap: 10px; font-family: "Prompt"; color: var(--green-800); flex-wrap: wrap; }
+.ath-search input { font: inherit; font-family: "Sarabun", sans-serif; font-size: 1rem; width: 280px; max-width: 100%; padding: 9px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); color: var(--ink); }
+.ath-search input:focus { outline: 2px solid var(--gold); border-color: var(--gold); }
+.ath-found { font-family: "Prompt"; color: var(--ink-soft); margin: 6px 0 22px; font-size: .95rem; }
+.sp { background: var(--green-50); border-radius: 22px; padding: 22px 22px 8px; margin-bottom: 26px; border: 1px solid var(--line); }
+.sp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.sp-head h3 { margin: 0; font-size: 1.4rem; }
+.sp-head small { color: var(--ink-soft); font-size: .9rem; line-height: 1.5; display: block; }
+.sp-head > div { flex: 1; min-width: 0; }
+.sp-no { flex: none; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Prompt"; font-weight: 700; font-size: 1.2rem; color: var(--green-900); background: linear-gradient(180deg, var(--gold-soft), var(--gold)); box-shadow: 0 4px 12px rgba(217,154,43,.35); }
+.sp.in .sp-no { animation: ath-pop .6s cubic-bezier(.2,1.6,.4,1) both; }
+.sp-count { flex: none; font-family: "Prompt"; font-weight: 600; color: var(--white); background: var(--green-700); border-radius: 999px; padding: 4px 14px; font-size: .92rem; }
+.ev { margin-bottom: 18px; }
+.ev-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 8px 0 10px; border-top: 1px dashed var(--line); }
+.ev-head b { font-family: "Prompt"; font-weight: 600; color: var(--green-800); font-size: 1.08rem; }
+.ev-n { font-family: "Prompt"; font-size: .85rem; color: #6E4A0C; background: var(--gold-pale); border-radius: 999px; padding: 1px 10px; }
+.ev-head small { color: var(--ink-soft); font-size: .86rem; }
+.ev-empty { border: 2px dashed var(--line); border-radius: 12px; padding: 12px 16px; color: var(--ink-soft); font-family: "Prompt"; font-size: .95rem; background: var(--white); }
+.ath-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.ath { background: var(--white); border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(5,37,26,.10); text-align: center; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+.ath:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(5,37,26,.18); }
+.ath-ph { display: block; padding: 0; border: 0; cursor: zoom-in; aspect-ratio: 4/5; background: radial-gradient(circle at 50% 38%, var(--green-600), var(--green-800)); overflow: hidden; }
+.ath-ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .35s; }
+.ath:hover .ath-ph img { transform: scale(1.05); }
+.ath-b { padding: 10px 8px 14px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.ath-b .nm { font-family: "Prompt"; font-weight: 600; color: var(--green-800); font-size: .93rem; line-height: 1.4; }
+.ath-also { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-top: 4px; }
+.ath-also small { width: 100%; color: var(--ink-soft); font-size: .76rem; }
+.ath-also span { font-family: "Prompt"; font-size: .72rem; line-height: 1.5; color: var(--green-700); background: var(--green-100); border-radius: 999px; padding: 1px 8px; }
+.ath-grid .ath.reveal { transition: opacity .5s ease, transform .5s ease, box-shadow .2s; }
+@keyframes ath-pop { from { transform: scale(0) rotate(-90deg); } to { transform: none; } }
+@media (max-width: 860px) { .ath-stats { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+  .ath-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .sp { padding: 16px 12px 4px; }
+  .sp-head h3 { font-size: 1.2rem; }
+  .ath-search input { width: 100%; }
+  .ath-tools .filters { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 6px; scrollbar-width: thin; }
+  .ath-tools .chip { flex: none; }
+  .ath-search { width: 100%; }
+}
+/* ตารางรายการแข่งในหน้าบุนนาคเกมส์ */
+.sports-tbl td:first-child { font-family: "Prompt"; font-weight: 600; color: var(--green-700); text-align: center; }
+.sports-tbl .n { font-family: "Prompt"; font-weight: 600; white-space: nowrap; }
+.sports-tbl .miss { color: #8A3412; font-size: .88rem; }

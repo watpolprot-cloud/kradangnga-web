@@ -10,7 +10,7 @@ const crypto = require("crypto");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "data", "chatbot-knowledge.json");
-const DATA = ["site", "news", "teachers", "duty", "students", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
+const DATA = ["site", "news", "teachers", "duty", "students", "athletes", "gallery", "memories", "tiktok", "tiktok-feed", "instagram", "instagram-feed", "chatbot"];
 const PAGES = [
   ["index.html", "หน้าแรก"],
   ["news.html", "ข่าวสาร"],
@@ -158,6 +158,24 @@ function build() {
       `- ${m.name}${m.nick ? ` (${m.nick})` : ""} ห้อง ${m.room}${m.role ? ` หน้าที่ ${m.role}` : ""}`).join("\n")).join("\n") +
     ((KD.studentPending || []).length ? `\nฝ่ายที่ยังรวบรวมรายชื่อ: ${KD.studentPending.join(", ")}` : "") +
     "\nทำเนียบแสดงเฉพาะรูป ชื่อ ชื่อเล่น ห้อง และหน้าที่ ไม่แสดงเลขประจำตัวหรือข้อมูลติดต่อ");
+
+  // ทะเบียนนักกีฬาบุนนาคเกมส์ (data/athletes.js)
+  const AT = KD.athletes || {}, SP = KD.sports || [], AM = KD.athleteMeta || {};
+  if (SP.length) {
+    const who = id => AT[id] ? `${AT[id].name} ${AT[id].room}` : id;
+    const rooms = {};
+    Object.values(AT).forEach(a => { rooms[a.room] = (rooms[a.room] || 0) + 1; });
+    add(`${AM.title || "ทะเบียนนักกีฬา"} (นักกีฬา ${Object.keys(AT).length} คน ${SP.length} ชนิดกีฬา)`, "students.html#athletes", [
+      `ที่มา: ${AM.source || "ทะเบียนนักกีฬาของคณะสี"}${AM.date ? ` (ข้อมูลวันที่ ${thDate(AM.date)})` : ""} ดูรูปนักกีฬาและค้นหาชื่อได้ที่หน้าทำเนียบนักเรียน ส่วนทะเบียนนักกีฬา`,
+      ...SP.map(s => [
+        `${s.no}. ${s.sport}${s.format ? ` (${s.format})` : ""}${(s.teachers || []).length ? ` ผู้รับผิดชอบการแข่งขัน: ${s.teachers.join(", ")}` : ""}`,
+        ...s.events.map(ev => `- ${s.sport === "E-sport" ? "" : s.sport + " "}${ev.div}${ev.form ? ` (${ev.form})` : ""}: ` +
+          (ev.team.length ? `${ev.team.length} คน ได้แก่ ${ev.team.map(who).join(", ")}` : "ยังไม่มีรายชื่อในทะเบียน"))
+      ].join("\n")),
+      "จำนวนนักกีฬาแต่ละห้อง: " + Object.keys(rooms).sort((a, b) => a.localeCompare(b, "th", { numeric: true })).map(r => `${r} ${rooms[r]} คน`).join(", "),
+      "ถ้าชื่อ ห้อง หรือรูปไม่ถูกต้อง แจ้งหัวหน้าคณะสีหรือครูนพพล ภาณุสุวัฒน์"
+    ].join("\n"));
+  }
 
   // อัลบั้มภาพ
   const A = KD.albums || [];

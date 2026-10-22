@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>บุนนาคเกมส์ 2569 · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="สรุปสิ่งที่คณะสีกระดังงาต้องรู้ จากการประชุมคณะสีวันที่ 18 กันยายน 2569">
+<meta name="description" content="สรุปสิ่งที่คณะสีกระดังงาต้องรู้ จากการประชุมคณะสีวันที่ 18 กันยายน 2569 และรายการแข่งกีฬา 11 ชนิดพร้อมครูผู้รับผิดชอบ">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -114,7 +114,15 @@
   </div>
 </section>
 
+<section class="block" id="sports">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>การแข่งขันกีฬา 11 ชนิด</h2><p>รายการแข่งขันกีฬาระหว่างคณะสี ปีการศึกษา 2569 และนักกีฬากระดังงาที่ส่งชื่อในทะเบียนแล้ว</p></div><a class="btn btn-green" href="students.html#athletes">ดูทะเบียนนักกีฬาพร้อมรูป</a></div>
+    <div class="tbl-wrap reveal"><table class="tbl sports-tbl" id="sports-tbl"></table></div>
+  </div>
+</section>
+
 <script src="data/site.js"></script>
+<script src="data/athletes.js"></script>
 <script src="js/common.js"></script>
 <script>
 const CK = [
@@ -144,6 +152,17 @@ const items = infos.map(([f, c]) => ({ src: `assets/img/games/${f}.jpg`, cap: c 
 const ib = document.getElementById("info");
 ib.innerHTML = infos.map(([f, c], i) => `<figure style="margin:0" class="reveal"><img src="assets/img/games/${f}.jpg" alt="${c}" data-i="${i}" loading="lazy"><figcaption class="credit" style="margin-top:6px">${c}</figcaption></figure>`).join("");
 ib.querySelectorAll("img").forEach(im => im.onclick = () => openLightbox(items, +im.dataset.i));
+// ตารางรายการแข่งขันกีฬา จาก data/athletes.js
+const SPT = KD.sports || [];
+if (!SPT.length) document.getElementById("sports").hidden = true;
+document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ชนิดกีฬา</th><th>รายการที่กระดังงาส่งชื่อ</th><th>รูปแบบ</th><th>ผู้รับผิดชอบการแข่งขัน</th><th>นักกีฬา</th></tr>` +
+  SPT.map(s => {
+    const n = new Set(s.events.flatMap(e => e.team)).size;
+    return `<tr><td>${s.no}</td><td><b>${esc(s.sport)}</b></td>
+      <td>${s.events.map(e => e.team.length ? `${esc(e.div)} <span class="n">${e.team.length} คน</span>` : `${esc(e.div)} <span class="miss">ยังไม่มีรายชื่อ</span>`).join("<br>")}</td>
+      <td>${esc(s.format)}</td><td>${s.teachers.map(esc).join("<br>")}</td>
+      <td class="n"><a href="students.html?sport=${encodeURIComponent(s.sport)}#athletes">${n} คน</a></td></tr>`;
+  }).join("");
 revealAll();
 </script>
 </body>

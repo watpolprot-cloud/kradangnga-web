@@ -4,12 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ทำเนียบนักเรียน · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569">
+<meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 และทะเบียนนักกีฬาบุนนาคเกมส์ 2569 ทุกชนิดกีฬา">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบนักเรียน</h1><p>นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569</p></div></section>
+<section class="page-head ath-head">
+  <div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบนักเรียน</h1><p>นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 และทะเบียนนักกีฬาบุนนาคเกมส์ 2569</p>
+    <a class="btn btn-gold ath-jump" href="#athletes">ดูทะเบียนนักกีฬา <span id="ath-total"></span></a></div>
+  <img class="duty-flower f1" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
+  <img class="duty-flower f2" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
+</section>
 <section class="block">
   <div class="wrap">
     <div id="groups"></div>
@@ -20,8 +25,27 @@
     <p class="note">เพื่อความปลอดภัยของนักเรียน ทำเนียบนี้แสดงเฉพาะรูป ชื่อ ชื่อเล่น ห้อง และหน้าที่ในคณะสี ไม่แสดงเลขประจำตัวหรือข้อมูลติดต่อ ถ้าข้อมูลไม่ถูกต้อง ต้องการเปลี่ยนรูปหรือไม่ต้องการให้แสดงรูป หรือต้องการเพิ่มรายชื่อ แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
   </div>
 </section>
+
+<section class="block dark ath-intro" id="athletes">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>ทะเบียนนักกีฬา บุนนาคเกมส์ 2569</h2><p id="ath-sub"></p></div></div>
+    <div class="ath-stats" id="ath-stats"></div>
+  </div>
+</section>
+<section class="block alt">
+  <div class="wrap">
+    <div class="ath-tools reveal">
+      <div class="filters" id="ath-chips"></div>
+      <label class="ath-search"><span>ค้นหานักกีฬา</span><input id="ath-q" type="search" placeholder="พิมพ์ชื่อ หรือห้อง เช่น 5/4" autocomplete="off"></label>
+    </div>
+    <p class="ath-found" id="ath-found" aria-live="polite"></p>
+    <div id="ath-list"></div>
+    <p class="note">รายชื่อตามทะเบียนนักกีฬาที่คณะสีกระดังงาส่งฝ่ายกีฬา (20 ตุลาคม 2569) แสดงเฉพาะรูป ชื่อ และห้อง ไม่แสดงเลขประจำตัว รูปที่ไม่ชัดใช้รูปจากระบบของโรงเรียนแทน ถ้าชื่อ รูป หรือรายการแข่งไม่ถูกต้อง หรือมีการเปลี่ยนตัวนักกีฬา แจ้งครูนพพลหรือหัวหน้าคณะสีได้</p>
+  </div>
+</section>
 <script src="data/site.js"></script>
 <script src="data/students.js"></script>
+<script src="data/athletes.js"></script>
 <script src="js/common.js"></script>
 <script>
 // ไม่ให้นามสกุลถูกตัดกลางคำเมื่อขึ้นบรรทัดใหม่
@@ -29,23 +53,136 @@ function nameHtml(n) {
   const i = n.lastIndexOf(" ");
   return i < 0 ? esc(n) : `${esc(n.slice(0, i))} <span style="white-space:nowrap">${esc(n.slice(i + 1))}</span>`;
 }
+const PREFIX = /^(นางสาว|นาง|นาย|เด็กหญิง|เด็กชาย)/;
+
+// ---------- ทะเบียนนักกีฬา: ข้อมูลกลาง ----------
+const AT = KD.athletes || {}, SP = KD.sports || [];
+// ชื่อรายการแบบสั้นสำหรับป้าย "ลงแข่งอีก"
+const evLabel = (s, ev) => s.sport === "E-sport" ? ev.div : s.sport === "กรีฑา" ? `กรีฑา ${ev.div}` : `${s.sport} ${ev.div}`;
+const evOf = {}, sportOf = {};
+SP.forEach(s => s.events.forEach(ev => ev.team.forEach(id => {
+  (evOf[id] = evOf[id] || []).push(evLabel(s, ev));
+  const t = s.sport === "E-sport" ? ev.div : s.sport;
+  if (!(sportOf[id] = sportOf[id] || []).includes(t)) sportOf[id].push(t);
+})));
+const byName = {};
+Object.entries(AT).forEach(([id, a]) => byName[a.name] = id);
+
+// ---------- ฝ่ายต่าง ๆ ในคณะสี ----------
 document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
   <div class="st-group reveal">
     <h3>${esc(g.group)}</h3>
-    <div class="people">${g.members.map(m => `
+    <div class="people">${g.members.map(m => {
+      const sports = sportOf[byName[m.name]] || [];
+      return `
       <div class="person">
         <div class="ph">${m.photo ? `<img src="assets/img/students/${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy">`
-          : `<div class="initial">${esc(m.name.replace(/^(นางสาว|นาง|นาย|เด็กหญิง|เด็กชาย)/, "").charAt(0))}</div>`}</div>
+          : `<div class="initial">${esc(m.name.replace(PREFIX, "").charAt(0))}</div>`}</div>
         <div class="pb">
           <span class="room-badge">${esc(m.room)}</span>
           <div class="nm">${nameHtml(m.name)}</div>
           ${m.nick ? `<div class="nick">ชื่อเล่น ${esc(m.nick)}</div>` : ""}
-          <div class="rl"><span class="tag">${esc(m.role)}</span></div>
+          <div class="rl"><span class="tag">${esc(m.role)}</span>${sports.map(t => ` <a class="tag ath-tag" href="?sport=${encodeURIComponent(SP.find(x => x.sport === t || x.events.some(e => e.div === t)).sport)}#athletes">นักกีฬา${/^[A-Za-z]/.test(t) ? " " : ""}${esc(t)}</a>`).join("")}</div>
         </div>
-      </div>`).join("")}
+      </div>`;
+    }).join("")}
     </div>
   </div>`).join("");
 document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span>${esc(p)}</span>`).join("");
+
+// ---------- ทะเบียนนักกีฬา ----------
+(function () {
+  if (!SP.length) { document.getElementById("athletes").hidden = true; return; }
+  const M = KD.athleteMeta || {};
+  const ids = Object.keys(AT).filter(id => evOf[id]);
+  const events = SP.flatMap(s => s.events);
+  const rooms = new Set(ids.map(id => AT[id].room));
+  document.getElementById("ath-total").textContent = `${ids.length} คน`;
+  document.getElementById("ath-sub").textContent =
+    `นักกีฬาคณะสีกระดังงาตามทะเบียนที่ส่งฝ่ายกีฬา${M.date ? ` วันที่ ${thDate(M.date)}` : ""} เลือกชนิดกีฬาหรือค้นหาชื่อและห้องของตัวเองได้`;
+  const stats = [
+    [ids.length, "นักกีฬา (คน)"],
+    [SP.length, "ชนิดกีฬา"],
+    [events.filter(e => e.team.length).length, "รายการที่ส่งชื่อแล้ว"],
+    [rooms.size, "ห้องเรียนที่มีนักกีฬา"]
+  ];
+  const st = document.getElementById("ath-stats");
+  st.innerHTML = stats.map(([n, t], i) => `<div class="ath-stat reveal" style="transition-delay:${i * .08}s"><b data-n="${n}">0</b><span>${t}</span></div>`).join("");
+  // ตัวเลขวิ่งขึ้นเมื่อเลื่อนมาเห็น
+  const run = () => st.querySelectorAll("b[data-n]").forEach(b => {
+    const n = +b.dataset.n, t0 = performance.now();
+    const step = t => { const p = Math.min(1, (t - t0) / 1100); b.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { run(); io.disconnect(); } }, { threshold: .3 });
+    io.observe(st);
+  } else run();
+
+  // ตัวเลือกชนิดกีฬา
+  const chips = document.getElementById("ath-chips"), q = document.getElementById("ath-q");
+  const countOf = s => new Set(s.events.flatMap(e => e.team)).size;
+  let cur = "";
+  const want = new URLSearchParams(location.search).get("sport");
+  if (want && SP.some(s => s.sport === want)) cur = want;
+  chips.innerHTML = `<button class="chip" data-s="">ทุกชนิดกีฬา</button>` +
+    SP.map(s => `<button class="chip" data-s="${esc(s.sport)}">${esc(s.sport)} <small>${countOf(s)}</small></button>`).join("");
+  chips.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    cur = b.dataset.s; render();
+  });
+  q.addEventListener("input", render);
+
+  const norm = s => String(s).toLowerCase().replace(/\s+/g, "").replace(/^ม\./, "");
+  const match = (id, k) => {
+    if (!k) return true;
+    const a = AT[id];
+    return norm(a.name).includes(k) || norm(a.name.replace(PREFIX, "")).includes(k) || norm(a.room).includes(k);
+  };
+  const card = (id, s, ev) => {
+    const a = AT[id], also = (evOf[id] || []).filter(t => t !== evLabel(s, ev));
+    return `<div class="ath reveal">
+      <button class="ath-ph" data-id="${id}" aria-label="ดูรูป ${esc(a.name)}"><img src="assets/img/athletes/${id}.jpg" alt="${esc(a.name)}" loading="lazy"></button>
+      <div class="ath-b"><span class="room-badge">${esc(a.room)}</span><div class="nm">${nameHtml(a.name)}</div>
+        ${also.length ? `<div class="ath-also"><small>ลงแข่งอีก</small>${also.map(t => `<span>${esc(t)}</span>`).join("")}</div>` : ""}</div>
+    </div>`;
+  };
+  const list = document.getElementById("ath-list"), found = document.getElementById("ath-found");
+  function render() {
+    chips.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.s === cur));
+    const k = norm(q.value.trim().replace(/^ม\.?/, ""));
+    const hit = new Set(); let nEv = 0;
+    const html = SP.filter(s => !cur || s.sport === cur).map(s => {
+      const evs = s.events.map(ev => {
+        const team = ev.team.filter(id => match(id, k));
+        if (k && !team.length) return "";
+        team.forEach(id => hit.add(id)); if (team.length) nEv++;
+        return `<div class="ev">
+          <div class="ev-head"><b>${esc(ev.div)}</b>${ev.team.length ? `<span class="ev-n">ส่งชื่อ ${ev.team.length} คน</span>` : ""}<small>${esc(ev.form)}</small></div>
+          ${team.length ? `<div class="ath-grid">${team.map(id => card(id, s, ev)).join("")}</div>`
+            : `<div class="ev-empty">ยังไม่มีรายชื่อในทะเบียน</div>`}
+        </div>`;
+      }).join("");
+      if (!evs) return "";
+      return `<div class="sp reveal">
+        <div class="sp-head"><span class="sp-no">${s.no}</span><div><h3>${esc(s.sport)}</h3>
+          <small>${esc(s.format)} · ผู้รับผิดชอบการแข่งขัน ${s.teachers.map(esc).join(", ")}</small></div>
+          <span class="sp-count">${countOf(s)} คน</span></div>
+        ${evs}
+      </div>`;
+    }).join("");
+    list.innerHTML = html || `<div class="ev-empty">ไม่พบนักกีฬาที่ตรงกับคำค้น ลองพิมพ์เฉพาะชื่อจริง หรือเลขห้อง เช่น 5/4</div>`;
+    found.textContent = k ? `พบ ${hit.size} คน ใน ${nEv} รายการ` : cur ? `${cur} · นักกีฬา ${hit.size} คน` : `นักกีฬาทั้งหมด ${hit.size} คน ใน ${nEv} รายการ`;
+    list.querySelectorAll(".ev").forEach(box => {
+      const btns = [...box.querySelectorAll(".ath-ph")];
+      const items = btns.map(b => { const a = AT[b.dataset.id]; return { src: `assets/img/athletes/${b.dataset.id}.jpg`, cap: `${a.name} · ${a.room} · ${(evOf[b.dataset.id] || []).join(", ")}` }; });
+      btns.forEach((b, i) => b.onclick = () => openLightbox(items, i));
+    });
+    revealAll();
+  }
+  render();
+  if (want) setTimeout(() => document.getElementById("athletes").scrollIntoView(), 50);
+})();
 revealAll();
 </script>
 </body>
