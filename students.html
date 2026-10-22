@@ -106,7 +106,7 @@ document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
           <span class="room-badge">${esc(m.room)}</span>
           <div class="nm">${nameHtml(m.name)}</div>
           ${m.nick ? `<div class="nick">ชื่อเล่น ${esc(m.nick)}</div>` : ""}
-          <div class="rl"><span class="tag">${esc(m.role)}</span>${sports.map(t => ` <a class="tag ath-tag" href="?sport=${encodeURIComponent(SP.find(x => x.sport === t || x.events.some(e => e.div === t)).sport)}#athletes">นักกีฬา${/^[A-Za-z]/.test(t) ? " " : ""}${esc(t)}</a>`).join("")}</div>
+          <div class="rl">${m.role.split(" · ").map(r => `<span class="tag">${esc(r)}</span>`).join(" ")}${sports.map(t => ` <a class="tag ath-tag" href="?sport=${encodeURIComponent(SP.find(x => x.sport === t || x.events.some(e => e.div === t)).sport)}#athletes">นักกีฬา${/^[A-Za-z]/.test(t) ? " " : ""}${esc(t)}</a>`).join("")}</div>
         </div>
       </div>`;
     }).join("")}
@@ -266,12 +266,12 @@ document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span
     const k = norm(q.value.trim().replace(/^ม\.?/, ""));
     const hit = new Set(); let nEv = 0;
     const html = SP.filter(s => !cur || s.sport === cur).map(s => {
-      const evs = s.events.map(ev => {
+      const evs = s.events.map((ev, ei) => {
         const team = ev.team.filter(id => match(id, k));
         if (k && !team.length) return "";
         team.forEach(id => hit.add(id)); if (team.length) nEv++;
         return `<div class="ev">
-          <div class="ev-head"><b>${esc(ev.div)}</b>${ev.team.length ? `<span class="ev-n">ส่งชื่อ ${ev.team.length} คน</span>` : ""}<small>${esc(ev.form)}</small></div>
+          <div class="ev-head"><b>${esc(ev.div)}</b>${ev.team.length ? `<span class="ev-n">ส่งชื่อ ${ev.team.length} คน</span>` : ""}<small>${esc(ev.form)}</small><a class="ev-print" href="print-athletes.html?s=${s.no}&amp;e=${ei}&amp;print=1" target="_blank" rel="noopener" title="เปิดแบบฟอร์มทะเบียนนักกีฬา A4 สำหรับพิมพ์หรือบันทึกเป็น PDF">พิมพ์ทะเบียน</a></div>
           ${team.length ? `<div class="ath-grid">${team.map(id => card(id, s, ev)).join("")}</div>`
             : `<div class="ev-empty">ยังไม่มีรายชื่อในทะเบียน</div>`}
         </div>`;
@@ -280,7 +280,7 @@ document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span
       return `<div class="sp reveal">
         <div class="sp-head"><span class="sp-no">${s.no}</span><div><h3>${esc(s.sport)}</h3>
           <small>${esc(s.format)} · ผู้รับผิดชอบการแข่งขัน ${s.teachers.map(esc).join(", ")}</small></div>
-          <span class="sp-count">${countOf(s)} คน</span></div>
+          <span class="sp-count">${countOf(s)} คน</span>${s.events.length > 1 ? `<a class="ev-print sp-print" href="print-athletes.html?s=${s.no}&amp;print=1" target="_blank" rel="noopener">พิมพ์ทุกรุ่น (${s.events.length} หน้า)</a>` : ""}</div>
         ${evs}
       </div>`;
     }).join("");

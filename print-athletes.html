@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>พิมพ์ทะเบียนนักกีฬา · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.png">
+<style>
+/* TH Sarabun New (ฟอนต์แห่งชาติ SIPA) ใช้ฟอนต์ในเครื่องก่อน ถ้าไม่มีโหลดจากเว็บ */
+@font-face { font-family: "THSN"; src: local("TH Sarabun New"), local("THSarabunNew"), url("assets/fonts/THSarabunNew-Regular.woff") format("woff"); font-weight: 400; }
+@font-face { font-family: "THSN"; src: local("TH Sarabun New Bold"), local("THSarabunNew-Bold"), url("assets/fonts/THSarabunNew-Bold.woff") format("woff"); font-weight: 700; }
+@font-face { font-family: "Prompt"; src: url("assets/fonts/Prompt-Medium.ttf") format("truetype"); font-weight: 500; }
+@page { size: A4 portrait; margin: 10mm 10mm 8mm; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: #e9eee9; color: #111; font-family: "THSN", "TH Sarabun New", sans-serif; }
+/* แถบเครื่องมือ (เฉพาะบนจอ) */
+.bar { position: sticky; top: 0; z-index: 5; background: #0B3B2A; color: #fff; padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-family: "Prompt", sans-serif; }
+.bar b { font-weight: 500; }
+.bar .tip { font-size: .85rem; color: #CFE6B4; flex: 1 1 260px; }
+.bar a, .bar button { font: inherit; font-size: .95rem; border-radius: 999px; padding: 7px 16px; cursor: pointer; text-decoration: none; }
+.bar button { background: #E8C46A; color: #3B2A05; border: 0; }
+.bar a { color: #fff; border: 1px solid rgba(255,255,255,.5); }
+.err { max-width: 640px; margin: 40px auto; padding: 0 16px; font-family: "Prompt", sans-serif; font-size: 1.05rem; }
+/* หน้ากระดาษ A4 */
+.sheet { width: 210mm; min-height: 297mm; margin: 14px auto; background: #fff; padding: 10mm 10mm 8mm; box-shadow: 0 4px 18px rgba(0,0,0,.18); display: flex; flex-direction: column; }
+.ttl { text-align: center; font-weight: 700; font-size: 22pt; line-height: 1.35; padding-top: 4mm; }
+.col { text-align: center; font-size: 19pt; line-height: 1.4; margin: 1mm 0 4mm; }
+.col span { display: inline-block; min-width: 34mm; border-bottom: 1.2pt dotted #000; font-weight: 700; font-size: 21pt; padding: 0 3mm; }
+.grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: calc(100% - 1.5pt); border-top: 1pt solid #000; border-left: 1pt solid #000; }
+.cell { border-right: 1pt solid #000; border-bottom: 1pt solid #000; padding: 2.2mm 1mm 1.4mm; display: flex; flex-direction: column; }
+.ph { width: 25mm; height: 31mm; margin: 0 auto 1.6mm; border: 1pt solid #000; overflow: hidden; background: #fff; }
+.ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.ln { display: flex; align-items: baseline; font-size: 13pt; line-height: 1.35; white-space: nowrap; gap: .4mm; }
+.ln i { font-style: normal; flex: none; font-size: 12pt; }
+.ln u { text-decoration: none; min-width: 0; border-bottom: .9pt dotted #000; text-align: center; padding: 0 .3mm; line-height: 1.25; }
+/* ชื่อ-นามสกุล: ขึ้นบรรทัดใหม่ตรงนามสกุล (ไม่ตัดกลางคำ) ถ้ายาวเกินช่องสคริปต์จะย่อตัวอักษรให้พอดี */
+.ln.nmr { align-items: flex-end; }
+.ln u.nm { flex: 1 1 auto; font-size: 13pt; white-space: normal; line-height: 1.15; padding-top: .4mm; }
+.ln u.nm b { font-weight: 400; white-space: nowrap; }
+.ln u.rm { flex: 1 1 auto; }
+.ln u.sm { flex: 0 0 6.5mm; }
+.dense .ph { width: 23mm; height: 28mm; }
+.dense .cell { padding-top: 1.6mm; }
+.sig { padding-top: 10mm; display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; font-size: 17pt; line-height: 1.6; }
+.sig div { text-align: center; }
+.sig .dots { display: inline-block; width: 52mm; border-bottom: .9pt dotted #000; }
+.sig .who { display: inline-block; min-width: 50mm; }
+.foot { margin-top: 5mm; font-size: 12pt; color: #666; text-align: right; }
+@media print {
+  body { background: #fff; }
+  .bar, .no-print { display: none !important; }
+  .sheet { margin: 0; width: auto; min-height: 279mm; box-shadow: none; padding: 0; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  .cell { break-inside: avoid; }
+}
+@media screen and (max-width: 820px) {
+  main { overflow-x: auto; }
+  .sheet { zoom: .45; }
+}
+</style>
+</head>
+<body>
+<div class="bar no-print">
+  <b id="bar-t">ทะเบียนนักกีฬา</b>
+  <span class="tip">กด "พิมพ์ / บันทึกเป็น PDF" แล้วเลือกปลายทางเป็น "บันทึกเป็น PDF" (Save as PDF) กระดาษ A4 จากนั้นพิมพ์ลงชื่อส่งกรรมการ</span>
+  <button type="button" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button>
+  <a href="students.html#athletes">กลับหน้าทะเบียนนักกีฬา</a>
+</div>
+<main id="pages"></main>
+<script src="data/athletes.js"></script>
+<script src="data/coaches.js"></script>
+<script>
+(function () {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const AT = (window.KD && KD.athletes) || {}, SP = (window.KD && KD.sports) || [], CO = (window.KD && KD.coaches) || [];
+  const HEAD = "ไชยพงศ์ ปานมีศรี"; // หัวหน้าคณะสี (แม่สี)
+  const p = new URLSearchParams(location.search);
+  const sp = SP.find(s => String(s.no) === p.get("s"));
+  const out = document.getElementById("pages");
+  if (!sp) { out.innerHTML = `<p class="err">ไม่พบรายการกีฬา กลับไปเลือกรายการที่หน้า <a href="students.html#athletes">ทะเบียนนักกีฬา</a></p>`; return; }
+  const ei = p.get("e");
+  const evs = ei === null || ei === "" ? sp.events.map((ev, i) => [ev, i]) : [[sp.events[+ei], +ei]].filter(x => x[0]);
+  if (!evs.length) { out.innerHTML = `<p class="err">ไม่พบรุ่นที่เลือก</p>`; return; }
+
+  // จำนวนคนที่ส่งได้ จากข้อความเช่น "ส่งได้ 20 คน" "ทีมละ 4 คน" "ทีม 7 คน"
+  const quota = ev => { const m = ev.form.match(/(?:ส่งได้|ทีมละ|ทีม)\s*(\d+)\s*คน/); return m ? +m[1] : 0; };
+  const coachOf = ev => {
+    const c = CO.find(c => c.sport === sp.sport && c.div === ev.div)
+      || (/^4×100/.test(ev.div) && CO.find(c => c.sport === sp.sport && /^4×100/.test(c.div)));
+    return c && c.teachers.length ? c.teachers.map(t => t.replace(/^ครู/, "")).join(", ") : "";
+  };
+
+  out.innerHTML = evs.map(([ev]) => {
+    const team = ev.team.filter(id => AT[id]);
+    const q = quota(ev), n = Math.max(q, team.length);
+    const slots = Math.max(5, Math.ceil(n / 5) * 5);
+    const label = `${sp.sport} ${ev.div}`;
+    const cells = Array.from({ length: slots }, (_, i) => {
+      const id = team[i], a = id && AT[id];
+      return `<div class="cell">
+        <div class="ph">${a ? `<img src="assets/img/athletes/${id}.jpg" alt="">` : ""}</div>
+        <div class="ln nmr"><i>ชื่อ</i><u class="nm">${a ? esc(a.name).split(" ").map(w => `<b>${w}</b>`).join(" ") : "&nbsp;"}</u></div>
+        <div class="ln"><i>ชั้น</i><u class="rm">${a ? esc(a.room) : "&nbsp;"}</u><i>เลขที่</i><u class="sm">${a && a.no ? a.no : "&nbsp;"}</u></div>
+      </div>`;
+    }).join("");
+    const coach = coachOf(ev);
+    return `<section class="sheet">
+      <div class="ttl">ทะเบียนนักกีฬา${/^[A-Za-z]/.test(label) ? " " : ""}${esc(label)}${n ? ` (${n} คน)` : ""}</div>
+      <div class="col">สี <span>กระดังงา</span></div>
+      <div class="grid${slots > 15 ? " dense" : ""}">${cells}</div>
+      <div class="sig">
+        <div>ลงชื่อ<span class="dots"></span>ครูผู้ดูแล<br>(<span class="who">${coach ? esc(coach) : "&nbsp;"}</span>)</div>
+        <div>ลงชื่อ<span class="dots"></span>แม่สี<br>(<span class="who">${esc(HEAD)}</span>)</div>
+      </div>
+      <div class="foot no-print">${esc(sp.sport)} · ${esc(ev.form)} · ข้อมูลจากทะเบียนนักกีฬาบนเว็บคณะสี${team.length ? ` · ส่งชื่อแล้ว ${team.length} คน` : " · ยังไม่มีรายชื่อในทะเบียน เติมชื่อเองได้"}</div>
+    </section>`;
+  }).join("");
+  document.getElementById("bar-t").textContent = `ทะเบียนนักกีฬา ${sp.sport}${evs.length === 1 ? " " + evs[0][0].div : ` · ${evs.length} รุ่น (${evs.length} หน้า)`}`;
+  document.title = `ทะเบียนนักกีฬา ${sp.sport}${evs.length === 1 ? " " + evs[0][0].div : ""} · คณะสีกระดังงา`;
+
+  // ย่อตัวอักษรจนข้อความอยู่ในช่องทั้งหมด (ชื่อไม่เกิน 2 บรรทัด ห้อง/เลขที่ 1 บรรทัด)
+  const room = u => u.clientWidth - parseFloat(getComputedStyle(u).paddingLeft) - parseFloat(getComputedStyle(u).paddingRight);
+  const shrink = (u, start, over) => { let s = start; u.style.fontSize = s + "pt"; while (over(u) && s > 8) { s -= .25; u.style.fontSize = s + "pt"; } };
+  const fit = () => {
+    document.querySelectorAll(".ln u.nm").forEach(u => shrink(u, 13, u =>
+      [...u.children].some(b => b.getBoundingClientRect().width > room(u) - 1) || u.getClientRects()[0] && u.scrollHeight > parseFloat(getComputedStyle(u).lineHeight) * 2.4));
+    document.querySelectorAll(".ln u.rm, .ln u.sm").forEach(u => shrink(u, 12.5, u => u.scrollWidth > u.clientWidth));
+  };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+  // เปิดหน้าต่างพิมพ์อัตโนมัติเมื่อรูปโหลดครบ (กดจากปุ่มพิมพ์ในหน้าทะเบียน)
+  if (p.get("print") === "1") {
+    const imgs = [...document.images];
+    Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })))
+      .then(() => (document.fonts ? document.fonts.ready : 0)).then(() => { fit(); setTimeout(() => window.print(), 300); });
+  }
+})();
+</script>
+</body>
+</html>
