@@ -58,9 +58,15 @@
         <div><a href="tiktok.html">ดูคลิป</a> · <a href="instagram.html">ดูโพสต์ IG</a> ในเว็บ</div>
         <div style="margin-top:10px">${(S.motto || []).join("<br>")}</div>
       </div>
-      <div class="copy">เว็บไซต์ของครูและนักเรียนคณะสีกระดังงา · ปรับปรุงล่าสุด ${S.updated || ""}</div>
+      <div class="copy">เว็บไซต์ของครูและนักเรียนคณะสีกระดังงา · ปรับปรุงล่าสุด <span id="last-update">${S.updated || ""}</span></div>
     </div>`;
   document.body.append(footer);
+  // วันเวลาที่กด Push ครั้งล่าสุด (บอท GitHub Actions เขียนลง data/last-update.json ทุกครั้งที่ Push)
+  fetch("data/last-update.json?t=" + Date.now(), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(j => {
+    const m = j && /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(j.updated || "");
+    if (!m) return;
+    footer.querySelector("#last-update").textContent = `${+m[3]} ${TH_MONTHS[m[2] - 1]} ${+m[1] + 543} เวลา ${m[4]}.${m[5]} น.`;
+  }).catch(() => {});
 
   // ---------- ตัวช่วย ----------
   const TH_MONTHS = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
