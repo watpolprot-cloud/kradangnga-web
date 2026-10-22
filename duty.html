@@ -56,7 +56,7 @@ const cardId = d => `d${d.spot}-${d.time.slice(0, 5).replace(".", "")}`;
 const start = d => d.time.split("–")[0].trim();
 const end = d => d.time.split("–")[1].replace("น.", "").trim();
 document.getElementById("duty-sub").textContent =
-  `ภาคเรียนที่ ${M.term || ""} · ${M.day || ""} · ${new Set(D.map(d => d.spot)).size} จุด · คุณครู ${names.length} ท่าน`;
+  `ภาคเรียนที่ ${M.term || ""} · ${M.day || ""} · ${new Set(D.map(d => d.spot)).size} จุด · คุณครูลงเวร ${names.length} ท่าน (ครูไชยพงศ์ หัวหน้าคณะสี ไม่ลงเวร)`;
 
 function person(n, sel) {
   const [, pre = "", first, last] = n.match(/^(ครู|Mr\. |Ms\. |Mrs\. )?(\S+)\s*(.*)$/);
