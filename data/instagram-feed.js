@@ -6,11 +6,11 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 508,
+  "followers": 509,
   "following": null,
   "posts": 36,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-10-22"
+  "day": "2026-10-23"
  },
  "posts": [
   {
@@ -44,7 +44,7 @@ KD.instagramFeed = {
    "cw": 540,
    "ch": 960,
    "alt": "",
-   "likes": 221,
+   "likes": 222,
    "comments": 1
   },
   {
@@ -63,23 +63,6 @@ KD.instagramFeed = {
    "alt": "",
    "likes": 132,
    "comments": 1
-  },
-  {
-   "id": "DcN_nlbKezN",
-   "url": "https://www.instagram.com/p/DcN_nlbKezN/",
-   "kind": "image",
-   "reel": false,
-   "caption": "5/7 เก็บขยะกันคร้าบ #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #fyp",
-   "date": "2026-08-19",
-   "ts": 1787135986,
-   "images": [
-    "assets/img/instagram/DcN_nlbKezN.jpg"
-   ],
-   "cw": 720,
-   "ch": 405,
-   "alt": "",
-   "likes": 303,
-   "comments": null
   },
   {
    "id": "DcF7cm-qaKn",
@@ -102,5 +85,5 @@ KD.instagramFeed = {
  "skipped": [],
  "qr": 1,
  "via": "embed",
- "updated": "2026-10-22T21:31+07:00"
+ "updated": "2026-10-23T02:13+07:00"
 };
