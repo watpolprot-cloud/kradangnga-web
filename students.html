@@ -112,7 +112,9 @@ document.getElementById("groups").innerHTML = KD.studentGroups.map(g => `
     }).join("")}
     </div>
   </div>`).join("");
-document.getElementById("pending").innerHTML = KD.studentPending.map(p => `<span>${esc(p)}</span>`).join("");
+const PD = KD.studentPending || [];
+document.getElementById("pending").innerHTML = PD.map(p => `<span>${esc(p)}</span>`).join("");
+if (!PD.length) document.getElementById("pending").closest(".st-group").hidden = true;
 
 // ---------- ห้องเรียนคณะสีเขียว และผังการเข้าแถว ----------
 (function () {
