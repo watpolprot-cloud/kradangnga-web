@@ -10,7 +10,7 @@ KD.instagramFeed = {
   "following": null,
   "posts": 36,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-10-23"
+  "day": "2026-10-24"
  },
  "posts": [
   {
@@ -27,7 +27,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 1280,
    "alt": "",
-   "likes": 49,
+   "likes": 51,
    "comments": 0
   },
   {
@@ -65,23 +65,6 @@ KD.instagramFeed = {
    "comments": 1
   },
   {
-   "id": "DcN_nlbKezN",
-   "url": "https://www.instagram.com/p/DcN_nlbKezN/",
-   "kind": "image",
-   "reel": false,
-   "caption": "5/7 เก็บขยะกันคร้าบ #พรตพิทยพยัต #คณะสีกระดังงา #สีเขียว #กีฬาสี #fyp",
-   "date": "2026-08-19",
-   "ts": 1787135986,
-   "images": [
-    "assets/img/instagram/DcN_nlbKezN.jpg"
-   ],
-   "cw": 720,
-   "ch": 405,
-   "alt": "",
-   "likes": 303,
-   "comments": null
-  },
-  {
    "id": "DcF7cm-qaKn",
    "url": "https://www.instagram.com/p/DcF7cm-qaKn/",
    "kind": "video",
@@ -102,5 +85,5 @@ KD.instagramFeed = {
  "skipped": [],
  "qr": 1,
  "via": "embed",
- "updated": "2026-10-23T21:15+07:00"
+ "updated": "2026-10-24T02:15+07:00"
 };
