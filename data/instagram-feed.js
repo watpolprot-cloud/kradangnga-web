@@ -8,11 +8,45 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 509,
   "following": null,
-  "posts": 36,
+  "posts": 39,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-10-24"
+  "day": "2026-10-25"
  },
  "posts": [
+  {
+   "id": "De4ggCbPm-l",
+   "url": "https://www.instagram.com/p/De4ggCbPm-l/",
+   "kind": "image",
+   "reel": false,
+   "caption": "ร้อยเรียงตำนาน สืบสานวรรณศิลป์\n\nเปิดม่านแห่งพนาลัย เผยมนตร์เสน่ห์แห่งหิมพานต์ \nเมื่อเรื่องราวจากวรรณคดีไทยอันทรงคุณค่า จะถูกถ่ายทอดผ่านจินตนาการและความภาคภูมิใจของพวกเราชาวคณะสีกระดังงา",
+   "date": "2026-10-24",
+   "ts": 1792857487,
+   "images": [
+    "assets/img/instagram/De4ggCbPm-l.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 20,
+   "comments": 0
+  },
+  {
+   "id": "De4gb4Dvhn7",
+   "url": "https://www.instagram.com/p/De4gb4Dvhn7/",
+   "kind": "image",
+   "reel": false,
+   "caption": "ร้อยเรียงตำนาน สืบสานวรรณศิลป์\n\nเปิดม่านแห่งพนาลัย เผยมนตร์เสน่ห์แห่งหิมพานต์ \nเมื่อเรื่องราวจากวรรณคดีไทยอันทรงคุณค่า จะถูกถ่ายทอดผ่านจินตนาการและความภาคภูมิใจของพวกเราชาวคณะสีกระดังงา",
+   "date": "2026-10-24",
+   "ts": 1792857460,
+   "images": [
+    "assets/img/instagram/De4gb4Dvhn7.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 28,
+   "comments": 0
+  },
   {
    "id": "DehSV_jP9RG",
    "url": "https://www.instagram.com/p/DehSV_jP9RG/",
@@ -27,7 +61,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 1280,
    "alt": "",
-   "likes": 51,
+   "likes": 54,
    "comments": 0
   },
   {
@@ -99,8 +133,10 @@ KD.instagramFeed = {
    "comments": 0
   }
  ],
- "skipped": [],
+ "skipped": [
+  "De4gekYP6gX"
+ ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-10-24T20:20+07:00"
+ "updated": "2026-10-25T01:10+07:00"
 };
