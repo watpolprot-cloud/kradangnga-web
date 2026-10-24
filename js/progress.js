@@ -95,6 +95,12 @@
   function shortName(n) { return String(n || "").replace(/\s+ม\.\d+\/\d+$/, ""); }
 
   // ---------- เรียกตัวกลาง ----------
+  // ข้อมูลหลักที่คำตอบของแต่ละคำสั่งต้องมี ถ้าได้คำตอบ ok แต่ขาดข้อมูลเหล่านี้ (เช่นสัญญาณสะดุดระหว่างรอ แล้วได้คำตอบอื่นกลับมา) ถือว่าไม่สำเร็จ
+  const NEED = {
+    login: ["token", "role"], overview: ["depts"], dept_detail: ["dept", "open_sessions"],
+    chat_history: ["sessions", "messages"], chat_send: ["session_id", "kind", "bot", "at"], plan_confirm: ["version"],
+    step_ready: ["step_no"], indicator_check: ["ind_id"], plan_approve: ["version"], image_get: ["data"]
+  };
   async function api(action, data, ms) {
     const body = Object.assign({ action, device_id: S.device }, S.token ? { token: S.token } : {}, data || {});
     if (MOCK) return Mock.call(body);
@@ -114,6 +120,7 @@
       if (err.error === "token_expired" && action !== "login") { signOut(err.message); }
       throw err;
     }
+    if ((NEED[action] || []).some(k => j[k] == null)) throw { error: "bad_reply", message: "คำตอบจากระบบมาไม่ครบ ลองใหม่อีกครั้ง" };
     return j;
   }
   function signOut(message) {
@@ -394,7 +401,12 @@
         const bots = S.chat.msgs.filter(m => m.role === "assistant");
         S.chat.last = bots.length ? bots[bots.length - 1].display : null;
         S.chat.draft = latestDraft(S.chat.msgs);
-      } catch (e) { if (!S.token) return; }
+      } catch (e) {
+        // ห้ามเปิดหน้าคุยว่างแทน ไม่งั้นข้อความถัดไปจะเริ่มบทสนทนาใหม่ แล้วบทที่คุยไว้หายจากหน้าจอ
+        S.chat = null;
+        if (S.token && S.tab === "chat") errorCard(panel, e, () => startKind(kind));
+        return;
+      }
     }
     if (S.tab === "chat") renderChat(panel);
   }
@@ -537,7 +549,8 @@
     const imgs = ch.imgs.slice();
     if (!text && !imgs.length) return;
     ch.msgs = ch.msgs.filter(m => m.role !== "err");
-    ch.msgs.push({ role: "user", display: { text }, reporter: S.reporter, at: new Date(nowMs()).toISOString(), thumbs: imgs.map(x => x.url) });
+    const sentAt = nowMs();
+    ch.msgs.push({ role: "user", display: { text }, reporter: S.reporter, at: new Date(sentAt).toISOString(), thumbs: imgs.map(x => x.url) });
     ch.busy = true; ch.imgs = []; ch.free = false;
     const ta = document.getElementById("pg-text"); if (ta) ta.value = "";
     drawChat();
@@ -550,6 +563,8 @@
       ch.draft = r.draft_plan && r.draft_plan.length ? r.draft_plan : ch.draft;
     } catch (e) {
       if (!S.token) return;
+      // ข้อความอาจถึงระบบและได้คำตอบแล้ว แต่คำตอบมาไม่ถึงเครื่อง ดึงจากที่บันทึกไว้ก่อน จะได้ไม่ต้องส่งซ้ำ
+      if (["offline", "claude_timeout", "bad_reply"].indexOf(e.error) >= 0 && await recoverReply(ch, text, sentAt)) { ch.busy = false; drawChat(); return; }
       const mine = ch.msgs.pop();
       ch.msgs.push({ role: "err", display: { text: e.message || T.offline } });
       ch.imgs = imgs;
@@ -559,6 +574,31 @@
     }
     ch.busy = false;
     drawChat();
+  }
+  // หาคู่ข้อความล่าสุดที่ตรงกับที่เพิ่งส่ง ในบทเดิมก่อน แล้วจึงดูบทที่เปิดอยู่ของฝ่าย (กรณีข้อความแรก หรือบทเดิมครบรอบ)
+  async function recoverReply(ch, text, sentAt) {
+    const dept = S.det.dept.dept_id, norm = x => String(x || "").replace(/\s+/g, "");
+    const tried = [];
+    async function check(sid) {
+      if (!sid || tried.indexOf(sid) >= 0) return false;
+      tried.push(sid);
+      const r = await api("chat_history", { dept_id: dept, session_id: sid });
+      const msgs = r.messages.map(m => ({ role: m.role, display: m.display || {}, at: m.at, reporter: m.reporter, images: (m.image_ids || []).length }));
+      const bot = msgs[msgs.length - 1], mine = msgs[msgs.length - 2];
+      if (!bot || !mine || bot.role !== "assistant" || mine.role !== "user" || norm(mine.display.text) !== norm(text)) return false;
+      if (!(Date.parse(bot.at) > sentAt - 600000)) return false;
+      if (S.chat !== ch) return true;
+      ch.session_id = sid; ch.kind = (r.sessions[0] && r.sessions[0].kind) || ch.kind;
+      ch.msgs = msgs; ch.last = bot.display; ch.draft = latestDraft(msgs);
+      if (ch.left != null) ch.left = Math.max(0, ch.left - 1);
+      return true;
+    }
+    try {
+      if (await check(ch.session_id)) return true;
+      const d = await api("dept_detail", { dept_id: dept });
+      for (const s of d.open_sessions.filter(x => x.kind === ch.kind || !ch.session_id)) if (await check(s.session_id)) return true;
+    } catch (e) { }
+    return false;
   }
   // ย่อรูปในเครื่องให้ด้านยาวไม่เกิน 1,600 px เป็น JPEG คุณภาพราว 0.8 (และไม่เกิน 1.5 MB)
   function resizeImage(file) {
