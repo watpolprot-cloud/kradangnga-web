@@ -10,7 +10,8 @@
     ["teachers.html", "ทำเนียบครู"],
     ["duty.html", "เวรประจำจุด"],
     ["students.html", "ทำเนียบนักเรียน"],
-    ["games.html", "บุนนาคเกมส์ 2569"]
+    ["games.html", "บุนนาคเกมส์ 2569"],
+    ["progress.html", "ความก้าวหน้าฝ่ายงาน"]
   ];
   const here = (location.pathname.split("/").pop() || "index.html");
   const S = (window.KD && KD.site) || {};
