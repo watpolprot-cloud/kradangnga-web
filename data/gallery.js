@@ -4,6 +4,7 @@ window.KD = window.KD || {};
 KD.albums = [
  {
   "id": "colorperiod2569",
+  "drive": "https://drive.google.com/drive/folders/1PSokGCxevN7uO4xh-aor6sz6UqHUbT89?usp=sharing",
   "title": "คาบคณะสี รวมพลและซ้อมท่าเชียร์ ภาคเรียนที่ 2/2569",
   "date": "2026-10-26",
   "desc": "บ่ายวันเปิดภาคเรียน นักเรียนคณะสีเขียวรวมพลในคาบคณะสี พี่ ๆ แกนนำพูดคุยกับน้อง ๆ และพาซ้อมท่าเชียร์ เตรียมพร้อมสู่บุนนาคเกมส์ 2569",
@@ -12,6 +13,7 @@ KD.albums = [
  },
  {
   "id": "openterm2569",
+  "drive": "https://drive.google.com/drive/folders/1qkiOOIGUO-fJBj5m0yhMZkbu33-XhJOg?usp=sharing",
   "title": "ต้อนรับวันเปิดภาคเรียนที่ 2/2569",
   "date": "2026-10-26",
   "desc": "ตัวแทนคณะสีเขียวในชุดนักกีฬา ร่วมกับตัวแทนคณะสีอื่น ๆ คณะครู และผู้บริหาร ยืนต้อนรับครูและนักเรียนในวันเปิดภาคเรียนวันแรก",
