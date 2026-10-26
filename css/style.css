@@ -879,6 +879,23 @@ ul.clean li { margin-bottom: 6px; }
 .duty-imgs figcaption a { font-size: .9rem; }
 .duty-line { display: block; margin-top: 8px; padding: 6px 9px; border-left: 3px solid var(--gold); border-radius: 8px; background: var(--green-50); color: var(--green-700); font-size: .84rem; line-height: 1.5; }
 .duty-line:hover { background: var(--gold-pale); color: var(--green-800); }
+/* เวรครูตรวจแถวตอนเช้า */
+.duty-h2 { margin: 0 0 18px; font-size: clamp(1.5rem, 3vw, 2rem); padding-top: 4px; }
+.lu-task { margin: -4px 0 22px; color: var(--ink-soft); padding-top: 2px; }
+.lu-wrap { display: grid; grid-template-columns: 1fr 260px; gap: 26px; align-items: start; }
+.lu-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.lu-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 0 8px 18px; display: flex; flex-direction: column; align-items: center; gap: 14px; overflow: hidden; border: 2px solid transparent; }
+.lu-day { align-self: stretch; margin: 0 -8px; text-align: center; font-family: "Prompt"; font-weight: 600; color: var(--green-900); background: linear-gradient(180deg, var(--gold-pale), var(--gold-soft)); padding: 9px 6px 7px; line-height: 1.5; }
+.lu-day em { display: inline-block; margin-left: 6px; font-style: normal; font-size: .78rem; color: var(--cream); background: var(--green-700); border-radius: 999px; padding: 1px 9px; vertical-align: 2px; }
+.lu-card .dt { min-width: 0; }
+.lu-card.today { border-color: var(--gold); box-shadow: 0 14px 34px rgba(217,154,43,.3); }
+.lu-card.today .lu-day { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); }
+.lu-img { margin: 0; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.lu-img button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.lu-img img { width: 100%; display: block; }
+.lu-img figcaption { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; font-family: "Prompt"; color: var(--green-800); font-size: .92rem; }
+@media (max-width: 1100px) { .lu-wrap { grid-template-columns: 1fr; } .lu-img { max-width: 360px; } }
+@media (max-width: 760px) { .lu-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 860px) { .duty-imgs { grid-template-columns: repeat(2, 1fr); } .duty-flower.f2 { display: none; } }
 @media (max-width: 560px) {
   .duty-flower.f1 { width: 96px; right: 4%; top: auto; bottom: 8px; opacity: .55; }

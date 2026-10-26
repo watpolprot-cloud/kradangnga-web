@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>เวรประจำจุด · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="เวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
+<meta name="description" content="เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,8 +14,19 @@
   <img class="duty-flower f1" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
   <img class="duty-flower f2" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
 </section>
+<section class="block alt" id="lineup">
+  <div class="wrap">
+    <div class="dp-head reveal"><h2 id="lu-title">เวรครูตรวจแถวตอนเช้า</h2><span id="lu-when"></span></div>
+    <p class="lu-task reveal" id="lu-task"></p>
+    <div class="lu-wrap">
+      <div class="lu-grid" id="lu-grid"></div>
+      <figure class="lu-img reveal" id="lu-img" hidden></figure>
+    </div>
+  </div>
+</section>
 <section class="block">
   <div class="wrap">
+    <h2 class="duty-h2 reveal">เวรประจำจุด (ทุกวันพุธ)</h2>
     <div class="duty-tools reveal">
       <label class="duty-find"><span>หาเวรของครู</span>
         <select id="duty-teacher"><option value="">เลือกชื่อครู</option></select>
@@ -141,6 +152,24 @@ S.onchange = () => { period = "ทั้งหมด"; if (S.value) mapSel = Mat
 const want = new URLSearchParams(location.search).get("t");
 if (want && names.includes(want)) { S.value = want; mapSel = Math.max(0, MP.findIndex(p => p.slots.some(d => d.teachers.includes(want)))); }
 render();
+
+// เวรครูตรวจแถวตอนเช้า (KD.lineupDuty ใน data/duty.js) ไฮไลต์เวรของวันนี้ตามเวลาไทย
+const LU = KD.lineupDuty;
+if (LU && (LU.days || []).length) {
+  const today = new Intl.DateTimeFormat("th-TH", { weekday: "long", timeZone: "Asia/Bangkok" }).format(new Date());
+  document.getElementById("lu-title").textContent = LU.title || "เวรครูตรวจแถวตอนเช้า";
+  document.getElementById("lu-when").textContent = `ทุกเช้า ${LU.time || ""} · ${LU.place || ""}`;
+  document.getElementById("lu-task").textContent = LU.task || "";
+  document.getElementById("lu-grid").innerHTML = LU.days.map(d => `<article class="lu-card reveal${d.day === today ? " today" : ""}">
+    <div class="lu-day">${esc(d.day)}${d.day === today ? `<em>วันนี้</em>` : ""}</div>${person(d.teacher, d.day === today ? d.teacher : "")}</article>`).join("");
+  if (LU.image) {
+    const LI = [{ src: `assets/img/duty/${LU.image}`, cap: LU.title || "เวรครูตรวจแถวตอนเช้า" }], F2 = document.getElementById("lu-img");
+    F2.hidden = false;
+    F2.innerHTML = `<button type="button" aria-label="ดูภาพเวรตรวจแถวขนาดใหญ่"><img src="${esc(LI[0].src.replace(/\.jpg$/, "-s.jpg"))}" alt="${esc(LI[0].cap)}" loading="lazy"></button>
+      <figcaption><span>ภาพสำหรับส่งกลุ่ม LINE</span><a href="${esc(LI[0].src)}" download="${esc(LI[0].cap)}.jpg">ดาวน์โหลด</a></figcaption>`;
+    F2.querySelector("button").onclick = () => openLightbox(LI, 0);
+  }
+} else document.getElementById("lineup").hidden = true;
 
 const CAPS = ["ภาพรวม", "ช่วงเช้า", "ช่วงกลางวัน", "ช่วงบ่าย"];
 const imgs = (M.images || []).map((f, i) => ({ src: `assets/img/duty/${f}`, cap: `${M.title || "เวรประจำจุด"} · ${CAPS[i] || i + 1}` }));

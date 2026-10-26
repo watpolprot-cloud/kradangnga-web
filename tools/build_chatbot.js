@@ -151,6 +151,11 @@ function build() {
       DM.checked && `ข้อมูลตรวจเมื่อ ${DM.checked} ถ้าข้อมูลไม่ถูกต้องให้แจ้งหัวหน้าคณะสี`
     ].filter(Boolean).join("\n"));
   }
+  const LU = KD.lineupDuty;
+  if (LU && (LU.days || []).length) add(LU.title || "เวรครูตรวจแถวตอนเช้า", "duty.html#lineup", [
+    `ทุกเช้า เวลา ${LU.time} ณ ${LU.place} ครูคณะสีกระดังงาไป${LU.task}`,
+    ...LU.days.map(d => `- ${d.day}: ${d.teacher}`)
+  ].join("\n"));
 
   // ทำเนียบนักเรียน
   const G = KD.studentGroups || [];

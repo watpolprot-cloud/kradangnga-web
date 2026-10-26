@@ -50,6 +50,7 @@ function card(t) {
     <div class="sub">${t.group === "ครูชาวต่างชาติ" ? "ครูชาวต่างชาติ" : "กลุ่มสาระ" + esc(t.group)}</div>
     ${t.role ? `<div class="rl"><span class="tag">${esc(t.role)}</span></div>` : ""}
     ${coach(t.name)}
+    ${(KD.lineupDuty?.days || []).filter(d => d.teacher === t.name).map(d => `<a class="duty-line" href="duty.html#lineup">เวรตรวจแถว: ${esc(d.day)} ${esc(KD.lineupDuty.time || "")}</a>`).join("")}
     ${duty.length ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}">${duty.map(d => `เวร: จุดที่ ${d.spot} ${esc(d.place)} ${esc(d.time)}`).join("<br>")}</a>` : ""}
   </div></div>`;
 }
