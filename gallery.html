@@ -19,6 +19,7 @@
         <div><h2 id="al-title"></h2><div class="credit" id="al-meta"></div></div>
       </div>
       <p id="al-desc"></p>
+      <p id="al-drive-wrap" hidden><a class="btn btn-outline" id="al-drive" target="_blank" rel="noopener">ดูภาพต้นฉบับทั้งหมดบน Google Drive</a></p>
       <div class="masonry" id="al-photos"></div>
     </div>
     <p class="note" style="margin-top:40px">ภาพจากกลุ่ม LINE คณะสีและกลุ่ม PR.สีเขียว กำลังทยอยรวบรวมเพิ่ม ถ้ามีภาพกิจกรรมสีเขียวที่อยากให้ขึ้นเว็บ ส่งให้ครูนพพลหรือฝ่ายประชาสัมพันธ์ได้เลย</p>
@@ -45,6 +46,9 @@ function route() {
   document.getElementById("al-title").textContent = a.title;
   document.getElementById("al-meta").textContent = thDate(a.date) + (a.credit ? " · " + a.credit : "");
   document.getElementById("al-desc").textContent = a.desc;
+  // ลิงก์โฟลเดอร์ภาพต้นฉบับบน Google Drive (ใส่ "drive" ในอัลบั้มที่ data/gallery.js)
+  document.getElementById("al-drive-wrap").hidden = !a.drive;
+  if (a.drive) document.getElementById("al-drive").href = a.drive;
   const ps = KD.photos.filter(p => p.album === id);
   const items = ps.map(p => ({ src: "assets/img/gallery/" + p.file, cap: p.caption || a.title }));
   const box = document.getElementById("al-photos");
