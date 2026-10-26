@@ -129,6 +129,8 @@
 <section class="block" id="sports">
   <div class="wrap">
     <div class="sec-title"><div><h2>การแข่งขันกีฬา 11 ชนิด</h2><p>รายการแข่งขันกีฬาระหว่างคณะสี ปีการศึกษา 2569 และนักกีฬากระดังงาที่ส่งชื่อในทะเบียนแล้ว</p></div><a class="btn btn-green" href="students.html#athletes">ดูทะเบียนนักกีฬาพร้อมรูป</a></div>
+    <div class="venue-h reveal"><h3>สนามแข่งขันแต่ละชนิดกีฬา</h3><p>วันและเวลาแข่งขัน <span class="vwait">รอประกาศ</span> (ยกเว้นรายการที่ระบุไว้)</p></div>
+    <div class="venues reveal" id="venues"></div>
     <div class="tbl-wrap reveal"><table class="tbl sports-tbl" id="sports-tbl"></table></div>
   </div>
 </section>
@@ -178,10 +180,21 @@ function coachOf(s, e) {
   return t ? `<span class="co-who">${t}${c.pending ? " และครูอีก " + c.pending + " ท่าน (รอประกาศ)" : ""}</span>`
            : (c.pending ? `<span class="co-who wait">ครูผู้ควบคุม: รอประกาศชื่อ</span>` : "");
 }
-document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ชนิดกีฬา</th><th>รายการที่กระดังงาส่งชื่อ · ครูสีเขียวผู้ควบคุม</th><th>รูปแบบ</th><th>ผู้รับผิดชอบการแข่งขัน</th><th>นักกีฬา</th></tr>` +
+// สนามแข่ง (venue) และวันเวลา (when) ไม่มีข้อมูล = รอประกาศ
+const VN = [];
+SPT.forEach(s => {
+  const v = s.venue || "รอประกาศสนาม";
+  let g = VN.find(x => x.v === v); if (!g) VN.push(g = { v, list: [] });
+  g.list.push(s);
+});
+VN.sort((a, b) => (a.v === "รอประกาศสนาม") - (b.v === "รอประกาศสนาม"));
+document.getElementById("venues").innerHTML = VN.map(g => `<div class="venue${g.v === "รอประกาศสนาม" ? " tba" : ""}"><div class="vn">${esc(g.v)}</div>
+  ${g.list.map(s => `<div class="vs"><b>${esc(s.sport)}</b><span class="${s.when ? "when" : "vwait"}">${s.when ? esc(s.when) : "วัน เวลา รอประกาศ"}</span></div>`).join("")}</div>`).join("");
+document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ชนิดกีฬา</th><th>สนามแข่ง · วัน เวลา</th><th>รายการที่กระดังงาส่งชื่อ · ครูสีเขียวผู้ควบคุม</th><th>รูปแบบ</th><th>ผู้รับผิดชอบการแข่งขัน</th><th>นักกีฬา</th></tr>` +
   SPT.map(s => {
     const n = new Set(s.events.flatMap(e => e.team)).size;
     return `<tr><td>${s.no}</td><td><b>${esc(s.sport)}</b></td>
+      <td class="vcell">${s.venue ? esc(s.venue) : `<span class="vwait">รอประกาศ</span>`}<br><span class="${s.when ? "when" : "vwait"}">${s.when ? esc(s.when) : "วัน เวลา รอประกาศ"}</span></td>
       <td>${s.events.map(e => `<div class="ev">${e.team.length ? `${esc(e.div)} <span class="n">${e.team.length} คน</span>` : `${esc(e.div)} <span class="miss">ยังไม่มีรายชื่อ</span>`}${coachOf(s, e)}</div>`).join("")}</td>
       <td>${esc(s.format)}</td><td>${s.teachers.map(esc).join("<br>")}</td>
       <td class="n"><a href="students.html?sport=${encodeURIComponent(s.sport)}#athletes">${n} คน</a></td></tr>`;

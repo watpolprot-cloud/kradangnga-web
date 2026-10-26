@@ -1173,3 +1173,17 @@ ul.clean li { margin-bottom: 6px; }
   .co-days { grid-template-columns: 1fr; gap: 8px; }
   .co-day { flex-direction: row; align-items: baseline; gap: 10px; padding: 10px 14px; }
 }
+
+/* สนามแข่งขันแต่ละชนิดกีฬา (games.html#sports) */
+.venue-h { margin: 4px 0 12px; }
+.venue-h h3 { font-family: "Prompt"; font-weight: 600; color: var(--green-800); margin: 0 0 4px; padding-top: 4px; }
+.venue-h p { margin: 0; }
+.vwait { color: #8A3412; font-size: .88rem; }
+.when { color: var(--green-700); font-family: "Prompt"; font-weight: 600; font-size: .88rem; }
+.venues { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 22px; }
+.venue { background: #fff; border: 2px solid var(--gold); border-radius: 14px; overflow: hidden; }
+.venue .vn { background: linear-gradient(160deg, var(--green-700), var(--green-900)); color: var(--cream); font-family: "Prompt"; font-weight: 600; font-size: 1.05rem; padding: 10px 14px 8px; line-height: 1.6; }
+.venue .vs { padding: 8px 14px; display: flex; flex-direction: column; gap: 1px; line-height: 1.55; }
+.venue .vs + .vs { border-top: 1px dashed rgba(0,0,0,.12); }
+.venue.tba { border-style: dashed; opacity: .85; }
+.sports-tbl .vcell { min-width: 150px; }

@@ -174,7 +174,7 @@ function build() {
     add(`${AM.title || "ทะเบียนนักกีฬา"} (นักกีฬา ${Object.keys(AT).length} คน ${SP.length} ชนิดกีฬา)`, "students.html#athletes", [
       `ที่มา: ${AM.source || "ทะเบียนนักกีฬาของคณะสี"}${AM.date ? ` (ข้อมูลวันที่ ${thDate(AM.date)})` : ""} ดูรูปนักกีฬาและค้นหาชื่อได้ที่หน้าทำเนียบนักเรียน ส่วนทะเบียนนักกีฬา`,
       ...SP.map(s => [
-        `${s.no}. ${s.sport}${s.format ? ` (${s.format})` : ""}${(s.teachers || []).length ? ` ผู้รับผิดชอบการแข่งขัน: ${s.teachers.join(", ")}` : ""}`,
+        `${s.no}. ${s.sport}${s.format ? ` (${s.format})` : ""} สนามแข่ง: ${s.venue || "รอประกาศ"} วัน เวลาแข่ง: ${s.when || "รอประกาศ"}${(s.teachers || []).length ? ` ผู้รับผิดชอบการแข่งขัน: ${s.teachers.join(", ")}` : ""}`,
         ...s.events.map(ev => `- ${s.sport === "E-sport" ? "" : s.sport + " "}${ev.div}${ev.form ? ` (${ev.form})` : ""}: ` +
           (ev.team.length ? `${ev.team.length} คน ได้แก่ ${ev.team.map(who).join(", ")}` : "ยังไม่มีรายชื่อในทะเบียน"))
       ].join("\n")),
