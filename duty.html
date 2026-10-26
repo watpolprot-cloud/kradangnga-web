@@ -156,9 +156,10 @@ render();
 // เวรครูตรวจแถวตอนเช้า (KD.lineupDuty ใน data/duty.js) ไฮไลต์เวรของวันนี้ตามเวลาไทย
 const LU = KD.lineupDuty;
 if (LU && (LU.days || []).length) {
-  const today = new Intl.DateTimeFormat("th-TH", { weekday: "long", timeZone: "Asia/Bangkok" }).format(new Date());
+  const now = new Date(), ymd = now.toLocaleDateString("sv-SE", { timeZone: "Asia/Bangkok" });
+  const today = !LU.start || ymd >= LU.start ? new Intl.DateTimeFormat("th-TH", { weekday: "long", timeZone: "Asia/Bangkok" }).format(now) : "";
   document.getElementById("lu-title").textContent = LU.title || "เวรครูตรวจแถวตอนเช้า";
-  document.getElementById("lu-when").textContent = `ทุกเช้า ${LU.time || ""} · ${LU.place || ""}`;
+  document.getElementById("lu-when").textContent = `ทุกเช้า ${LU.time || ""} · ${LU.place || ""}${LU.startText ? " · " + LU.startText : ""}`;
   document.getElementById("lu-task").textContent = LU.task || "";
   document.getElementById("lu-grid").innerHTML = LU.days.map(d => `<article class="lu-card reveal${d.day === today ? " today" : ""}">
     <div class="lu-day">${esc(d.day)}${d.day === today ? `<em>วันนี้</em>` : ""}</div>${person(d.teacher, d.day === today ? d.teacher : "")}</article>`).join("");

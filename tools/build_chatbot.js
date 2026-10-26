@@ -153,7 +153,7 @@ function build() {
   }
   const LU = KD.lineupDuty;
   if (LU && (LU.days || []).length) add(LU.title || "เวรครูตรวจแถวตอนเช้า", "duty.html#lineup", [
-    `ทุกเช้า เวลา ${LU.time} ณ ${LU.place} ครูคณะสีกระดังงาไป${LU.task}`,
+    `ทุกเช้า เวลา ${LU.time} ณ ${LU.place} ครูคณะสีกระดังงาไป${LU.task}${LU.startText ? ` (${LU.startText})` : ""}`,
     ...LU.days.map(d => `- ${d.day}: ${d.teacher}`)
   ].join("\n"));
 
