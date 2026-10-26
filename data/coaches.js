@@ -1,9 +1,9 @@
-// ครูคณะสีกระดังงาผู้ควบคุมนักกีฬา บุนนาคเกมส์ 2569 (ข้อมูลจากพี่ต้น 22 ต.ค. 2569)
+// ครูคณะสีกระดังงาผู้ควบคุมนักกีฬา บุนนาคเกมส์ 2569 (ข้อมูลจากพี่ต้น 22 ต.ค. 2569 · เพิ่มครูผู้ควบคุม Mobile Legends 26 ต.ค. 2569)
 // coaches: รายการแข่งขัน -> ครูสีเขียวที่ดูแล (pending = จำนวนครูที่ยังรอประกาศชื่อ) · ชื่อครูต้องตรงกับ data/teachers.js เพื่อดึงรูป
 window.KD = window.KD || {};
 KD.coachMeta = {
  "title": "ครูผู้ควบคุมนักกีฬา บุนนาคเกมส์ 2569",
- "updated": "22 ต.ค. 2569",
+ "updated": "26 ต.ค. 2569",
  "days": [
   {
    "date": "2026-10-28",
@@ -72,7 +72,7 @@ KD.coaches = [
   {"no": 9, "sport": "E-sport", "div": "ROV", "teachers": ["ครูภวภัค จินนุกูล"], "pending": 0},
   {"no": 9, "sport": "E-sport", "div": "Free Fire", "teachers": ["ครูธนาวุฒิ อดิษะ"], "pending": 0},
   {"no": 9, "sport": "E-sport", "div": "VALORANT", "teachers": ["ครูธวัชชัย พาลาศรี"], "pending": 0},
-  {"no": 9, "sport": "E-sport", "div": "Mobile Legends", "teachers": [], "pending": 0},
+  {"no": 9, "sport": "E-sport", "div": "Mobile Legends", "teachers": ["ครูธวัชชัย พาลาศรี"], "pending": 0},
   {"no": 10, "sport": "เปตอง", "div": "ชาย ม.1–3", "teachers": ["ครูศุภาวรรณ จันทะมูล"], "pending": 0},
   {"no": 10, "sport": "เปตอง", "div": "ชาย ม.4–6", "teachers": ["ครูจุฬาลักษณ์ กุลบุตรดี"], "pending": 0},
   {"no": 10, "sport": "เปตอง", "div": "หญิง ม.1–3", "teachers": [], "pending": 0},
