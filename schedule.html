@@ -152,7 +152,7 @@ function path(T) {
   st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})` });
   return { g, st, end: "ได้บายรอบแรก ลงแข่งนัดแรกที่คู่ที่ 3" };
 }
-function table(T) {
+function table(T, day) {
   const g = T.indexOf("เขียว") + 1, t = n => hc(T[n - 1]), s = x => `<span class="slot">${x}</span>`;
   const R = [
     [1, t(1), t(2), g === 1 || g === 2],
@@ -162,7 +162,7 @@ function table(T) {
     [5, s("ผู้ชนะคู่ที่ 2"), s("ผู้ชนะคู่ที่ 3"), true]
   ];
   return `<div class="tbl-wrap"><table class="bt"><tr><th>คู่</th><th>ทีม</th><th></th><th>ทีม</th><th>วัน เวลา</th></tr>${R.map(([n, a, b, me]) =>
-    `<tr${me ? ' class="g"' : ""}><td>${n}${n === 4 ? "<br><small>ชิงที่ 3</small>" : n === 5 ? "<br><small>ชิงชนะเลิศ</small>" : ""}</td><td>${a}</td><td class="vs">VS</td><td>${b}</td><td><span class="sc-wait">รอประกาศ</span></td></tr>`).join("")}</table></div>`;
+    `<tr${me ? ' class="g"' : ""}><td>${n}${n === 4 ? "<br><small>ชิงที่ 3</small>" : n === 5 ? "<br><small>ชิงชนะเลิศ</small>" : ""}</td><td>${a}</td><td class="vs">VS</td><td>${b}</td><td>${day ? `<b>${esc(day)}</b>` : `<span class="sc-wait">รอประกาศ</span>`}</td></tr>`).join("")}</table></div>`;
 }
 function people(ev) {
   const ch = coachesOf(ev), hd = headsOf(ev);
@@ -176,17 +176,18 @@ function athletes(ev) {
 }
 function card(ev) {
   const s = sportOf(ev) || {}, id = "e-" + ev.code.replace(".", "-");
-  const meta = `<div class="mc-meta"><span>สนาม <b>${esc(s.venue || "รอประกาศ")}</b></span>${ev.note ? `<span>${esc(ev.note)}</span>` : ""}</div>`;
+  const W = s.when ? esc(s.when) : "วัน เวลา รอประกาศ";
+  const meta = `<div class="mc-meta"><span>สนาม <b>${esc(s.venue || "รอประกาศ")}</b></span>${s.when ? `<span>วันแข่ง <b>${esc(s.when)}</b></span>` : ""}${ev.note ? `<span>${esc(ev.note)}</span>` : ""}</div>`;
   let left;
   if (ev.type === "bracket") {
     const p = path(ev.teams);
     left = `<div class="mine"><div class="tno">กระดังงาเป็นทีมที่ ${p.g} · สาย ${p.g === 3 || p.g === 4 ? "A" : "B"}</div><ol>${p.st.map(x =>
-      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${x.first ? `<div class="when">วัน เวลา รอประกาศ</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
-      <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams)}`;
+      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${x.first ? `<div class="when">${W}</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
+      <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams, s.day)}`;
   } else if (ev.type === "league") {
-    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">วัน เวลา รอประกาศ</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
+    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">${W}</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
   } else {
-    left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน ลู่ที่ 2 – 6 จับเวลาจัดอันดับ 1 – 5<div class="when">วัน เวลา รอประกาศ</div></li></ol><div class="end">ลู่ของสีเขียวตามที่เขียนกำกับไว้ในตารางแข่ง</div></div>`;
+    left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน ลู่ที่ 2 – 6 จับเวลาจัดอันดับ 1 – 5<div class="when">${W}</div></li></ol><div class="end">ลู่ของสีเขียวตามที่เขียนกำกับไว้ในตารางแข่ง</div></div>`;
   }
   return `<article class="mc reveal" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3></div>${meta}
     <div class="mc-grid"><div>${left}</div><div>${people(ev)}${athletes(ev)}</div></div></article>`;
