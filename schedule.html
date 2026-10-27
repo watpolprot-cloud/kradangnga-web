@@ -129,30 +129,36 @@ const athFig = (id, res) => { const a = AT[id]; if (!a) return ""; return `<figu
 const person = (name, photo, sub) => `<span class="pp">${photo ? `<img src="${photo}" alt="" loading="lazy">` : `<img src="assets/img/logo.png" alt="" style="object-fit:contain;padding:4px">`}<span>${esc(name)}${sub ? ` <small>${esc(sub)}</small>` : ""}</span></span>`;
 
 // เส้นทางของสีเขียวในสาย 5 ทีม
+const WD = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"], MO = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+function fmt(x) {
+  if (!x) return "";
+  const [d, m, y] = x[0].split("/").map(Number);
+  return `${WD[new Date(y - 543, m - 1, d).getDay()]} ${d} ${MO[m - 1]} · ${x[1]} น.`;
+}
 function path(T) {
   const g = T.indexOf("เขียว") + 1, t = n => hc(T[n - 1]), or = (a, b) => `${t(a)} หรือ ${t(b)}`;
   const st = [];
   if (g === 1 || g === 2) {
     const o = g === 1 ? 2 : 1;
-    st.push({ k: "คู่ที่ 1 (นัดแรก)", h: `พบ ${t(o)}`, first: 1 });
-    st.push({ k: "ถ้าชนะ → คู่ที่ 3", h: `พบ ${t(5)}` });
-    st.push({ k: "ชนะคู่ที่ 3 → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})` });
-    st.push({ k: "แพ้คู่ที่ 3 → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})` });
+    st.push({ k: "คู่ที่ 1 (นัดแรก)", h: `พบ ${t(o)}`, first: 1, m: 1 });
+    st.push({ k: "ถ้าชนะ → คู่ที่ 3", h: `พบ ${t(5)}`, m: 3 });
+    st.push({ k: "ชนะคู่ที่ 3 → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})`, m: 5 });
+    st.push({ k: "แพ้คู่ที่ 3 → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})`, m: 4 });
     return { g, st, end: "ถ้าแพ้คู่ที่ 1 จบการแข่งขันรายการนี้" };
   }
   if (g === 3 || g === 4) {
     const o = g === 3 ? 4 : 3;
-    st.push({ k: "คู่ที่ 2 (นัดแรก)", h: `พบ ${t(o)}`, first: 1 });
-    st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})` });
-    st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})` });
+    st.push({ k: "คู่ที่ 2 (นัดแรก)", h: `พบ ${t(o)}`, first: 1, m: 2 });
+    st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})`, m: 5 });
+    st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})`, m: 4 });
     return { g, st, end: "ชนะนัดเดียวได้เข้าชิงชนะเลิศเลย" };
   }
-  st.push({ k: "คู่ที่ 3 (นัดแรก รอผลคู่ที่ 1)", h: `พบผู้ชนะคู่ที่ 1 (${or(1, 2)})`, first: 1 });
-  st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})` });
-  st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})` });
+  st.push({ k: "คู่ที่ 3 (นัดแรก รอผลคู่ที่ 1)", h: `พบผู้ชนะคู่ที่ 1 (${or(1, 2)})`, first: 1, m: 3 });
+  st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})`, m: 5 });
+  st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})`, m: 4 });
   return { g, st, end: "ได้บายรอบแรก ลงแข่งนัดแรกที่คู่ที่ 3" };
 }
-function table(T, day) {
+function table(T, D) {
   const g = T.indexOf("เขียว") + 1, t = n => hc(T[n - 1]), s = x => `<span class="slot">${x}</span>`;
   const R = [
     [1, t(1), t(2), g === 1 || g === 2],
@@ -162,7 +168,7 @@ function table(T, day) {
     [5, s("ผู้ชนะคู่ที่ 2"), s("ผู้ชนะคู่ที่ 3"), true]
   ];
   return `<div class="tbl-wrap"><table class="bt"><tr><th>คู่</th><th>ทีม</th><th></th><th>ทีม</th><th>วัน เวลา</th></tr>${R.map(([n, a, b, me]) =>
-    `<tr${me ? ' class="g"' : ""}><td>${n}${n === 4 ? "<br><small>ชิงที่ 3</small>" : n === 5 ? "<br><small>ชิงชนะเลิศ</small>" : ""}</td><td>${a}</td><td class="vs">VS</td><td>${b}</td><td>${day ? `<b>${esc(day)}</b>` : `<span class="sc-wait">รอประกาศ</span>`}</td></tr>`).join("")}</table></div>`;
+    `<tr${me ? ' class="g"' : ""}><td>${n}${n === 4 ? "<br><small>ชิงที่ 3</small>" : n === 5 ? "<br><small>ชิงชนะเลิศ</small>" : ""}</td><td>${a}</td><td class="vs">VS</td><td>${b}</td><td>${D ? `<b>${fmt(D[n - 1])}</b>` : `<span class="sc-wait">รอประกาศ</span>`}</td></tr>`).join("")}</table></div>`;
 }
 function people(ev) {
   const ch = coachesOf(ev), hd = headsOf(ev);
@@ -182,12 +188,12 @@ function card(ev) {
   if (ev.type === "bracket") {
     const p = path(ev.teams);
     left = `<div class="mine"><div class="tno">กระดังงาเป็นทีมที่ ${p.g} · สาย ${p.g === 3 || p.g === 4 ? "A" : "B"}</div><ol>${p.st.map(x =>
-      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${x.first ? `<div class="when">${W}</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
-      <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams, s.day)}`;
+      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${ev.dates ? `<div class="when">${fmt(ev.dates[x.m - 1])}</div>` : x.first ? `<div class="when">${W}</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
+      <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams, ev.dates)}`;
   } else if (ev.type === "league") {
-    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">${W}</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
+    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">${ev.dates ? "รอบแรก " + fmt(ev.dates[0]) : W}</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
   } else {
-    left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน ลู่ที่ 2 – 6 จับเวลาจัดอันดับ 1 – 5<div class="when">${W}</div></li></ol><div class="end">ลู่ของสีเขียวตามที่เขียนกำกับไว้ในตารางแข่ง</div></div>`;
+    left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน จับเวลาจัดอันดับ 1 – 5<div class="when">${W}</div></li></ol><div class="end">ลู่ ${ev.lanes.map((c, i) => `${i + 2} ${hc(c)}`).join(" · ")}</div></div>`;
   }
   return `<article class="mc reveal" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3></div>${meta}
     <div class="mc-grid"><div>${left}</div><div>${people(ev)}${athletes(ev)}</div></div></article>`;
