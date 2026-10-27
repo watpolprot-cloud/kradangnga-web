@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบครู</h1><p>คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน · ในทำเนียบมี 30 ท่าน รอข้อมูลและรูปครูใหม่ 2 ท่าน (ครูปัจฉิมา นินเคนที และครูศุภาวรรณ จันทะมูล)</p></div></section>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบครู</h1><p>คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน · ในทำเนียบมี 31 ท่าน รอข้อมูลและรูปครูใหม่ 1 ท่าน (ครูปัจฉิมา นินเคนที)</p></div></section>
 <section class="block">
   <div class="wrap">
     <div class="leader reveal" id="leader"></div>
@@ -45,9 +45,9 @@ function card(t) {
   const ph = t.photo ? `<img src="${t.photo}" alt="${esc(t.name)}" loading="lazy">`
                      : `<img class="no-photo" src="assets/img/logo.png" alt="${esc(t.name)} (ยังไม่มีรูป)" loading="lazy">`;
   return `<div class="person reveal"><div class="ph">${ph}</div><div class="pb">
-    <span class="room-badge">${esc(t.room)}</span>
+    ${t.room ? `<span class="room-badge">${esc(t.room)}</span>` : ""}
     <div class="nm">${esc(t.name)}</div>
-    <div class="sub">${t.group === "ครูชาวต่างชาติ" ? "ครูชาวต่างชาติ" : "กลุ่มสาระ" + esc(t.group)}</div>
+    ${t.group ? `<div class="sub">${t.group === "ครูชาวต่างชาติ" ? "ครูชาวต่างชาติ" : "กลุ่มสาระ" + esc(t.group)}</div>` : ""}
     ${t.role ? `<div class="rl"><span class="tag">${esc(t.role)}</span></div>` : ""}
     ${coach(t.name)}
     ${(KD.lineupDuty?.days || []).filter(d => d.teacher === t.name).map(d => `<a class="duty-line" href="duty.html#lineup">เวรตรวจแถว: ${esc(d.day)} ${esc(KD.lineupDuty.time || "")}</a>`).join("")}

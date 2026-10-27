@@ -11,6 +11,7 @@
     ["duty.html", "เวรประจำจุด"],
     ["students.html", "ทำเนียบนักเรียน"],
     ["games.html", "บุนนาคเกมส์ 2569"],
+    ["schedule.html", "ตารางแข่ง"],
     ["progress.html", "ความก้าวหน้าฝ่ายงาน"]
   ];
   const here = (location.pathname.split("/").pop() || "index.html");

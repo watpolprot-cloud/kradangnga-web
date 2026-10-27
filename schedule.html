@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตารางแข่งกีฬาภายใน 2569 · คณะสีกระดังงา (สีเขียว)</title>
+<meta name="description" content="ตารางการแข่งขันกีฬาภายใน 2569 ของคณะสีกระดังงา (สีเขียว) สีเขียวเจอสีไหนในแต่ละคู่ ถ้าชนะหรือแพ้ไปต่อคู่ไหน พร้อมรายชื่อนักกีฬา ครูผู้ควบคุม และเฮดกีฬาของแต่ละรายการ">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.sc-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 10px 0 0; }
+.hc { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; }
+.hc i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.hc.me { color: var(--green-700); font-weight: 700; }
+.sc-how { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 16px; }
+.sc-how div { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: .95rem; }
+.sc-how b { font-family: "Prompt"; color: var(--green-700); display: block; }
+.sc-wait { display: inline-block; background: var(--gold-pale); color: #7a5600; border-radius: 999px; padding: 1px 10px; font-size: .88rem; font-weight: 500; }
+.sc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 18px; padding: 8px 0; }
+@media (min-width: 861px) { .sc-chips { position: sticky; top: 76px; z-index: 5; background: var(--green-50); } }
+.sc-chips button { font: inherit; font-size: .92rem; border: 1px solid var(--green-600); color: var(--green-700); background: var(--white); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
+.sc-chips button.active { background: var(--green-600); color: var(--white); }
+.mc { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 18px 20px; margin-bottom: 22px; }
+.mc.hit { outline: 3px solid var(--gold); }
+.mc-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding-top: 4px; }
+.mc-h .code { font-family: "Prompt"; font-weight: 700; background: var(--green-700); color: var(--gold-soft); border-radius: 8px; padding: 0 10px; }
+.mc-h h3 { margin: 0; font-size: 1.3rem; padding-top: 4px; }
+.mc-meta { color: var(--ink-soft); font-size: .93rem; margin: 4px 0 12px; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.mc-meta b { color: var(--green-800); font-weight: 500; }
+.mc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 18px; }
+@media (max-width: 860px) { .mc-grid { grid-template-columns: minmax(0, 1fr); } }
+.mine { background: linear-gradient(135deg, var(--green-800), var(--green-600)); color: var(--white); border-radius: 14px; padding: 14px 16px; }
+.mine .tno { font-family: "Prompt"; font-size: 1.05rem; color: var(--gold-soft); padding-top: 3px; }
+.mine ol { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.mine li { background: rgba(255,255,255,.1); border-radius: 10px; padding: 8px 12px; line-height: 1.55; }
+.mine li .k { font-family: "Prompt"; font-weight: 600; color: var(--gold-pale); display: block; font-size: .92rem; }
+.mine li.first { background: rgba(243,210,122,.22); border: 1px solid var(--gold-soft); }
+.mine .hc { color: var(--white); }
+.mine .when { font-size: .85rem; color: var(--gold-pale); opacity: .9; }
+.mine .end { font-size: .88rem; opacity: .85; margin-top: 8px; }
+.bt { width: 100%; border-collapse: collapse; font-size: .93rem; }
+.bt th, .bt td { border-bottom: 1px solid var(--line); padding: 7px 6px; text-align: left; vertical-align: middle; }
+.bt th { font-family: "Prompt"; font-weight: 500; color: var(--green-700); background: var(--green-100); }
+.bt tr.g td { background: #eef8ef; }
+.bt .vs { color: var(--gold-deep); font-weight: 700; text-align: center; }
+.bt .slot { color: var(--ink-soft); font-size: .88rem; }
+.mc h4 { margin: 16px 0 8px; font-size: 1.02rem; padding-top: 3px; }
+.ath { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+.ath figure { margin: 0; background: var(--green-50); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .82rem; line-height: 1.35; }
+.ath img { width: 100%; aspect-ratio: 4/5; object-fit: cover; object-position: top; background: var(--green-100); }
+.ath figcaption { padding: 6px 7px 8px; }
+.ath figcaption b { display: block; font-weight: 500; color: var(--green-800); }
+.ath .res { color: var(--gold-deep); font-weight: 600; }
+.ppl { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp { display: inline-flex; align-items: center; gap: 8px; background: var(--green-50); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px 3px 3px; font-size: .9rem; }
+.pp img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; object-position: top; background: var(--green-100); }
+.pp small { color: var(--ink-soft); }
+.none { color: var(--ink-soft); font-size: .92rem; }
+.cls { margin-bottom: 10px; }
+.cls > b { font-family: "Prompt"; font-weight: 500; color: var(--green-700); display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว · บุนนาคเกมส์ 2569</div><h1>ตารางแข่งกีฬาภายใน 2569</h1><p>สีเขียวเจอสีไหนในแต่ละคู่ ชนะหรือแพ้แล้วไปต่อคู่ไหน พร้อมนักกีฬา ครูผู้ควบคุม และเฮดกีฬาของแต่ละรายการ</p></div></section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>อ่านตารางนี้อย่างไร</h2><p id="sc-note"></p></div><a class="btn btn-green" href="games.html#sports">ดูสนามแข่งแต่ละชนิดกีฬา</a></div>
+    <div class="sc-legend reveal" id="sc-legend"></div>
+    <div class="sc-how reveal">
+      <div><b>แข่งแบบแบ่งสาย 5 สี 5 คู่</b>สาย A ทีมที่ 3 และ 4 · สาย B ทีมที่ 1, 2 และ 5</div>
+      <div><b>คู่ที่ 1–3 รอบแรก</b>คู่ 1 ทีม 1 พบทีม 2 · คู่ 2 ทีม 3 พบทีม 4 · คู่ 3 ผู้ชนะคู่ 1 พบทีม 5</div>
+      <div><b>คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2</b>ผู้แพ้คู่ 2 พบผู้แพ้คู่ 3</div>
+      <div><b>คู่ที่ 5 ชิงชนะเลิศ</b>ผู้ชนะคู่ 2 พบผู้ชนะคู่ 3</div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="schedule">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>คู่แข่งขันของสีเขียว แยกตามรายการ</h2><p>กดเลือกชนิดกีฬา กรอบสีเขียวเข้มคือเส้นทางของกระดังงา แถวสีเขียวอ่อนในตารางคือคู่ที่สีเขียวมีโอกาสลงแข่ง</p></div></div>
+    <div class="sc-chips" id="sc-chips"></div>
+    <div id="sc-list"></div>
+  </div>
+</section>
+
+<script src="data/site.js"></script>
+<script src="data/athletes.js"></script>
+<script src="data/teachers.js"></script>
+<script src="data/coaches.js"></script>
+<script src="data/students.js"></script>
+<script src="data/schedule.js"></script>
+<script src="js/common.js"></script>
+<script>
+const H = KD.houses, M = KD.scheduleMeta, SC = KD.schedule || [], SP = KD.sports || [], AT = KD.athletes || {};
+const CO = KD.coaches || [], TP = {}; (KD.teachers || []).forEach(t => TP[t.name] = t.photo);
+const HEADS = (KD.studentGroups || []).flatMap(g => g.members);  // เฮดกีฬาบางคนอยู่กลุ่มอื่น เช่น ฝ่ายประชาสัมพันธ์
+const hc = c => `<span class="hc${c === "เขียว" ? " me" : ""}"><i style="background:${H[c].color}"></i>${esc(H[c].name)} (${c})</span>`;
+document.getElementById("sc-note").innerHTML = `ข้อมูลจากตารางการแข่งขันกีฬาภายใน 2569 ปรับปรุง ${esc(M.updated)} · <span class="sc-wait">${esc(M.dateNote)}</span>`;
+document.getElementById("sc-legend").innerHTML = Object.keys(H).map(hc).join("");
+
+// หาข้อมูลรายการใน data/athletes.js
+const sportOf = ev => SP.find(s => s.sport === ev.sport);
+function teamOf(ev) {
+  const s = sportOf(ev); if (!s) return [];
+  if (ev.relay) return s.events.filter(e => e.div.startsWith(ev.div + " ม.")).map(e => ({ cls: e.div.slice(ev.div.length + 1), ids: e.team }));
+  const e = s.events.find(e => e.div === ev.div); return e ? e.team : [];
+}
+function coachesOf(ev) {
+  const s = sportOf(ev); if (!s) return [];
+  const c = CO.find(c => c.no === s.no && (c.div === ev.div || (ev.relay && c.div.startsWith("4×100"))));
+  return c ? c.teachers : [];
+}
+// เฮดกีฬาจากบทบาท เช่น "เฮดฟุตซอล" "เฮดบาสเกตบอล (หญิง)" "เฮด ROV"
+const HEADKEY = { "บาสเกตบอล 3×3": "บาสเกตบอล", "E-sport": "" };
+function headsOf(ev) {
+  let key = ev.sport in HEADKEY ? HEADKEY[ev.sport] : ev.sport;
+  if (ev.sport === "E-sport") key = ev.div;
+  const sex = /หญิง/.test(ev.div) ? "หญิง" : /ชาย/.test(ev.div) ? "ชาย" : "";
+  return HEADS.filter(m => m.role.split(" · ").some(r => {
+    if (!r.startsWith("เฮด") || r === "เฮดกีฬาหลัก") return false;
+    const name = r.replace(/^เฮด\s*/, "");
+    if (!name.startsWith(key)) return false;
+    const rs = (name.match(/\((ชาย|หญิง)\)/) || [])[1];
+    return !rs || !sex || rs === sex;
+  }));
+}
+const athFig = (id, res) => { const a = AT[id]; if (!a) return ""; return `<figure><img src="assets/img/athletes/${id}.jpg" alt="${esc(a.name)}" loading="lazy"><figcaption><b>${esc(a.name)}</b>${esc(a.room)}${res ? ` <span class="res">สำรอง</span>` : ""}</figcaption></figure>`; };
+const person = (name, photo, sub) => `<span class="pp">${photo ? `<img src="${photo}" alt="" loading="lazy">` : `<img src="assets/img/logo.png" alt="" style="object-fit:contain;padding:4px">`}<span>${esc(name)}${sub ? ` <small>${esc(sub)}</small>` : ""}</span></span>`;
+
+// เส้นทางของสีเขียวในสาย 5 ทีม
+function path(T) {
+  const g = T.indexOf("เขียว") + 1, t = n => hc(T[n - 1]), or = (a, b) => `${t(a)} หรือ ${t(b)}`;
+  const st = [];
+  if (g === 1 || g === 2) {
+    const o = g === 1 ? 2 : 1;
+    st.push({ k: "คู่ที่ 1 (นัดแรก)", h: `พบ ${t(o)}`, first: 1 });
+    st.push({ k: "ถ้าชนะ → คู่ที่ 3", h: `พบ ${t(5)}` });
+    st.push({ k: "ชนะคู่ที่ 3 → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})` });
+    st.push({ k: "แพ้คู่ที่ 3 → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})` });
+    return { g, st, end: "ถ้าแพ้คู่ที่ 1 จบการแข่งขันรายการนี้" };
+  }
+  if (g === 3 || g === 4) {
+    const o = g === 3 ? 4 : 3;
+    st.push({ k: "คู่ที่ 2 (นัดแรก)", h: `พบ ${t(o)}`, first: 1 });
+    st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})` });
+    st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 3 (${t(1)}, ${t(2)} หรือ ${t(5)})` });
+    return { g, st, end: "ชนะนัดเดียวได้เข้าชิงชนะเลิศเลย" };
+  }
+  st.push({ k: "คู่ที่ 3 (นัดแรก รอผลคู่ที่ 1)", h: `พบผู้ชนะคู่ที่ 1 (${or(1, 2)})`, first: 1 });
+  st.push({ k: "ถ้าชนะ → คู่ที่ 5 ชิงชนะเลิศ", h: `พบผู้ชนะคู่ที่ 2 (${or(3, 4)})` });
+  st.push({ k: "ถ้าแพ้ → คู่ที่ 4 ชิงรองชนะเลิศอันดับ 2", h: `พบผู้แพ้คู่ที่ 2 (${or(3, 4)})` });
+  return { g, st, end: "ได้บายรอบแรก ลงแข่งนัดแรกที่คู่ที่ 3" };
+}
+function table(T) {
+  const g = T.indexOf("เขียว") + 1, t = n => hc(T[n - 1]), s = x => `<span class="slot">${x}</span>`;
+  const R = [
+    [1, t(1), t(2), g === 1 || g === 2],
+    [2, t(3), t(4), g === 3 || g === 4],
+    [3, s("ผู้ชนะคู่ที่ 1"), t(5), g !== 3 && g !== 4],
+    [4, s("ผู้แพ้คู่ที่ 2"), s("ผู้แพ้คู่ที่ 3"), true],
+    [5, s("ผู้ชนะคู่ที่ 2"), s("ผู้ชนะคู่ที่ 3"), true]
+  ];
+  return `<div class="tbl-wrap"><table class="bt"><tr><th>คู่</th><th>ทีม</th><th></th><th>ทีม</th><th>วัน เวลา</th></tr>${R.map(([n, a, b, me]) =>
+    `<tr${me ? ' class="g"' : ""}><td>${n}${n === 4 ? "<br><small>ชิงที่ 3</small>" : n === 5 ? "<br><small>ชิงชนะเลิศ</small>" : ""}</td><td>${a}</td><td class="vs">VS</td><td>${b}</td><td><span class="sc-wait">รอประกาศ</span></td></tr>`).join("")}</table></div>`;
+}
+function people(ev) {
+  const ch = coachesOf(ev), hd = headsOf(ev);
+  return `<h4>ครูผู้ควบคุมและเฮดกีฬา</h4><div class="ppl">${ch.map(n => person(n, TP[n], "ครูผู้ควบคุม")).join("")}${hd.map(m => person(m.name, "assets/img/students/" + m.photo, "เฮด " + m.room)).join("")}${!ch.length && !hd.length ? `<span class="none">รอประกาศ</span>` : ""}</div>`;
+}
+function athletes(ev) {
+  if (ev.relay) return `<h4>นักกีฬา (ทีมละ 4 คน แยกตามชั้น)</h4>` + teamOf(ev).map(r =>
+    `<div class="cls"><b>${esc(r.cls)}</b>${r.ids.length ? `<div class="ath">${r.ids.map(id => athFig(id, id === "a167")).join("")}</div>` : `<span class="none">ยังไม่มีรายชื่อ</span>`}</div>`).join("");
+  const ids = teamOf(ev);
+  return `<h4>นักกีฬากระดังงา ${ids.length ? ids.length + " คน" : ""}</h4>` + (ids.length ? `<div class="ath">${ids.map(id => athFig(id)).join("")}</div>` : `<span class="none">ยังไม่มีรายชื่อ</span>`);
+}
+function card(ev) {
+  const s = sportOf(ev) || {}, id = "e-" + ev.code.replace(".", "-");
+  const meta = `<div class="mc-meta"><span>สนาม <b>${esc(s.venue || "รอประกาศ")}</b></span>${ev.note ? `<span>${esc(ev.note)}</span>` : ""}</div>`;
+  let left;
+  if (ev.type === "bracket") {
+    const p = path(ev.teams);
+    left = `<div class="mine"><div class="tno">กระดังงาเป็นทีมที่ ${p.g} · สาย ${p.g === 3 || p.g === 4 ? "A" : "B"}</div><ol>${p.st.map(x =>
+      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${x.first ? `<div class="when">วัน เวลา รอประกาศ</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
+      <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams)}`;
+  } else if (ev.type === "league") {
+    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">วัน เวลา รอประกาศ</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
+  } else {
+    left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน ลู่ที่ 2 – 6 จับเวลาจัดอันดับ 1 – 5<div class="when">วัน เวลา รอประกาศ</div></li></ol><div class="end">ลู่ของสีเขียวตามที่เขียนกำกับไว้ในตารางแข่ง</div></div>`;
+  }
+  return `<article class="mc reveal" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3></div>${meta}
+    <div class="mc-grid"><div>${left}</div><div>${people(ev)}${athletes(ev)}</div></div></article>`;
+}
+const list = document.getElementById("sc-list"), chips = document.getElementById("sc-chips");
+const sports = [...new Set(SC.map(e => e.sport))];
+list.innerHTML = SC.map(card).join("");
+function pick(s) {
+  chips.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.s === s));
+  list.querySelectorAll(".mc").forEach(c => c.hidden = s !== "ทั้งหมด" && c.dataset.s !== s);
+}
+chips.innerHTML = ["ทั้งหมด", ...sports].map(s => `<button data-s="${esc(s)}">${esc(s)}</button>`).join("");
+chips.querySelectorAll("button").forEach(b => b.onclick = () => { pick(b.dataset.s); history.replaceState(null, "", b.dataset.s === "ทั้งหมด" ? location.pathname : "?sport=" + encodeURIComponent(b.dataset.s)); });
+const q = new URLSearchParams(location.search).get("sport");
+pick(q && sports.includes(q) ? q : "ทั้งหมด");
+if (location.hash) { const el = document.querySelector(location.hash); if (el) { el.hidden = false; el.classList.add("hit"); } }
+revealAll();
+</script>
+</body>
+</html>
