@@ -6,7 +6,7 @@ KD.tiktokFeed = {
  "profile": {
   "name": "สีเขียว(กระดังงา)- พรตพิทยพยัต",
   "bio": "คณะสีกระดังงา (เขียว) 🟢โรงเรียนพรตพิทยพยัต 💛💜",
-  "followers": 810,
+  "followers": 809,
   "likes": 29847,
   "videos": 18,
   "avatar": "assets/img/tiktok/avatar.jpg"
@@ -19,7 +19,7 @@ KD.tiktokFeed = {
    "date": "2026-10-20",
    "ts": 1792478405,
    "dur": 58,
-   "views": 1939,
+   "views": 1942,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -35,7 +35,7 @@ KD.tiktokFeed = {
    "date": "2026-09-23",
    "ts": 1790162099,
    "dur": 33,
-   "views": 5710,
+   "views": 5720,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -51,7 +51,7 @@ KD.tiktokFeed = {
    "date": "2026-08-31",
    "ts": 1788164902,
    "dur": 61,
-   "views": 5701,
+   "views": 5702,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -67,7 +67,7 @@ KD.tiktokFeed = {
    "date": "2026-08-19",
    "ts": 1787135938,
    "dur": 13,
-   "views": 8182,
+   "views": 8184,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -259,7 +259,7 @@ KD.tiktokFeed = {
    "date": "2026-06-10",
    "ts": 1781089653,
    "dur": 59,
-   "views": 7688,
+   "views": 7689,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -269,5 +269,5 @@ KD.tiktokFeed = {
    "ch": 480
   }
  ],
- "updated": "2026-10-27T00:10+07:00"
+ "updated": "2026-10-27T08:53+07:00"
 };
