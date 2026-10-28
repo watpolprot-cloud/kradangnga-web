@@ -40,6 +40,29 @@
 .res { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: linear-gradient(90deg, #fff4cf, #ffe9a8); border: 2px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; font-family: "Prompt"; color: var(--green-800); }
 .res b { font-weight: 600; }
 .res button { margin-left: auto; font: inherit; font-size: .88rem; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--green-700); color: #fff; cursor: pointer; }
+.res .st { font-weight: 700; border-radius: 999px; padding: 2px 14px 3px; background: var(--green-700); color: var(--gold-soft); }
+/* รายการที่แพ้ตกรอบแล้ว: การ์ดโทนเทา ป้ายจบการแข่งขัน */
+.mc.out { background: #f1f2f1; border-color: #c9cdca; }
+.mc.out .mc-h .code { background: #7d837f; color: #fff; }
+.mc.out .mc-h h3 { color: #5c625e; }
+.mc .flag { margin-left: auto; font-family: "Prompt"; font-weight: 700; font-size: .95rem; border-radius: 999px; padding: 3px 16px 4px; }
+.mc.out .flag { background: #5c625e; color: #fff; }
+.mc.on .flag, .mc.done .flag { background: linear-gradient(180deg, #fff1be, #f3c860); color: var(--green-900); box-shadow: 0 0 0 2px var(--gold); }
+.mc.out .res { background: #e4e6e4; border-color: #9aa09c; color: #3f4441; }
+.mc.out .res .st, .mc.out .res button { background: #5c625e; color: #fff; }
+.mc.out .mine { background: linear-gradient(135deg, #5c625e, #868c88); }
+.mc.out .mine .tno, .mc.out .mine li .k, .mc.out .mine .when { color: #eceeed; }
+.mc.out .mine li.first { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.5); }
+.mine li.skip { opacity: .55; }
+.mine li.skip .h { text-decoration: line-through; }
+.mine li .sc { display: inline-block; margin-left: 6px; font-family: "Prompt"; font-weight: 700; font-size: .82rem; border-radius: 999px; padding: 0 10px 1px; background: var(--gold-soft); color: var(--green-900); vertical-align: 2px; }
+.mine li .sc.no { background: rgba(255,255,255,.85); color: #3f4441; }
+.mc.out .ath img { filter: grayscale(.6); }
+.sc-res { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.sc-res a { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-family: "Prompt"; font-size: .92rem; border-radius: 12px; padding: 6px 12px; border: 1px solid; }
+.sc-res a.on, .sc-res a.done { background: #fff4cf; border-color: var(--gold); color: var(--green-800); }
+.sc-res a.out { background: #eceeed; border-color: #b5bab7; color: #5c625e; }
+.sc-res a b { font-weight: 700; }
 .mine .end { font-size: .88rem; opacity: .85; margin-top: 8px; }
 .bt { width: 100%; border-collapse: collapse; font-size: .93rem; }
 .bt th, .bt td { border-bottom: 1px solid var(--line); padding: 7px 6px; text-align: left; vertical-align: middle; }
@@ -83,6 +106,7 @@
   <div class="wrap">
     <div class="sec-title"><div><h2>คู่แข่งขันของสีเขียว แยกตามรายการ</h2><p>กดเลือกชนิดกีฬา กรอบสีเขียวเข้มคือเส้นทางของกระดังงา แถวสีเขียวอ่อนในตารางคือคู่ที่สีเขียวมีโอกาสลงแข่ง</p></div></div>
     <div class="sc-chips" id="sc-chips"></div>
+    <div class="sc-res" id="sc-res" hidden></div>
     <div id="sc-list"></div>
   </div>
 </section>
@@ -183,28 +207,41 @@ function athletes(ev) {
   const ids = teamOf(ev);
   return `<h4>นักกีฬากระดังงา ${ids.length ? ids.length + " คน" : ""}</h4>` + (ids.length ? `<div class="ath">${ids.map(id => athFig(id)).join("")}</div>` : `<span class="none">ยังไม่มีรายชื่อ</span>`);
 }
+// ผลการแข่งขัน: คู่ที่แข่งแล้วมีป้ายผล · ตกรอบแล้วคู่ถัดไปขีดฆ่า "ไม่ได้ไปต่อ"
+const ST = { on: "ผ่านเข้ารอบ · ลุ้นต่อ", out: "จบการแข่งขันแล้ว · ไม่ได้ไปต่อ", done: "จบการแข่งขันแล้ว" };
+function step(ev, x, W) {
+  const R = ev.result, pl = R && R.played && R.played[x.m], skip = R && R.status === "out" && !pl;
+  return `<li class="${x.first ? "first" : ""}${skip ? " skip" : ""}"><span class="k">${x.k}${pl ? `<span class="sc">${esc(pl)}</span>` : skip ? `<span class="sc no">ไม่ได้ไปต่อ</span>` : ""}</span><span class="h">${x.h}</span>${ev.dates ? `<div class="when">${fmt(ev.dates[x.m - 1])}</div>` : x.first ? `<div class="when">${W}</div>` : ""}</li>`;
+}
 function card(ev) {
-  const s = sportOf(ev) || {}, id = "e-" + ev.code.replace(".", "-");
+  const s = sportOf(ev) || {}, id = "e-" + ev.code.replace(".", "-"), R = ev.result;
   const W = s.when ? esc(s.when) : "วัน เวลา รอประกาศ";
   const meta = `<div class="mc-meta"><span>สนาม <b>${esc(s.venue || "รอประกาศ")}</b></span>${s.when ? `<span>วันแข่ง <b>${esc(s.when)}</b></span>` : ""}${ev.note ? `<span>${esc(ev.note)}</span>` : ""}</div>`;
   let left;
   if (ev.type === "bracket") {
     const p = path(ev.teams);
     left = `<div class="mine"><div class="tno">กระดังงาเป็นทีมที่ ${p.g} · สาย ${p.g === 3 || p.g === 4 ? "A" : "B"}</div><ol>${p.st.map(x =>
-      `<li class="${x.first ? "first" : ""}"><span class="k">${x.k}</span>${x.h}${ev.dates ? `<div class="when">${fmt(ev.dates[x.m - 1])}</div>` : x.first ? `<div class="when">${W}</div>` : ""}</li>`).join("")}</ol><div class="end">${p.end}</div></div>
+      step(ev, x, W)).join("")}</ol><div class="end">${R && R.status === "out" ? "จบการแข่งขันรายการนี้แล้ว" : p.end}</div></div>
       <h4>คู่แข่งขันทั้งสาย</h4>${table(ev.teams, ev.dates)}`;
   } else if (ev.type === "league") {
-    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">${ev.dates ? "รอบแรก " + fmt(ev.dates[0]) : W}</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
+    left = `<div class="mine"><div class="tno">แข่งแบบพบกันหมด</div><ol><li class="first"><span class="k">กระดังงาพบทุกสี${R && R.played && R.played[1] ? `<span class="sc">${esc(R.played[1])}</span>` : ""}</span>${["แดง", "ชมพู", "ฟ้า", "น้ำเงิน"].map(hc).join(" · ")}<div class="when">${ev.dates ? "รอบแรก " + fmt(ev.dates[0]) : W}</div></li></ol><div class="end">${esc(ev.note)}</div></div>`;
   } else {
     left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน จับเวลาจัดอันดับ 1 – 5<div class="when">${W}</div></li></ol><div class="end">ลู่ ${ev.lanes.map((c, i) => `${i + 2} ${hc(c)}`).join(" · ")}</div></div>`;
   }
-  return `<article class="mc reveal" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3></div>${meta}
-    ${ev.result ? `<div class="res"><b>ผลการแข่งขัน</b><span>${esc(ev.result.text)}</span>${ev.result.img ? `<button type="button" data-img="assets/img/gallery/${esc(ev.result.img)}" data-cap="${esc(ev.sport + " " + ev.div)} · ${esc(ev.result.text)}">ดูภาพผล</button>` : ""}</div>` : ""}
+  return `<article class="mc reveal${R && R.status ? " " + R.status : ""}" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3>${R && ST[R.status] ? `<span class="flag">${ST[R.status]}</span>` : ""}</div>${meta}
+    ${ev.result ? `<div class="res">${R.status ? `<span class="st">${R.status === "on" ? "ลุ้นต่อ" : "จบแล้ว"}</span>` : `<b>ผลการแข่งขัน</b>`}<span>${esc(ev.result.text)}</span>${ev.result.img ? `<button type="button" data-img="assets/img/gallery/${esc(ev.result.img)}" data-cap="${esc(ev.sport + " " + ev.div)} · ${esc(ev.result.text)}">ดูภาพผล</button>` : ""}</div>` : ""}
     <div class="mc-grid"><div>${left}</div><div>${people(ev)}${athletes(ev)}</div></div></article>`;
 }
 const list = document.getElementById("sc-list"), chips = document.getElementById("sc-chips");
 const sports = [...new Set(SC.map(e => e.sport))];
 list.innerHTML = SC.map(card).join("");
+const done = SC.filter(e => e.result && e.result.status);
+if (done.length) {
+  const box = document.getElementById("sc-res"); box.hidden = false;
+  box.innerHTML = `<span style="font-family:Prompt;font-weight:600;align-self:center">ผลล่าสุด</span>` + done.map(e =>
+    `<a class="${e.result.status}" href="#e-${e.code.replace(".", "-")}"><b>${esc(e.sport === "E-sport" ? e.div : e.sport + " " + e.div)}</b>${e.result.status === "on" ? "ลุ้นต่อ" : e.result.status === "out" ? "จบแล้ว ไม่ได้ไปต่อ" : "จบแล้ว"}</a>`).join("");
+  box.querySelectorAll("a").forEach(a => a.onclick = () => pick("ทั้งหมด"));
+}
 list.querySelectorAll(".res button").forEach(b => b.onclick = () => openLightbox([{ src: b.dataset.img, cap: b.dataset.cap }]));
 function pick(s) {
   chips.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.s === s));
