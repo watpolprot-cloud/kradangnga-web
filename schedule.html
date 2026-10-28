@@ -37,6 +37,9 @@
 .mine li.first { background: rgba(243,210,122,.22); border: 1px solid var(--gold-soft); }
 .mine .hc { color: var(--white); }
 .mine .when { font-size: .85rem; color: var(--gold-pale); opacity: .9; }
+.res { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: linear-gradient(90deg, #fff4cf, #ffe9a8); border: 2px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; font-family: "Prompt"; color: var(--green-800); }
+.res b { font-weight: 600; }
+.res button { margin-left: auto; font: inherit; font-size: .88rem; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--green-700); color: #fff; cursor: pointer; }
 .mine .end { font-size: .88rem; opacity: .85; margin-top: 8px; }
 .bt { width: 100%; border-collapse: collapse; font-size: .93rem; }
 .bt th, .bt td { border-bottom: 1px solid var(--line); padding: 7px 6px; text-align: left; vertical-align: middle; }
@@ -196,11 +199,13 @@ function card(ev) {
     left = `<div class="mine"><div class="tno">กระดังงาวิ่งลู่ที่ ${ev.lane}</div><ol><li class="first"><span class="k">${ev.relay ? "ผลัด 4×100 เมตร แข่งแยก ม.1 – ม.6" : "แข่งแยกชั้น ม.1 – ม.6 ชั้นละ 1 คน"}</span>5 สีวิ่งพร้อมกัน จับเวลาจัดอันดับ 1 – 5<div class="when">${W}</div></li></ol><div class="end">ลู่ ${ev.lanes.map((c, i) => `${i + 2} ${hc(c)}`).join(" · ")}</div></div>`;
   }
   return `<article class="mc reveal" id="${id}" data-s="${esc(ev.sport)}"><div class="mc-h"><span class="code">${esc(ev.code)}</span><h3>${esc(ev.sport)} ${esc(ev.div)}</h3></div>${meta}
+    ${ev.result ? `<div class="res"><b>ผลการแข่งขัน</b><span>${esc(ev.result.text)}</span>${ev.result.img ? `<button type="button" data-img="assets/img/gallery/${esc(ev.result.img)}" data-cap="${esc(ev.sport + " " + ev.div)} · ${esc(ev.result.text)}">ดูภาพผล</button>` : ""}</div>` : ""}
     <div class="mc-grid"><div>${left}</div><div>${people(ev)}${athletes(ev)}</div></div></article>`;
 }
 const list = document.getElementById("sc-list"), chips = document.getElementById("sc-chips");
 const sports = [...new Set(SC.map(e => e.sport))];
 list.innerHTML = SC.map(card).join("");
+list.querySelectorAll(".res button").forEach(b => b.onclick = () => openLightbox([{ src: b.dataset.img, cap: b.dataset.cap }]));
 function pick(s) {
   chips.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.s === s));
   list.querySelectorAll(".mc").forEach(c => c.hidden = s !== "ทั้งหมด" && c.dataset.s !== s);

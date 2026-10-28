@@ -23,6 +23,18 @@
   </div>
 </section>
 
+<section class="block dark" id="practice">
+  <div class="wrap">
+    <div class="sec-title"><div><h2>กำหนดการฝึกซ้อม 26 ต.ค. – 11 พ.ย. 2569</h2><p>โรงเรียนแจ้งเวลาฝึกซ้อมกองเชียร์บุนนาคเกมส์ ครั้งที่ 77 มีคณะครูกำกับดูแลการฝึกซ้อม</p></div><button class="btn btn-gold" type="button" id="practice-img">เปิดภาพประกาศของโรงเรียน</button></div>
+    <div class="facts">
+      <div class="fact reveal"><small>1 · ซ้อมกีฬา</small><b>13.50 – 15.30 น.</b><small>ประตูเปิดให้กลับบ้านได้ 15.30 น.</small></div>
+      <div class="fact reveal"><small>2 · ซ้อมสแตนด์เชียร์ (ม.ต้น)</small><b>ไม่เกิน 16.30 น.</b><small>อาจปรับเปลี่ยนตามความเหมาะสม สอบถามคณะสีที่รับผิดชอบ</small></div>
+      <div class="fact reveal"><small>3 · ซ้อมทุกประเภทกิจกรรม</small><b>ไม่เกิน 18.00 น.</b><small>ประตูโรงเรียนปิด มีครูเวรประจำวันตรวจสอบ</small></div>
+    </div>
+    <p style="margin-top:16px;opacity:.9">ผู้ปกครองวางแผนรับ – ส่งนักเรียนตามเวลานี้ได้เลย</p>
+  </div>
+</section>
+
 <section class="block alt">
   <div class="wrap">
     <div class="sec-title"><div><h2>ลำดับการแสดง</h2><p>สแตนด์ของกระดังงาอยู่ตำแหน่งกลาง ต้องถอดฉากเบื้องหลังสแตนด์ออกก่อนพิธีจุดคบเพลิง แล้วประกอบกลับ</p></div></div>
@@ -237,6 +249,7 @@ document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ช
   }).join("")}${M.welfarePending ? `<span class="co-wp wait">และอีก ${M.welfarePending} ท่าน (รอประกาศ)</span>` : ""}</div>${M.welfareNote ? `<p class="co-note">${esc(M.welfareNote)}</p>` : ""}` : "";
 })();
 revealAll();
+document.getElementById("practice-img").onclick = () => openLightbox([{ src: "assets/img/gallery/info_practice_time_2569-2.jpg", cap: "ประกาศกำหนดการฝึกซ้อมกองเชียร์ 26 ต.ค. – 11 พ.ย. 2569" }]);
 </script>
 </body>
 </html>
