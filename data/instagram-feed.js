@@ -10,7 +10,7 @@ KD.instagramFeed = {
   "following": null,
   "posts": 39,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-10-29"
+  "day": "2026-10-30"
  },
  "posts": [
   {
@@ -27,7 +27,7 @@ KD.instagramFeed = {
    "cw": 720,
    "ch": 405,
    "alt": "",
-   "likes": 69,
+   "likes": 202,
    "comments": 0
   },
   {
@@ -44,7 +44,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 38,
+   "likes": 41,
    "comments": 0
   },
   {
@@ -61,7 +61,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 41,
+   "likes": 47,
    "comments": 0
   },
   {
@@ -78,7 +78,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 1280,
    "alt": "",
-   "likes": 56,
+   "likes": 57,
    "comments": 0
   },
   {
@@ -155,5 +155,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-10-29T00:11+07:00"
+ "updated": "2026-10-30T00:27+07:00"
 };
