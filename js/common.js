@@ -12,7 +12,8 @@
     ["students.html", "ทำเนียบนักเรียน"],
     ["games.html", "บุนนาคเกมส์ 2569"],
     ["schedule.html", "ตารางแข่ง"],
-    ["progress.html", "ความก้าวหน้าฝ่ายงาน"]
+    ["progress.html", "ความก้าวหน้าฝ่ายงาน"],
+    ["sponsors.html", "ขอบคุณผู้สนับสนุน"]
   ];
   const here = (location.pathname.split("/").pop() || "index.html");
   const S = (window.KD && KD.site) || {};
