@@ -6,7 +6,7 @@
 <title>ทำเนียบครู · คณะสีกระดังงา (สีเขียว)</title>
 <meta name="description" content="คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="css/style.css?v=20261030f">
+<link rel="stylesheet" href="css/style.css?v=20261030h">
 </head>
 <body>
 <section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ทำเนียบครู</h1><p>คณะครูที่ปรึกษาคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 จำนวน 32 ท่าน · ในทำเนียบมี 31 ท่าน รอข้อมูลและรูปครูใหม่ 1 ท่าน (ครูปัจฉิมา นินเคนที)</p></div></section>
@@ -51,6 +51,7 @@ function card(t) {
     ${t.role ? `<div class="rl"><span class="tag">${esc(t.role)}</span></div>` : ""}
     ${coach(t.name)}
     ${(KD.lineupDuty?.days || []).filter(d => d.teacher === t.name).map(d => `<a class="duty-line" href="duty.html#lineup">เวรตรวจแถว: ${esc(d.day)} ${esc(KD.lineupDuty.time || "")}</a>`).join("")}
+    ${(KD.cleanRoom?.sets || []).map((s, i) => s.g1 === t.name || s.g2 === t.name ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}#cleanroom">ตรวจห้องเรียนสะอาด: กลุ่มที่ ${s.g1 === t.name ? 1 : 2} ชุดที่ ${i + 1} · วันพุธ 16.00 น. (${(KD.cleanRoom.groups.find(g => g.no === (s.g1 === t.name ? 1 : 2)) || { dates: [] }).dates.length} ครั้ง)</a>` : "").join("")}
     ${duty.length ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}">${duty.map(d => `เวร: จุดที่ ${d.spot} ${esc(d.place)} ${esc(d.time)}`).join("<br>")}</a>` : ""}
   </div></div>`;
 }

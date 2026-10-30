@@ -156,6 +156,19 @@ function build() {
     `ทุกเช้า เวลา ${LU.time} ณ ${LU.place} ครูคณะสีกระดังงาไป${LU.task}${LU.startText ? ` (${LU.startText})` : ""}`,
     ...LU.days.map(d => `- ${d.day}: ${d.teacher}`)
   ].join("\n"));
+  const CR = KD.cleanRoom;
+  if (CR && (CR.sets || []).length) {
+    const rooms = s => s.rooms.map(([r, c]) => `${r} (ห้องประจำ ${c})`).join(", ");
+    const days = g => (CR.groups.find(x => x.no === g) || { dates: [] }).dates.map(d => `วันพุธที่ ${thDate(d)}`).join(", ");
+    add(`${CR.title} ${CR.term}`, "duty.html#cleanroom", [
+      `ตาม${CR.order} ครูคณะสีกระดังงา ${CR.sets.length * 2} ท่าน เป็นครูเวรตรวจห้องเรียน เวลา ${CR.time} แบ่ง 2 กลุ่ม กลุ่มละ ${CR.sets.length} ท่าน ครูกลุ่มที่ 1 และกลุ่มที่ 2 ในชุดเดียวกันตรวจห้องชุดเดียวกัน สลับวันกัน`,
+      ...CR.groups.map(g => `กลุ่มที่ ${g.no} (${g.dates.length} ครั้ง): ${days(g.no)}`),
+      "หน้าที่ของครูเวร: " + CR.tasks.map((t, i) => `${i + 1}) ${t}`).join(" "),
+      "ชุดห้องและครูเวร:",
+      ...CR.sets.map((s, i) => `- ชุดที่ ${i + 1} ห้อง ${rooms(s)}: กลุ่มที่ 1 ${s.g1} · กลุ่มที่ 2 ${s.g2}`),
+      CR.lead
+    ].filter(Boolean).join("\n"));
+  }
 
   // ทำเนียบนักเรียน
   const G = KD.studentGroups || [];

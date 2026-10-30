@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>เวรประจำจุด · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
+<meta name="description" content="เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) เวรตรวจห้องเรียนสะอาด (วันพุธตามวันที่กำหนด 16.00 น. ครู 30 ท่าน 2 กลุ่ม) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="css/style.css?v=20261030f">
+<link rel="stylesheet" href="css/style.css?v=20261030h">
 </head>
 <body>
 <section class="page-head duty-head">
@@ -22,6 +22,29 @@
       <div class="lu-grid" id="lu-grid"></div>
       <figure class="lu-img reveal" id="lu-img" hidden></figure>
     </div>
+  </div>
+</section>
+<section class="block dark" id="cleanroom">
+  <div class="wrap">
+    <div class="dp-head reveal"><h2 id="cr-title">เวรตรวจห้องเรียนสะอาด</h2><span id="cr-when"></span></div>
+    <p class="cr-order reveal" id="cr-order"></p>
+    <div class="cr-wrap">
+      <div>
+        <div class="cr-next reveal" id="cr-next" aria-live="polite"></div>
+        <div class="cr-groups" id="cr-groups"></div>
+        <div class="cr-tasks reveal" id="cr-tasks"></div>
+      </div>
+      <figure class="lu-img cr-img reveal" id="cr-img" hidden></figure>
+    </div>
+    <div class="duty-tools cr-tools reveal">
+      <label class="duty-find"><span>หาเวรตรวจห้องของครู</span>
+        <select id="cr-teacher"><option value="">เลือกชื่อครู</option></select>
+      </label>
+      <span class="cr-hint">ครูกลุ่มที่ 1 และกลุ่มที่ 2 ในแถวเดียวกัน ตรวจห้องชุดเดียวกัน สลับวันกัน</span>
+    </div>
+    <div class="cr-result" id="cr-result" hidden></div>
+    <div class="cr-table" id="cr-table"></div>
+    <p class="cr-note" id="cr-note"></p>
   </div>
 </section>
 <section class="block">
@@ -171,6 +194,71 @@ if (LU && (LU.days || []).length) {
     F2.querySelector("button").onclick = () => openLightbox(LI, 0);
   }
 } else document.getElementById("lineup").hidden = true;
+
+// เวรตรวจห้องเรียนสะอาด (KD.cleanRoom ใน data/duty.js) ไฮไลต์เวรครั้งถัดไปตามเวลาไทย เลือกชื่อครูหรือเปิดด้วย ?t=ชื่อครู#cleanroom
+const CR = KD.cleanRoom;
+if (CR && (CR.sets || []).length) {
+  const TH_M = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+  const TH_MS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+  const TH_D = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+  const ymd = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Bangkok" });
+  const parts = s => s.split("-").map(Number);
+  const longTH = s => { const [y, m, d] = parts(s); return `วัน${TH_D[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}ที่ ${d} ${TH_M[m - 1]} ${y + 543}`; };
+  const shortTH = s => { const [y, m, d] = parts(s); return `${d} ${TH_MS[m - 1]} ${String(y + 543).slice(2)}`; };
+  const all = CR.groups.flatMap(g => g.dates.map(d => ({ d, g: g.no }))).sort((a, b) => a.d < b.d ? -1 : 1);
+  const nextOf = g => all.find(x => x.d >= ymd && (!g || x.g === g));
+  const nx = nextOf();
+  const crNames = CR.sets.flatMap(s => [s.g1, s.g2]).sort((a, b) => a.localeCompare(b, "th"));
+  const roomTxt = s => s.rooms.map(([r, c]) => `${r} (${c})`).join(", ");
+  document.getElementById("cr-title").textContent = CR.title;
+  document.getElementById("cr-when").textContent = `${CR.term} · ทุกวันพุธตามวันที่กำหนด · ${CR.time}`;
+  document.getElementById("cr-order").textContent = `ตาม${CR.order} คัดเฉพาะครูคณะสีกระดังงา (สีเขียว) ${crNames.length} ท่าน`;
+  document.getElementById("cr-next").innerHTML = nx
+    ? `<small>${nx.d === ymd ? "เวรวันนี้" : "เวรครั้งถัดไป"} · ครั้งที่ ${all.indexOf(nx) + 1} จาก ${all.length} ครั้ง</small><b>${longTH(nx.d)}</b><span>กลุ่มที่ ${nx.g} · ${CR.sets.length} ท่าน · ${esc(CR.time)}</span>`
+    : `<b>ครบเวรตรวจห้องเรียนทั้ง ${all.length} ครั้งแล้ว</b>`;
+  document.getElementById("cr-groups").innerHTML = CR.groups.map(g => `<article class="cr-g reveal${nx && nx.g === g.no ? " next" : ""}">
+    <div class="cr-g-top"><b>กลุ่มที่ ${g.no}</b><span>${CR.sets.length} ท่าน · ${g.dates.length} ครั้ง</span></div>
+    <div class="cr-dates">${g.dates.map(d => `<span class="cr-d${d < ymd ? " past" : ""}${nx && d === nx.d ? " next" : ""}" title="${longTH(d)}">${shortTH(d)}</span>`).join("")}</div></article>`).join("");
+  document.getElementById("cr-tasks").innerHTML = `<h3>หน้าที่ของครูเวร</h3><ol>${CR.tasks.map(t => `<li>${esc(t)}</li>`).join("")}</ol>`;
+  document.getElementById("cr-note").textContent = CR.lead || "";
+  if (CR.image) {
+    const CI = [{ src: `assets/img/duty/${CR.image}`, cap: `${CR.title} ${CR.term}` }], F3 = document.getElementById("cr-img");
+    F3.hidden = false;
+    F3.innerHTML = `<button type="button" aria-label="ดูภาพเวรตรวจห้องเรียนขนาดใหญ่"><img src="${esc(CI[0].src.replace(/\.jpg$/, "-s.jpg"))}" alt="${esc(CI[0].cap)}" loading="lazy"></button>
+      <figcaption><span>ภาพสำหรับส่งกลุ่ม LINE</span><a href="${esc(CI[0].src)}" download="${esc(CR.title)}.jpg">ดาวน์โหลด</a></figcaption>`;
+    F3.querySelector("button").onclick = () => openLightbox(CI, 0);
+  }
+  const CS = document.getElementById("cr-teacher"), CRR = document.getElementById("cr-result"), CT = document.getElementById("cr-table");
+  CS.innerHTML += crNames.map(n => `<option>${esc(n)}</option>`).join("");
+  const who = (n, sel) => {
+    const [, pre = "", first, last] = n.match(/^(ครู)?(\S+)\s*(.*)$/);
+    const ph = photo[n] ? `<img src="${esc(photo[n])}" alt="" loading="lazy">` : `<img class="no-photo" src="assets/img/logo.png" alt="" loading="lazy">`;
+    return `<div class="cr-p${n === sel ? " me" : ""}"><span class="cr-ph">${ph}</span><span><b>${esc(pre + first)}</b><small>${esc(last)}</small></span></div>`;
+  };
+  function renderCR() {
+    const sel = CS.value, i = CR.sets.findIndex(s => s.g1 === sel || s.g2 === sel), s = CR.sets[i];
+    CRR.hidden = !s;
+    if (s) {
+      const g = s.g1 === sel ? 1 : 2, pair = g === 1 ? s.g2 : s.g1, dates = CR.groups.find(x => x.no === g).dates, mine = nextOf(g);
+      CRR.innerHTML = `${person(sel)}<div><b>${esc(sel)}</b>
+        <p>กลุ่มที่ ${g} · ชุดห้องที่ ${i + 1} · ตรวจห้อง ${esc(roomTxt(s))}</p>
+        <p>วันเวร (${dates.length} ครั้ง): ${dates.map(d => `<span class="cr-d${d < ymd ? " past" : ""}${mine && d === mine.d ? " next" : ""}">${shortTH(d)}</span>`).join(" ")}</p>
+        <p>${mine ? `เวรครั้งถัดไป <strong>${longTH(mine.d)}</strong> ${esc(CR.time)}` : "ครบเวรทุกครั้งแล้ว"}</p>
+        <p>ตรวจห้องชุดเดียวกับ${esc(pair)} (กลุ่มที่ ${3 - g}) สลับวันกัน</p>
+        <button type="button" class="back-btn" id="cr-clear">ดูเวรทั้งหมด</button></div>`;
+      document.getElementById("cr-clear").onclick = () => { CS.value = ""; renderCR(); };
+    }
+    CT.innerHTML = `<div class="cr-tr cr-th"><span>ชุดห้องที่ตรวจ<small>เลขห้อง (ห้องประจำของชั้น)</small></span>${CR.groups.map(g => `<span>กลุ่มที่ ${g.no}<small>${g.dates.map(shortTH).join(" · ")}</small></span>`).join("")}</div>` +
+      CR.sets.map((t, k) => `<div class="cr-tr reveal${k === i ? " me" : ""}" id="cr-set-${k + 1}">
+        <div class="cr-rooms"><em>ชุดที่ ${k + 1}</em>${t.rooms.map(([r, c]) => `<span class="cr-room"><b>${esc(r)}</b><small>${esc(c)}</small></span>`).join("")}</div>
+        <div class="cr-cell" data-g="กลุ่มที่ 1">${who(t.g1, sel)}</div><div class="cr-cell" data-g="กลุ่มที่ 2">${who(t.g2, sel)}</div></div>`).join("");
+    revealAll();
+  }
+  CS.onchange = () => { renderCR(); if (CS.value) CRR.scrollIntoView({ behavior: "smooth", block: "center" }); };
+  if (want && crNames.includes(want)) CS.value = want;
+  renderCR();
+  if (CS.value && location.hash === "#cleanroom") setTimeout(() => CRR.scrollIntoView({ block: "center" }), 350);
+} else document.getElementById("cleanroom").hidden = true;
 
 const CAPS = ["ภาพรวม", "ช่วงเช้า", "ช่วงกลางวัน", "ช่วงบ่าย"];
 const imgs = (M.images || []).map((f, i) => ({ src: `assets/img/duty/${f}`, cap: `${M.title || "เวรประจำจุด"} · ${CAPS[i] || i + 1}` }));
