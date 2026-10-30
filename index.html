@@ -149,6 +149,15 @@
   </div>
 </section>
 
+<section class="block" id="sponsors" hidden>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>ขอบคุณผู้สนับสนุน</h2><p>ร้านค้าและผู้ใจดีที่ร่วมเป็นกำลังใจให้สีเขียว ฝากอุดหนุนกันด้วยนะ</p></div>
+    </div>
+    <div class="sponsor-grid" id="sponsor-list"></div>
+  </div>
+</section>
+
 <section class="block dark quote-band">
   <div class="wrap">
     <div class="q">ทุกน้ำใจคือพลัง<br>ทุกการสนับสนุนคือกำลังใจ</div>
@@ -166,6 +175,7 @@
 <script src="data/instagram.js"></script>
 <script src="data/instagram-feed.js"></script>
 <script src="data/duty-map.js"></script>
+<script src="data/sponsors.js"></script>
 <script src="js/common.js"></script>
 <script src="js/tiktok.js"></script>
 <script src="js/instagram.js"></script>
@@ -192,6 +202,23 @@
       <div class="cd-box"><b>${m}</b><span>นาที</span></div>`;
   }
   tick(); setInterval(tick, 30000);
+})();
+
+// ผู้สนับสนุน (data/sponsors.js)
+(function () {
+  const list = KD.sponsors || [], sec = document.getElementById("sponsors");
+  if (!list.length) return;
+  sec.hidden = false;
+  document.getElementById("sponsor-list").innerHTML = list.map(s => `
+    <article class="sponsor reveal">
+      <div class="sponsor-logo"><img src="assets/img/sponsors/${esc(s.logo)}" alt="โลโก้${esc(s.name)}" loading="lazy"></div>
+      <div class="sponsor-body">
+        <h3>${esc(s.name)}</h3>
+        ${s.note ? `<p>${esc(s.note)}</p>` : ""}
+        ${s.tel ? `<a class="btn btn-gold" href="tel:${esc(s.tel.replace(/-/g, ""))}">โทรสั่ง ${esc(s.tel)}</a>` : ""}
+      </div>
+    </article>`).join("");
+  if (location.hash === "#sponsors") setTimeout(() => sec.scrollIntoView(), 300);
 })();
 
 // ข่าว 3 รายการล่าสุด
