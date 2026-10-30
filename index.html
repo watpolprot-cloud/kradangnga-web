@@ -152,7 +152,7 @@
 <section class="block" id="sponsors" hidden>
   <div class="wrap">
     <div class="sec-title">
-      <div><h2>ขอบคุณผู้สนับสนุน</h2><p>ร้านค้าและผู้ใจดีที่ร่วมเป็นกำลังใจให้สีเขียว ฝากอุดหนุนกันด้วยนะ</p></div>
+      <div><h2>ขอบคุณผู้สนับสนุน</h2><p>ร้านค้าและผู้ใจดีที่ร่วมเป็นกำลังใจให้สีเขียว ฝากครู นักเรียน และผู้ปกครองช่วยกันอุดหนุนด้วยนะครับ</p></div>
     </div>
     <div class="sponsor-grid" id="sponsor-list"></div>
   </div>
@@ -209,15 +209,44 @@
   const list = KD.sponsors || [], sec = document.getElementById("sponsors");
   if (!list.length) return;
   sec.hidden = false;
-  document.getElementById("sponsor-list").innerHTML = list.map(s => `
+  const box = document.getElementById("sponsor-list");
+  box.innerHTML = list.map((s, k) => {
+    const q = encodeURIComponent(s.map || s.name);
+    const row = (label, val) => val ? `<li><b>${label}</b><span>${esc(val)}</span></li>` : "";
+    return `
     <article class="sponsor reveal">
-      <div class="sponsor-logo"><img src="assets/img/sponsors/${esc(s.logo)}" alt="โลโก้${esc(s.name)}" loading="lazy"></div>
-      <div class="sponsor-body">
-        <h3>${esc(s.name)}</h3>
-        ${s.note ? `<p>${esc(s.note)}</p>` : ""}
-        ${s.tel ? `<a class="btn btn-gold" href="tel:${esc(s.tel.replace(/-/g, ""))}">โทรสั่ง ${esc(s.tel)}</a>` : ""}
+      <div class="sp-top">
+        <div class="sponsor-logo"><img src="assets/img/sponsors/${esc(s.logo)}" alt="โลโก้${esc(s.name)}" loading="lazy"></div>
+        <div class="sponsor-body">
+          <div class="sp-kind">${esc(s.kind || "ผู้สนับสนุน")}</div>
+          <h3>${esc(s.name)}</h3>
+          ${s.amount ? `<div class="sp-amount">ร่วมสนับสนุน <b>${esc(s.amount)}</b></div>` : ""}
+          ${s.note ? `<p>${esc(s.note)}</p>` : ""}
+          ${s.slogan ? `<p class="sp-slogan">“${esc(s.slogan)}”</p>` : ""}
+          <div class="sp-actions">
+            ${s.tel ? `<a class="btn btn-gold" href="tel:${esc(s.tel.replace(/-/g, ""))}">โทรสั่ง ${esc(s.tel)}</a>` : ""}
+            ${s.map ? `<a class="btn btn-green" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">นำทางไปร้าน</a>` : ""}
+            ${s.facebook ? `<a class="btn btn-outline" href="${esc(s.facebook)}" target="_blank" rel="noopener">เพจ Facebook</a>` : ""}
+          </div>
+        </div>
       </div>
-    </article>`).join("");
+      ${s.photos && s.photos.length ? `<div class="sp-photos">${s.photos.map((p, i) => `<button type="button" data-k="${k}" data-i="${i}"><img src="assets/img/sponsors/${esc(p.src)}" alt="${esc(p.cap || s.name)}" loading="lazy"><span>${esc(p.cap || "")}</span></button>`).join("")}</div>` : ""}
+      <div class="sp-info">
+        <div>
+          ${s.menu && s.menu.length ? `<h4>เมนูแนะนำ</h4><div class="sp-menu">${s.menu.map(m => `<span>${esc(m)}</span>`).join("")}</div>` : ""}
+          <h4>ข้อมูลร้าน</h4>
+          <ul class="sp-list">
+            ${row("เวลาเปิด", s.hours)}${row("ราคา", s.price)}${row("ที่อยู่", s.address)}${row("โทร", s.tel)}
+          </ul>
+        </div>
+        ${s.map ? `<div class="sp-map"><iframe title="แผนที่${esc(s.name)}" src="https://www.google.com/maps?q=${q}&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+  box.querySelectorAll(".sp-photos button").forEach(b => b.onclick = () => {
+    const s = list[+b.dataset.k];
+    openLightbox(s.photos.map(p => ({ src: "assets/img/sponsors/" + p.src, cap: p.cap })), +b.dataset.i);
+  });
   if (location.hash === "#sponsors") setTimeout(() => sec.scrollIntoView(), 300);
 })();
 
