@@ -1328,3 +1328,37 @@ ul.clean li { margin-bottom: 6px; }
 .venue .vs + .vs { border-top: 1px dashed rgba(0,0,0,.12); }
 .venue.tba { border-style: dashed; opacity: .85; }
 .sports-tbl .vcell { min-width: 150px; }
+
+/* ---------- แถบข้อความวิ่งผู้สนับสนุน (js/common.js) ---------- */
+.sp-ticker { position: fixed; left: 0; right: 0; bottom: 0; z-index: 85; display: flex; align-items: center; height: 52px;
+  background: linear-gradient(90deg, var(--green-900), var(--green-800) 30%, var(--green-800) 70%, var(--green-900)); border-top: 2px solid var(--gold); box-shadow: 0 -8px 22px rgba(5,37,26,.25); animation: spt-in .5s ease-out; }
+.spt-label { flex: none; align-self: stretch; display: flex; align-items: center; padding: 0 16px; font-family: "Prompt"; font-weight: 600; font-size: .92rem; color: var(--green-900); background: linear-gradient(180deg, #FFF1BE, var(--gold-soft) 55%, var(--gold)); }
+.spt-label:hover { color: var(--green-900); }
+.spt-view { flex: 1; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.spt-track { display: inline-flex; width: max-content; white-space: nowrap; animation: spt-run 30s linear infinite; }
+.spt-dup { display: inline-flex; flex: none; }
+.spt-track > *, .spt-dup > * { flex: none; }
+.sp-ticker:hover .spt-track, .spt-track:focus-within { animation-play-state: paused; }
+.spt-track a { display: inline-flex; align-items: center; gap: 10px; padding: 0 14px; color: #FFF8E4; font-size: .95rem; }
+.spt-sep { display: inline-flex; align-items: center; padding: 0 14px; color: var(--gold); font-style: normal; font-size: .8rem; }
+.spt-track a:hover b { text-decoration: underline; }
+.spt-track img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: #fff; border: 2px solid var(--gold-soft); }
+.spt-track b { font-family: "Prompt"; font-weight: 600; color: var(--gold-soft); }
+.spt-x { flex: none; width: 34px; height: 34px; margin: 0 10px; border-radius: 50%; border: 1px solid rgba(243,210,122,.6); background: rgba(255,255,255,.08); color: var(--gold-pale); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.spt-x:hover { background: rgba(255,255,255,.2); }
+body.has-sp-ticker { padding-bottom: 52px; }
+body.has-sp-ticker .kc { bottom: 72px; }
+@keyframes spt-run { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes spt-in { from { transform: translateY(100%); } to { transform: none; } }
+@media (max-width: 640px) {
+  .sp-ticker { height: 46px; }
+  .spt-label { padding: 0 10px; font-size: .8rem; }
+  .spt-track a { font-size: .88rem; }
+  .spt-track img { width: 28px; height: 28px; }
+  body.has-sp-ticker { padding-bottom: 46px; }
+  body.has-sp-ticker .kc { bottom: 62px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spt-track { animation: none; }
+  .spt-view { overflow-x: auto; }
+}

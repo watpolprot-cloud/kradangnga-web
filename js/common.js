@@ -146,4 +146,33 @@
     } catch (e) { /* โหลดแชตบอตไม่ได้ก็ใช้เว็บได้ตามปกติ */ }
   }
   document.addEventListener("DOMContentLoaded", chatbot);
+
+  // ---------- แถบข้อความวิ่งผู้สนับสนุน ด้านล่างจอ (ทุกหน้า มีปุ่มปิด) ----------
+  // ข้อความมาจาก data/sponsors.js (ช่อง ticker ถ้าไม่ใส่จะใช้ชื่อ + ประเภท + เบอร์โทร) กดแล้วไปการ์ดในหน้าผู้สนับสนุน
+  // กดปิดแล้วจะไม่ขึ้นอีกจนกว่าจะปิดแท็บ/เบราว์เซอร์
+  async function sponsorTicker() {
+    try { if (sessionStorage.getItem("kd-sp-ticker-off")) return; } catch (e) {}
+    try { if (!KD.sponsors) await loadScript("data/sponsors.js"); } catch (e) { return; }
+    const list = KD.sponsors || [];
+    if (!list.length) return;
+    const item = s => `<a href="sponsors.html${s.id ? "#sp-" + esc(s.id) : ""}"><img src="assets/img/sponsors/${esc(s.thanksImage || s.logo)}" alt=""><b>${esc(s.name)}</b><span>${esc(s.ticker || [s.kind, s.tel && "โทร " + s.tel].filter(Boolean).join(" · "))}</span></a><i class="spt-sep" aria-hidden="true">✦</i>`;
+    const run = list.map(item).join("");
+    const bar = document.createElement("div");
+    bar.className = "sp-ticker";
+    bar.setAttribute("role", "region");
+    bar.setAttribute("aria-label", "ผู้สนับสนุนคณะสีกระดังงา");
+    // ใส่รายการซ้ำ 2 ชุดให้วิ่งต่อเนื่องไม่มีช่องว่าง
+    bar.innerHTML = `<a class="spt-label" href="sponsors.html">ขอบคุณผู้สนับสนุน</a>
+      <div class="spt-view"><div class="spt-track">${run}<span class="spt-dup" aria-hidden="true">${run}</span></div></div>
+      <button type="button" class="spt-x" aria-label="ปิดแถบผู้สนับสนุน" title="ปิด">×</button>`;
+    document.body.append(bar);
+    document.body.classList.add("has-sp-ticker");
+    const track = bar.querySelector(".spt-track");
+    track.style.animationDuration = Math.max(18, track.scrollWidth / 2 / 70) + "s";  // ราว 70px ต่อวินาที
+    bar.querySelector(".spt-x").onclick = () => {
+      bar.remove(); document.body.classList.remove("has-sp-ticker");
+      try { sessionStorage.setItem("kd-sp-ticker-off", "1"); } catch (e) {}
+    };
+  }
+  document.addEventListener("DOMContentLoaded", sponsorTicker);
 })();
