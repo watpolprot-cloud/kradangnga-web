@@ -147,7 +147,7 @@
   }
   document.addEventListener("DOMContentLoaded", chatbot);
 
-  // ---------- แถบข้อความวิ่งผู้สนับสนุน ด้านล่างจอ (ทุกหน้า มีปุ่มปิด) ----------
+  // ---------- แถบข้อความวิ่งผู้สนับสนุน บนสุดของจอ เหนือเมนู (ทุกหน้า มีปุ่มปิด) ----------
   // ข้อความมาจาก data/sponsors.js (ช่อง ticker ถ้าไม่ใส่จะใช้ชื่อ + ประเภท + เบอร์โทร) กดแล้วไปการ์ดในหน้าผู้สนับสนุน
   // กดปิดแล้วจะไม่ขึ้นอีกจนกว่าจะปิดแท็บ/เบราว์เซอร์
   async function sponsorTicker() {
@@ -165,7 +165,7 @@
     bar.innerHTML = `<a class="spt-label" href="sponsors.html">ขอบคุณผู้สนับสนุน</a>
       <div class="spt-view"><div class="spt-track">${run}<span class="spt-dup" aria-hidden="true">${run}</span></div></div>
       <button type="button" class="spt-x" aria-label="ปิดแถบผู้สนับสนุน" title="ปิด">×</button>`;
-    document.body.append(bar);
+    document.body.prepend(bar);
     document.body.classList.add("has-sp-ticker");
     const track = bar.querySelector(".spt-track");
     track.style.animationDuration = Math.max(18, track.scrollWidth / 2 / 70) + "s";  // ราว 70px ต่อวินาที
