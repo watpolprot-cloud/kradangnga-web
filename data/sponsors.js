@@ -36,9 +36,9 @@ KD.sponsors = [
     delivery: "https://www.wongnai.com/delivery/businesses/2454753nY/order",
     photos: [
       { src: "moothod-shop.jpg", cap: "หน้าร้านหมูทอดบ้านฉัน เปิด 24 ชั่วโมง" },
-      { src: "moothod-shop2.jpg", cap: "มุมนั่งทานในร้าน" },
+      { src: "moothod-plate.jpg", cap: "ข้าวหมูทอด จากใบเมนูของร้าน" },
       { src: "moothod-noodle.jpg", cap: "ก๋วยเตี๋ยวต้มยำโบราณ ใส่หมูทอด" },
-      { src: "moothod-rice.jpg", cap: "ข้าวหมูทอด" }
+      { src: "moothod-rice.jpg", cap: "ข้าวหมูทอดกับน้ำจิ้ม" }
     ]
   }
 ];
