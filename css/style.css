@@ -427,13 +427,14 @@ ul.clean li { margin-bottom: 6px; }
 .sp-photos button:hover img { transform: scale(1.04); }
 .sp-photos span { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 8px; font-family: "Prompt"; font-size: .85rem; color: #fff; text-align: left; background: linear-gradient(transparent, rgba(5,37,26,.85)); }
 .sp-menuwrap { display: grid; grid-template-columns: 1.7fr 1fr; gap: 26px; margin-top: 18px; align-items: start; }
-.sp-mtable { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.sp-mgroup { background: #FBF6E6; border: 1px solid #F0E2B6; border-radius: 14px; padding: 12px 16px; }
+.sp-mtable { columns: 2; column-gap: 18px; }
+.sp-mgroup { break-inside: avoid; margin-bottom: 14px; background: #FBF6E6; border: 1px solid #F0E2B6; border-radius: 14px; padding: 12px 16px; }
 .sp-mgroup h5 { font-family: "Prompt"; font-size: 1rem; color: var(--gold-deep); margin: 0 0 6px; }
 .sp-mgroup ul { list-style: none; margin: 0; padding: 0; }
 .sp-mgroup li { display: flex; align-items: baseline; gap: 6px; padding: 4px 0; font-size: .95rem; }
 .sp-mgroup li i { flex: 1; border-bottom: 1px dotted #CDB98A; transform: translateY(-4px); }
 .sp-mgroup li b { font-family: "Prompt"; font-weight: 600; color: var(--green-700); white-space: nowrap; }
+.sp-mnote { font-family: "Prompt"; font-weight: 600; color: var(--gold-deep); margin: 0 0 8px; }
 .sp-menuimg { position: relative; padding: 0; border: 3px solid var(--gold-soft); border-radius: 16px; overflow: hidden; cursor: zoom-in; background: none; box-shadow: 0 10px 26px rgba(8,51,31,.15); }
 .sp-menuimg img { width: 100%; display: block; }
 .sp-menuimg span { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px; font-family: "Prompt"; font-size: .9rem; color: #fff; background: rgba(5,37,26,.75); }
@@ -459,7 +460,8 @@ ul.clean li { margin-bottom: 6px; }
   .sp-actions { justify-content: center; }
   .sp-photos { grid-template-columns: 1fr 1fr; }
   .sp-info { grid-template-columns: 1fr; }
-  .sp-menuwrap, .sp-mtable { grid-template-columns: 1fr; }
+  .sp-menuwrap { grid-template-columns: 1fr; }
+  .sp-mtable { columns: 1; }
 }
 .quote-band { text-align: center; }
 .quote-band .q { font-family: "Charmonman"; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.5; padding: .3em .15em .25em; margin: -.3em -.15em -.25em;

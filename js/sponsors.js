@@ -31,6 +31,7 @@
         <div>
           <h4>เมนูและราคา</h4>
           <div class="sp-mtable">${s.menuTable.map(g => `<div class="sp-mgroup"><h5>${esc(g.title)}</h5><ul>${g.items.map(it => `<li><span>${esc(it[0])}</span><i></i><b>${esc(it[1])}</b></li>`).join("")}</ul></div>`).join("")}</div>
+          ${s.menuNote ? `<p class="sp-mnote">${esc(s.menuNote)}</p>` : ""}
           ${s.menu && s.menu.length ? `<h4>เมนูเด่นอื่น ๆ</h4><div class="sp-menu">${s.menu.map(m => `<span>${esc(m)}</span>`).join("")}</div>` : ""}
         </div>
         ${s.menuImage ? `<button type="button" class="sp-menuimg" data-k="${k}"><img src="assets/img/sponsors/${esc(s.menuImage)}" alt="ใบเมนู${esc(s.name)}" loading="lazy"><span>กดดูใบเมนูขนาดใหญ่</span></button>` : ""}
