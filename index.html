@@ -228,6 +228,7 @@
             ${s.tel ? `<a class="btn btn-gold" href="tel:${esc(s.tel.replace(/-/g, ""))}">โทรสั่ง ${esc(s.tel)}</a>` : ""}
             ${s.map || s.geo ? `<a class="btn btn-green" href="${nav}" target="_blank" rel="noopener">นำทางไปร้าน</a>` : ""}
             ${s.facebook ? `<a class="btn btn-outline" href="${esc(s.facebook)}" target="_blank" rel="noopener">เพจ Facebook</a>` : ""}
+            ${s.delivery ? `<a class="btn btn-outline" href="${esc(s.delivery)}" target="_blank" rel="noopener">สั่งเดลิเวอรี LINE MAN</a>` : ""}
           </div>
         </div>
       </div>
@@ -249,6 +250,7 @@
           <div class="sp-actions" style="margin-top:14px">
             ${s.tel ? `<a class="btn btn-gold" href="tel:${esc(s.tel.replace(/-/g, ""))}">โทรสั่ง ${esc(s.tel)}</a>` : ""}
             <a class="btn btn-green" href="${nav}" target="_blank" rel="noopener">เปิดเส้นทางใน Google Maps</a>
+            ${s.delivery ? `<a class="btn btn-outline" href="${esc(s.delivery)}" target="_blank" rel="noopener">สั่งเดลิเวอรี LINE MAN</a>` : ""}
           </div>
         </div>
         ${s.map || s.geo ? `<div class="sp-map"><iframe title="แผนที่${esc(s.name)}" src="https://www.google.com/maps?q=${q}&z=17&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>` : ""}

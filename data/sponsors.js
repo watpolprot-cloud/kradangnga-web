@@ -1,7 +1,7 @@
 // ผู้สนับสนุนคณะสีกระดังงา — เพิ่มรายใหม่ไว้บนสุดของรายการ (แสดงในหน้าแรก ส่วน "ขอบคุณผู้สนับสนุน")
 // logo / photos: ไฟล์ในโฟลเดอร์ assets/img/sponsors/ · ช่องที่ไม่มีข้อมูลเว้นไว้ได้
 // menuTable: เมนูพร้อมราคา · menuImage: ภาพใบเมนู · geo: พิกัดร้าน (ละติจูด,ลองจิจูด) สำหรับแผนที่และปุ่มนำทาง
-// amount: ยอดสนับสนุน (พี่ต้นให้แสดงได้ 30 ต.ค. 2569) · map: คำค้นใน Google Maps · facebook: ลิงก์เพจหรือคำค้นเพจ
+// amount: ยอดสนับสนุน (พี่ต้นให้แสดงได้ 30 ต.ค. 2569) · map: คำค้นใน Google Maps · facebook: ลิงก์เพจ · delivery: ลิงก์สั่งเดลิเวอรี (LINE MAN Wongnai)
 window.KD = window.KD || {};
 KD.sponsors = [
   {
@@ -31,7 +31,8 @@ KD.sponsors = [
     tel: "065-697-9889",
     map: "หมูทอดบ้านฉัน ลาดกระบัง",
     geo: "13.7220771,100.7831783",
-    facebook: "https://www.facebook.com/search/top?q=%E0%B8%AB%E0%B8%A1%E0%B8%B9%E0%B8%97%E0%B8%AD%E0%B8%94%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%89%E0%B8%B1%E0%B8%99",
+    facebook: "https://www.facebook.com/p/%E0%B8%AB%E0%B8%A1%E0%B8%B9%E0%B8%97%E0%B8%AD%E0%B8%94%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%89%E0%B8%B1%E0%B8%99-61550301562531/",
+    delivery: "https://www.wongnai.com/delivery/businesses/2454753nY/order",
     photos: [
       { src: "moothod-shop.jpg", cap: "หน้าร้านหมูทอดบ้านฉัน เปิด 24 ชั่วโมง" },
       { src: "moothod-shop2.jpg", cap: "มุมนั่งทานในร้าน" },
