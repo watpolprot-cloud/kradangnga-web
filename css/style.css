@@ -430,14 +430,20 @@ ul.clean li { margin-bottom: 6px; }
 .sp-menuimg { position: relative; padding: 0; border: 3px solid var(--gold-soft); border-radius: 16px; overflow: hidden; cursor: zoom-in; background: none; box-shadow: 0 10px 26px rgba(8,51,31,.15); }
 .sp-menuimg img { width: 100%; display: block; }
 .sp-menuimg span { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px; font-family: "Prompt"; font-size: .9rem; color: #fff; background: rgba(5,37,26,.75); }
-.sp-info { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; align-items: start; }
+.sp-info { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; align-items: stretch; }
 .sp-info h4 { font-size: 1.05rem; margin: 10px 0 8px; }
 .sp-menu { display: flex; flex-wrap: wrap; gap: 8px; }
 .sp-menu span { background: var(--green-50); border: 1px solid var(--green-100); color: var(--green-700); border-radius: 999px; padding: 4px 14px; font-size: .95rem; }
 .sp-list { list-style: none; margin: 0; padding: 0; }
 .sp-list li { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px dashed var(--green-100); }
 .sp-list b { flex: 0 0 72px; font-family: "Prompt"; font-weight: 600; color: var(--green-700); }
-.sp-map { border-radius: 14px; overflow: hidden; border: 2px solid var(--green-100); aspect-ratio: 4/3; background: var(--green-50); }
+.sp-thanks { display: flex; gap: 16px; align-items: center; margin-top: 18px; padding: 16px 18px; border-radius: 16px; color: #FFF8E4;
+  background: radial-gradient(ellipse 90% 120% at 20% 30%, var(--green-600), var(--green-800)); border: 2px solid var(--gold-soft); box-shadow: 0 10px 24px rgba(8,51,31,.18); }
+.sp-thanks img { flex: 0 0 92px; width: 92px; height: 92px; object-fit: cover; object-position: center 15%; border-radius: 50%; border: 3px solid var(--gold-soft); background: #fff; }
+.sp-thanks b { display: block; font-family: "Prompt"; color: var(--gold-soft); font-size: 1.05rem; margin-bottom: 4px; }
+.sp-thanks p { margin: 0 0 6px; line-height: 1.6; }
+.sp-thanks small { color: #CFE6B4; }
+.sp-map { border-radius: 14px; overflow: hidden; border: 2px solid var(--green-100); min-height: 320px; background: var(--green-50); }
 .sp-map iframe { width: 100%; height: 100%; border: 0; display: block; }
 @media (max-width: 760px) {
   .sponsor { padding: 16px; }
