@@ -1361,3 +1361,8 @@ body.has-sp-ticker .site-header { top: 52px; }
   .spt-track { animation: none; }
   .spt-view { overflow-x: auto; }
 }
+/* เกณฑ์ใบลงคะแนน (games.html#scoring) */
+#scoring h3 .sc-full{font-size:.7em;font-weight:600;background:var(--gold,#E9B949);color:#08331F;border-radius:999px;padding:1px 10px;margin-left:6px;vertical-align:middle}
+#scoring .sc-notes{margin-top:8px;font-size:.92em;opacity:.9}
+#scoring .sc-warn{margin-top:8px;background:#FFF4D1;color:#5A3D00;border-left:4px solid #E9B949;border-radius:8px;padding:8px 12px;font-size:.92em}
+#scoring .sc-tips{margin-top:24px;border:2px solid #E9B949;border-radius:16px;padding:16px 20px}
