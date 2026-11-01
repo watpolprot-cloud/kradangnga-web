@@ -6,7 +6,7 @@
 <title>ทำเนียบนักเรียน · คณะสีกระดังงา (สีเขียว)</title>
 <meta name="description" content="นักเรียนผู้มีหน้าที่ในคณะสีกระดังงา (สีเขียว) ปีการศึกษา 2569 ห้องเรียน 17 ห้องพร้อมครูที่ปรึกษาและผังการเข้าแถว และทะเบียนนักกีฬาบุนนาคเกมส์ 2569 ทุกชนิดกีฬา">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="css/style.css?v=20261031a">
+<link rel="stylesheet" href="css/style.css?v=20261101a">
 </head>
 <body>
 <section class="page-head ath-head">
@@ -198,7 +198,7 @@ if (!PD.length) document.getElementById("pending").closest(".st-group").hidden =
 
   document.getElementById("rm-note").innerHTML =
     `จำนวนนักเรียนนับจาก${esc(M.countSource || "ระบบของโรงเรียน")}${M.countDate ? ` (ข้อมูลวันที่ ${thDate(M.countDate)})` : ""} อาจต่างจากปัจจุบันเล็กน้อยถ้ามีนักเรียนย้ายเข้าหรือออก แสดงเฉพาะจำนวน ไม่แสดงรายชื่อหรือเลขประจำตัวนักเรียน` +
-    `${M.assemblyImage ? ` · <a href="${esc(M.assemblyImage)}" target="_blank" rel="noopener">ดาวน์โหลดภาพผังการเข้าแถว</a>` : ""} · ถ้าข้อมูลห้องหรือครูที่ปรึกษาไม่ถูกต้อง แจ้งครูนพพลหรือหัวหน้าคณะสีได้`;
+    `${M.assemblyImage ? ` · <a href="${esc(M.assemblyImage)}" target="_blank" rel="noopener">ดาวน์โหลดภาพผังการเข้าแถว</a>` : ""} · <a href="games.html#lineup-rules">กติกาการเข้าแถวคณะสี (นั่งพร้อมในแถวภายใน 07.55 น. ชิงถ้วยวินัย)</a> · ถ้าข้อมูลห้องหรือครูที่ปรึกษาไม่ถูกต้อง แจ้งครูนพพลหรือหัวหน้าคณะสีได้`;
 
   const want = (new URLSearchParams(location.search).get("room") || "").replace(/^ม\.?/, "");
   const wi = R.findIndex(r => r.room === `ม.${want}`);

@@ -6,7 +6,7 @@
 <title>เวรประจำจุด · คณะสีกระดังงา (สีเขียว)</title>
 <meta name="description" content="เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) เวรตรวจห้องเรียนสะอาด (วันพุธตามวันที่กำหนด 16.00 น. ครู 30 ท่าน 2 กลุ่ม) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="css/style.css?v=20261031a">
+<link rel="stylesheet" href="css/style.css?v=20261101a">
 </head>
 <body>
 <section class="page-head duty-head">
@@ -183,7 +183,7 @@ if (LU && (LU.days || []).length) {
   const today = !LU.start || ymd >= LU.start ? new Intl.DateTimeFormat("th-TH", { weekday: "long", timeZone: "Asia/Bangkok" }).format(now) : "";
   document.getElementById("lu-title").textContent = LU.title || "เวรครูตรวจแถวตอนเช้า";
   document.getElementById("lu-when").textContent = `ทุกเช้า ${LU.time || ""} · ${LU.place || ""}${LU.startText ? " · " + LU.startText : ""}`;
-  document.getElementById("lu-task").textContent = LU.task || "";
+  document.getElementById("lu-task").innerHTML = esc(LU.task || "") + (LU.rulesLink ? ` · <a href="${esc(LU.rulesLink)}">ดูกติกาการเข้าแถวคณะสี</a>` : "");
   document.getElementById("lu-grid").innerHTML = LU.days.map(d => `<article class="lu-card reveal${d.day === today ? " today" : ""}">
     <div class="lu-day">${esc(d.day)}${d.day === today ? `<em>วันนี้</em>` : ""}</div>${person(d.teacher, d.day === today ? d.teacher : "")}</article>`).join("");
   if (LU.image) {
