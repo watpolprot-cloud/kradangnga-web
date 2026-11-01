@@ -8,7 +8,7 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 523,
   "following": null,
-  "posts": 39,
+  "posts": 40,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-01"
  },
@@ -155,5 +155,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-01T09:15+07:00"
+ "updated": "2026-11-01T17:29+07:00"
 };
