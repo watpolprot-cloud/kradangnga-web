@@ -1382,4 +1382,12 @@ body.has-sp-ticker .site-header { top: 52px; }
 #lineup-rules .lr-foot{margin-top:20px}
 #lineup-rules .lr-foot p{margin:6px 0}
 #lineup-rules a{color:var(--gold-soft)}
+#lineup-rules .lr-res{margin-top:22px;border:2px solid var(--gold);border-radius:var(--radius);padding:14px 18px;background:rgba(255,241,190,.08)}
+#lineup-rules .lr-res h3{color:var(--gold-soft);margin:0 0 10px;padding-top:4px}
+#lineup-rules .lr-table{width:100%;border-collapse:collapse;min-width:620px}
+#lineup-rules .lr-table th,#lineup-rules .lr-table td{padding:8px 10px;border-bottom:1px solid rgba(255,241,190,.2);text-align:left;vertical-align:top}
+#lineup-rules .lr-table th{color:var(--gold-soft)}
+#lineup-rules .lr-table td b{color:var(--gold-soft)}
+#lineup-rules .lr-res .tbl-wrap{overflow-x:auto}
+#lineup-rules .lr-res p{margin:12px 0 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 @media (max-width:900px){#lineup-rules .lr-time,#lineup-rules .lr-grid{grid-template-columns:1fr}}
