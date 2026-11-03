@@ -133,10 +133,11 @@
     </div>
     <div class="lr-res reveal" id="lineup-results">
       <h3>ผลการเข้าแถวคณะสีที่โรงเรียนประกาศ</h3>
-      <div class="tbl-wrap"><table class="lr-table"><thead><tr><th>วันที่</th><th>อันดับ 1</th><th>อันดับ 2</th><th>อันดับ 3</th><th>สีเขียว</th></tr></thead><tbody>
-        <tr><td>จันทร์ 2 พ.ย. 2569</td><td>กระดังงา (สีเขียว) · ราชพฤกษ์ (สีฟ้า)</td><td>ศรีตรัง (สีแดง)</td><td>ปาริชาติ (สีน้ำเงิน) · จามจุรี (สีชมพู)</td><td><b>อันดับ 1</b></td></tr>
+      <div class="tbl-wrap"><table class="lr-table"><thead><tr><th>วันที่</th><th>ผลเรียงตามอันดับ</th><th>สีเขียว</th><th>ภาพประกาศ</th></tr></thead><tbody>
+        <tr><td>อังคาร 3 พ.ย. 2569</td><td>1 ปาริชาติ (สีน้ำเงิน)<br>2 ศรีตรัง (สีแดง)<br>3 ราชพฤกษ์ (สีฟ้า)<br>4 กระดังงา (สีเขียว)<br>5 จามจุรี (สีชมพู)</td><td><b>อันดับ 4</b></td><td><button class="btn btn-gold lr-btn" type="button" data-day="2569-11-03">เปิดภาพ</button></td></tr>
+        <tr><td>จันทร์ 2 พ.ย. 2569</td><td>1 กระดังงา (สีเขียว)<br>1 ราชพฤกษ์ (สีฟ้า)<br>2 ศรีตรัง (สีแดง)<br>3 ปาริชาติ (สีน้ำเงิน)<br>3 จามจุรี (สีชมพู)</td><td><b>อันดับ 1</b> (ร่วมกับสีฟ้า)</td><td><button class="btn btn-gold lr-btn" type="button" data-day="2569-11-02">เปิดภาพ</button></td></tr>
       </tbody></table></div>
-      <p><button class="btn btn-gold" type="button" id="lr-res-img">เปิดภาพประกาศผล 2 พ.ย.</button> ขอบคุณครูและนักเรียนสีเขียวทุกคน รักษามาตรฐานนี้ไว้ทุกเช้า</p>
+      <p>ผลล่าสุดอยู่บนสุด · สีเขียวรักษาเวลา 07.55 น. ไม่คุย ไม่กิน ร้องเพลงชาติ และไม่ทิ้งขยะ ทุกเช้า เพื่อคว้าถ้วยวินัยบุนนาคเกมส์</p>
     </div>
     <div class="lr-foot reveal">
       <p><b>สีเขียวนั่งแถวที่ 3 (แถวกลาง)</b> ตรงหน้าเวที เรียง ม.6 ฝั่งอาคาร 1 ไปจนถึง ม.1 ฝั่งเสาธงชาติ · <a href="students.html#rooms">ดูผังการเข้าแถวรายห้อง</a></p>
@@ -306,7 +307,11 @@ document.getElementById("sports-tbl").innerHTML = `<tr><th>ที่</th><th>ช
 revealAll();
 document.getElementById("scoring-img").onclick = () => openLightbox([{ src: "assets/img/gallery/info_scoring_2569.jpg", cap: "เกณฑ์การให้คะแนน ใบลงคะแนนบุนนาคเกมส์ ครั้งที่ 77" }]);
 document.getElementById("lr-img").onclick = () => openLightbox([{ src: "assets/img/gallery/info_lineup_rules_2569.jpg", cap: "กติกาการเข้าแถวคณะสี ถ้วยวินัยบุนนาคเกมส์ ครั้งที่ 77" }]);
-document.getElementById("lr-res-img").onclick = () => openLightbox([{ src: "assets/img/gallery/info_lineup_result_2569-11-02_v2.jpg", cap: "ขอบคุณและยินดีด้วย สีเขียวอันดับ 1 การเข้าแถวคณะสี 2 พ.ย. 2569" }, { src: "assets/img/gallery/school_lineup_result_2569-11-02.jpg", cap: "ประกาศผลการเข้าแถวคณะสี วันจันทร์ที่ 2 พ.ย. 2569 (ภาพต้นฉบับของโรงเรียน)" }]);
+const LR_IMG = {
+  "2569-11-03": [{ src: "assets/img/gallery/school_lineup_result_2569-11-03.jpg", cap: "ประกาศผลการเข้าแถวคณะสี วันอังคารที่ 3 พ.ย. 2569 (ภาพต้นฉบับของโรงเรียน)" }],
+  "2569-11-02": [{ src: "assets/img/gallery/info_lineup_result_2569-11-02_v2.jpg", cap: "ขอบคุณและยินดีด้วย สีเขียวอันดับ 1 การเข้าแถวคณะสี 2 พ.ย. 2569" }, { src: "assets/img/gallery/school_lineup_result_2569-11-02.jpg", cap: "ประกาศผลการเข้าแถวคณะสี วันจันทร์ที่ 2 พ.ย. 2569 (ภาพต้นฉบับของโรงเรียน)" }]
+};
+document.querySelectorAll(".lr-btn").forEach(b => b.onclick = () => openLightbox(LR_IMG[b.dataset.day]));
 document.getElementById("practice-img").onclick = () => openLightbox([{ src: "assets/img/gallery/info_practice_time_2569-2.jpg", cap: "ประกาศกำหนดการฝึกซ้อมกองเชียร์ 26 ต.ค. – 11 พ.ย. 2569" }]);
 </script>
 </body>
