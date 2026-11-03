@@ -5,7 +5,7 @@
 - เป็นเว็บแบบไฟล์ล้วน (HTML/CSS/JS) ไม่ต้องติดตั้งอะไร เปิด `index.html` ได้ทันที
 - ข้อมูลทั้งหมดอยู่ใน `data/*.js` แก้ไขแล้วเว็บเปลี่ยนตาม
 - ภาพอยู่ใน `assets/img/` (gallery = ภาพใหญ่, thumbs = ภาพย่อ)
-- ฟอนต์ Prompt, Sarabun, Charmonman ใช้ภายใต้สัญญาอนุญาต SIL Open Font License (`assets/fonts/`)
+- ฟอนต์ Prompt, Sarabun, Charmonman, Sriracha, Pattaya, Chonburi ใช้ภายใต้สัญญาอนุญาต SIL Open Font License (`assets/fonts/`)
 
 ## คลิป TikTok (หน้า tiktok.html)
 

@@ -8,6 +8,10 @@
 @font-face { font-family: "Sarabun"; src: url("../assets/fonts/Sarabun-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Sarabun"; src: url("../assets/fonts/Sarabun-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
 @font-face { font-family: "Charmonman"; src: url("../assets/fonts/Charmonman-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+/* ฟอนต์ลายมือ/หัวเรื่องสำหรับกล่องข้อความจากผู้สนับสนุน (ตัดเหลือเฉพาะอักษรไทยและละติน ไฟล์เล็ก โหลดเมื่อหน้ามีข้อความนี้เท่านั้น) */
+@font-face { font-family: "Sriracha"; src: url("../assets/fonts/Sriracha-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Pattaya"; src: url("../assets/fonts/Pattaya-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Chonburi"; src: url("../assets/fonts/Chonburi-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 
 :root {
   --green-900: #05251A;
@@ -466,6 +470,42 @@ ul.clean li { margin-bottom: 6px; }
 .sp-story img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; display: block; }
 .sp-story span { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 18px 14px; text-align: left; font-size: .95rem; line-height: 1.6; color: #fff; background: linear-gradient(transparent, rgba(5,37,26,.92) 45%); }
 .sp-story span b { display: block; font-family: "Prompt"; font-size: 1.1rem; color: var(--gold-soft); }
+/* [[...]] ในข้อมูลผู้สนับสนุน: กลุ่มคำไม่ตัดขึ้นบรรทัดกลางคำ (ถ้ายาวเกินความกว้างจริงจึงตัดภายในกลุ่ม) */
+.sp-nw { display: inline-block; }
+/* ลิงก์ตรงถึงการ์ด (sponsors.html#sp-...) ไม่ให้แถบวิ่งผู้สนับสนุนและแถบเมนูบังหัวการ์ด */
+.sponsor { scroll-margin-top: 10px; }
+body.has-sp-ticker .sponsor { scroll-margin-top: 60px; }
+/* ข้อความจากผู้สนับสนุนถึงน้อง ๆ (ช่อง message ใน data/sponsors.js) — ภาพในกรอบโค้ง + จดหมายตัวเขียนหลายสี */
+.sp-msg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px; margin-top: 22px; align-items: stretch; }
+.sp-msg-photo { position: relative; padding: 0; border: 4px solid var(--gold-soft); border-radius: 999px 999px 18px 18px; overflow: hidden; cursor: zoom-in; background: #F3E6C8; min-height: 320px; box-shadow: 0 12px 28px rgba(8,51,31,.18); }
+.sp-msg-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; transition: transform .3s; }
+.sp-msg-photo:hover img { transform: scale(1.03); }
+.sp-msg-photo > span { position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 12px 10px; font-family: "Prompt"; font-size: .88rem; line-height: 1.5; color: #fff; background: linear-gradient(transparent, rgba(5,37,26,.88) 50%); }
+.sp-letter { position: relative; margin: 0; padding: 26px 30px 20px; border-radius: 22px; border: 3px solid var(--gold-soft); color: #17402E;
+  background: linear-gradient(165deg, #FFFDF5 0%, #FFF6DC 55%, #FBEBC4 100%); box-shadow: 0 12px 28px rgba(8,51,31,.14); }
+.sp-letter::before { content: "“"; position: absolute; left: -16px; top: -18px; width: 56px; height: 56px; box-sizing: border-box; padding-top: 26px; border-radius: 50%; text-align: center;
+  font: 700 62px/1 Georgia, "Times New Roman", serif; color: var(--green-900); background: linear-gradient(180deg, #FFF1BE, var(--gold-soft) 55%, var(--gold-deep)); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+.sp-l-from { text-align: center; font-family: "Prompt"; font-weight: 600; font-size: .9rem; letter-spacing: 1px; color: #B0751A; }
+.sp-letter h4 { text-align: center; font-family: "Chonburi", "Prompt", serif; font-weight: 400; font-size: 1.75rem; line-height: 1.55; color: var(--green-700); margin: 0 0 8px; }
+.sp-letter p { font-family: "Sriracha", "Sarabun", sans-serif; font-size: 1.2rem; line-height: 1.85; margin: 0 0 10px; }
+.sp-letter mark { color: var(--c); background: linear-gradient(180deg, transparent 58%, var(--m) 58%, var(--m) 94%, transparent 94%); padding: 0 .06em; white-space: nowrap; }
+.sp-letter .mk1 { --c: #0B7A44; --m: #C9EDD5; }
+.sp-letter .mk2 { --c: #B4620A; --m: #FFE09A; }
+.sp-letter .mk3 { --c: #C2346A; --m: #FBD2E0; }
+.sp-letter .mk4 { --c: #6B42B6; --m: #E7DBF9; }
+.sp-letter .sp-l-end { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 4px 0 0; }
+.sp-l-end b { font-family: "Pattaya", "Prompt", sans-serif; font-weight: 400; font-size: 2.2rem; line-height: 1.45; color: #0B7A44; text-shadow: 0 2px 0 #FFE7A3; }
+.sp-l-end span { font-family: "Sriracha", "Sarabun", sans-serif; font-size: 1.35rem; color: #C2346A; }
+.sp-letter footer { text-align: right; font-family: "Sriracha", "Sarabun", sans-serif; font-size: 1.2rem; line-height: 1.7; color: #8A5B12; }
+@media (max-width: 760px) {
+  .sp-msg { grid-template-columns: 1fr; gap: 26px; }
+  .sp-msg-photo { min-height: 0; width: min(300px, 80%); aspect-ratio: 4 / 5; justify-self: center; }
+  .sp-letter { padding: 24px 18px 16px; text-align: left; }
+  .sp-letter::before { left: -6px; }
+  .sp-letter h4 { font-size: 1.45rem; }
+  .sp-letter p { font-size: 1.12rem; }
+  .sp-l-end b { font-size: 1.9rem; }
+}
 @media (max-width: 760px) {
   .sponsor { padding: 16px; }
   .sp-top { flex-direction: column; align-items: stretch; text-align: center; }
