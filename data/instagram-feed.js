@@ -8,28 +8,11 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 524,
   "following": null,
-  "posts": 40,
+  "posts": 39,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-03"
  },
  "posts": [
-  {
-   "id": "DfCvIoMP31M",
-   "url": "https://www.instagram.com/p/DfCvIoMP31M/",
-   "kind": "video",
-   "reel": false,
-   "caption": "พร้อมหรือยัง บุนนาคเกมส์ #กีฬาสี #คณะสีกระดังงา #สีเขียว #พรตพิทยพยัต",
-   "date": "2026-10-28",
-   "ts": 1793200722,
-   "images": [
-    "assets/img/instagram/DfCvIoMP31M.jpg"
-   ],
-   "cw": 720,
-   "ch": 405,
-   "alt": "",
-   "likes": 222,
-   "comments": 0
-  },
   {
    "id": "De4ggCbPm-l",
    "url": "https://www.instagram.com/p/De4ggCbPm-l/",
@@ -155,5 +138,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-03T03:48+07:00"
+ "updated": "2026-11-03T19:49+07:00"
 };
