@@ -305,7 +305,7 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
   };
 })();
 
-document.getElementById("home-teachers").innerHTML = [30, 24, 9].map(no => {
+document.getElementById("home-teachers").innerHTML = [30, 9, 24].map(no => {
   const t = KD.teachers.find(x => x.no === no);
   return `<div class="person"><div class="ph"><img src="${t.photo}" alt="${esc(t.name)}" loading="lazy"></div>
     <div class="pb"><div class="nm">${esc(t.name)}</div><div class="rl"><span class="tag">${esc(t.role)}</span></div></div></div>`;
