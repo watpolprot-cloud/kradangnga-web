@@ -84,7 +84,7 @@ KD.coaches = [
   {"no": 8, "sport": "กรีฑา", "div": "200 เมตร ชาย", "teachers": ["ครูอุทัย นุ่นดำ"], "pending": 0},
   {"no": 8, "sport": "กรีฑา", "div": "200 เมตร หญิง", "teachers": [], "pending": 0},
   {"no": 8, "sport": "กรีฑา", "div": "4×100 เมตร (ทุกรุ่น)", "teachers": [], "pending": 0},
-  {"no": 9, "sport": "E-sport", "div": "ROV", "teachers": ["ครูภวภัค จินนุกูล"], "pending": 0},
+  {"no": 9, "sport": "E-sport", "div": "ROV", "teachers": ["ครูธวัชชัย พาลาศรี"], "pending": 0},
   {"no": 9, "sport": "E-sport", "div": "Free Fire", "teachers": ["ครูธนาวุฒิ อดิษะ"], "pending": 0},
   {"no": 9, "sport": "E-sport", "div": "VALORANT", "teachers": ["ครูธวัชชัย พาลาศรี"], "pending": 0},
   {"no": 9, "sport": "E-sport", "div": "Mobile Legends", "teachers": ["ครูธวัชชัย พาลาศรี"], "pending": 0},
