@@ -6,11 +6,11 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 527,
+  "followers": 544,
   "following": null,
   "posts": 39,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-04"
+  "day": "2026-11-05"
  },
  "posts": [
   {
@@ -138,5 +138,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-04T03:07+07:00"
+ "updated": "2026-11-05T01:39+07:00"
 };
