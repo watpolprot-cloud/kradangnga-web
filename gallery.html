@@ -7,6 +7,7 @@
 <meta name="description" content="อัลบั้มภาพบรรยากาศกิจกรรมของคณะสีกระดังงา กดที่ภาพเพื่อดูภาพขนาดใหญ่">
 <link rel="icon" href="assets/img/favicon.png">
 <link rel="stylesheet" href="css/style.css?v=20261101a">
+<style>.album-video{margin:0 0 28px;text-align:center}.album-video video{display:block;margin:0 auto 12px;width:100%;max-width:420px;aspect-ratio:9/16;border-radius:18px;background:#05251A;box-shadow:0 10px 30px rgba(0,0,0,.25)}</style>
 </head>
 <body>
 <section class="page-head"><div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>ภาพกิจกรรม</h1><p>อัลบั้มภาพบรรยากาศกิจกรรมของคณะสีกระดังงา กดที่ภาพเพื่อดูภาพขนาดใหญ่</p></div></section>
@@ -20,6 +21,10 @@
       </div>
       <p id="al-desc"></p>
       <p id="al-drive-wrap" hidden><a class="btn btn-outline" id="al-drive" target="_blank" rel="noopener">ดูภาพต้นฉบับทั้งหมดบน Google Drive</a></p>
+      <figure id="al-video-wrap" class="album-video" hidden>
+        <video id="al-video" controls playsinline preload="none"></video>
+        <figcaption><a class="btn btn-outline" id="al-video-dl" download>ดาวน์โหลดคลิป</a></figcaption>
+      </figure>
       <div class="masonry" id="al-photos"></div>
     </div>
     <p class="note" style="margin-top:40px">ภาพจากกลุ่ม LINE คณะสีและกลุ่ม PR.สีเขียว กำลังทยอยรวบรวมเพิ่ม ถ้ามีภาพกิจกรรมสีเขียวที่อยากให้ขึ้นเว็บ ส่งให้ครูนพพลหรือฝ่ายประชาสัมพันธ์ได้เลย</p>
@@ -34,7 +39,7 @@ const albums = [...KD.albums].sort((a, b) => b.date.localeCompare(a.date));
 A.innerHTML = albums.map(a => {
   const n = KD.photos.filter(p => p.album === a.id).length;
   return `<article class="card album-card reveal" data-id="${esc(a.id)}">
-    <div class="card-img"><img src="assets/img/thumbs/${esc(a.cover)}" alt="" loading="lazy"><span class="album-count">${n} ภาพ</span></div>
+    <div class="card-img"><img src="assets/img/thumbs/${esc(a.cover)}" alt="" loading="lazy"><span class="album-count">${a.video ? "คลิป + " : ""}${n} ภาพ</span></div>
     <div class="card-body"><div class="meta">${thDate(a.date)}</div><h3>${esc(a.title)}</h3><p>${esc(a.desc)}</p></div>
   </article>`;
 }).join("");
@@ -49,6 +54,11 @@ function route() {
   // ลิงก์โฟลเดอร์ภาพต้นฉบับบน Google Drive (ใส่ "drive" ในอัลบั้มที่ data/gallery.js)
   document.getElementById("al-drive-wrap").hidden = !a.drive;
   if (a.drive) document.getElementById("al-drive").href = a.drive;
+  // คลิปวิดีโอของอัลบั้ม (ใส่ "video" และ "poster" ในอัลบั้มที่ data/gallery.js)
+  const vw = document.getElementById("al-video-wrap"), vv = document.getElementById("al-video");
+  vw.hidden = !a.video;
+  if (a.video) { vv.poster = a.poster || ""; vv.src = a.video; document.getElementById("al-video-dl").href = a.video; }
+  else { vv.removeAttribute("src"); vv.load(); }
   const ps = KD.photos.filter(p => p.album === id);
   const items = ps.map(p => ({ src: "assets/img/gallery/" + p.file, cap: p.caption || a.title }));
   const box = document.getElementById("al-photos");
