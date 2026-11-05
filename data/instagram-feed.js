@@ -8,11 +8,28 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 544,
   "following": null,
-  "posts": 39,
+  "posts": 40,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-05"
  },
  "posts": [
+  {
+   "id": "DfV65e9P1hU",
+   "url": "https://www.instagram.com/p/DfV65e9P1hU/",
+   "kind": "video",
+   "reel": false,
+   "caption": "💚💚 #กีฬาสี #คณะสีกระดังงา #สีเขียว #พรตพิทยพยัต #ดรัมเมเยอร์",
+   "date": "2026-11-05",
+   "ts": 1793844735,
+   "images": [
+    "assets/img/instagram/DfV65e9P1hU.jpg"
+   ],
+   "cw": 640,
+   "ch": 1136,
+   "alt": "",
+   "likes": 105,
+   "comments": 0
+  },
   {
    "id": "De4ggCbPm-l",
    "url": "https://www.instagram.com/p/De4ggCbPm-l/",
@@ -138,5 +155,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-05T01:39+07:00"
+ "updated": "2026-11-05T10:30+07:00"
 };
