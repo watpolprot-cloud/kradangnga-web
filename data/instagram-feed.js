@@ -6,11 +6,11 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 608,
+  "followers": 611,
   "following": null,
   "posts": 42,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-08"
+  "day": "2026-11-09"
  },
  "posts": [
   {
@@ -27,25 +27,8 @@ KD.instagramFeed = {
    "cw": 640,
    "ch": 1136,
    "alt": "",
-   "likes": 7241,
+   "likes": 7490,
    "comments": 1
-  },
-  {
-   "id": "DfCvIoMP31M",
-   "url": "https://www.instagram.com/p/DfCvIoMP31M/",
-   "kind": "video",
-   "reel": false,
-   "caption": "พร้อมหรือยัง บุนนาคเกมส์ #กีฬาสี #คณะสีกระดังงา #สีเขียว #พรตพิทยพยัต",
-   "date": "2026-10-28",
-   "ts": 1793200722,
-   "images": [
-    "assets/img/instagram/DfCvIoMP31M.jpg"
-   ],
-   "cw": 720,
-   "ch": 405,
-   "alt": "",
-   "likes": 234,
-   "comments": 0
   },
   {
    "id": "De4ggCbPm-l",
@@ -168,9 +151,10 @@ KD.instagramFeed = {
   }
  ],
  "skipped": [
-  "De4gekYP6gX"
+  "De4gekYP6gX",
+  "Dfe9x9UtRXs"
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-08T09:30+07:00"
+ "updated": "2026-11-09T00:04+07:00"
 };
