@@ -9,6 +9,11 @@
   // [[ข้อความ]] = กลุ่มคำที่ไม่ให้ตัดขึ้นบรรทัดใหม่กลางคำ เช่น ชื่อ-สกุลครู (ใช้ได้ในช่อง by, note, facts, thanksText, message.title, message.photoCap)
   const nb = t => esc(t).replace(/\[\[(.+?)\]\]/g, '<span class="sp-nw">$1</span>');
   const plain = t => String(t || "").replace(/\[\[|\]\]/g, "");
+  // ชื่อบนการ์ด: แต่ละคำ (ชื่อ นามสกุล) และวงเล็บท้ายชื่อไม่ตัดกลางคำ เช่น ไชย|ปัญญา บนจอมือถือ
+  const nameHtml = n => {
+    const m = String(n || "").match(/^(.*?)(?: (\([^)]*\)))?$/);
+    return m[1].split(" ").map(w => `<span class="sp-nw">${esc(w)}</span>`).join(" ") + (m[2] ? ` <span class="sp-nw">${esc(m[2])}</span>` : "");
+  };
   const msgBlock = (s, k) => {
     const m = s.message;
     return `<div class="sp-msg">
@@ -35,7 +40,7 @@
         <div class="sponsor-logo"${s.logoBg ? ` style="background:${esc(s.logoBg)}"` : ""}><img src="assets/img/sponsors/${esc(s.logo)}" alt="โลโก้${esc(s.name)}" loading="lazy"${s.logoBg ? ` style="object-fit:contain"` : ""}></div>
         <div class="sponsor-body">
           <div class="sp-kind">${esc(s.kind || "ผู้สนับสนุน")}</div>
-          <h3>${esc(s.name).replace(/ (\([^)]*\))$/, ' <span class="sp-nw">$1</span>')}</h3>
+          <h3>${nameHtml(s.name)}</h3>
           ${s.amount ? `<div class="sp-amount">ร่วมสนับสนุน <b>${esc(s.amount)}</b></div>` : ""}
           ${s.by ? `<p class="sp-by">${nb(s.by)}</p>` : ""}
           ${s.note ? `<p>${nb(s.note)}</p>` : ""}
