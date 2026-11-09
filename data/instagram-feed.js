@@ -14,6 +14,23 @@ KD.instagramFeed = {
  },
  "posts": [
   {
+   "id": "DfgH_KJve4t",
+   "url": "https://www.instagram.com/p/DfgH_KJve4t/",
+   "kind": "video",
+   "reel": false,
+   "caption": "ขอขอบพระคุณนายธีรเมศ ทาคำ (พี่อู๋)\nร่วมสนับสนุนคณะสีกระดังงา เป็นกำลังใจให้นักเรียนสีเขียว\nเตรียมความพร้อมสู่บุนนาคเกมส์ 2569 ขอบพระคุณมากค่ะ #พรตพิทยพยัต #กีฬาสี #สีเขียว #คณะสีกระดังงา #ผู้ใหญ่ใจดี",
+   "date": "2026-11-09",
+   "ts": 1794186935,
+   "images": [
+    "assets/img/instagram/DfgH_KJve4t.jpg"
+   ],
+   "cw": 720,
+   "ch": 1280,
+   "alt": "",
+   "likes": 121,
+   "comments": 1
+  },
+  {
    "id": "DfV65e9P1hU",
    "url": "https://www.instagram.com/p/DfV65e9P1hU/",
    "kind": "video",
@@ -156,5 +173,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-09T00:04+07:00"
+ "updated": "2026-11-09T09:40+07:00"
 };
