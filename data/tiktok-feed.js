@@ -6,9 +6,9 @@ KD.tiktokFeed = {
  "profile": {
   "name": "สีเขียว(กระดังงา)- พรตพิทยพยัต",
   "bio": "คณะสีกระดังงา (เขียว) 🟢โรงเรียนพรตพิทยพยัต 💛💜",
-  "followers": 1007,
-  "likes": 51374,
-  "videos": 25,
+  "followers": 1020,
+  "likes": 52414,
+  "videos": 26,
   "avatar": "assets/img/tiktok/avatar.jpg"
  },
  "videos": [
@@ -19,7 +19,7 @@ KD.tiktokFeed = {
    "date": "2026-11-05",
    "ts": 1793844458,
    "dur": 12,
-   "views": 47100,
+   "views": 49200,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -35,7 +35,7 @@ KD.tiktokFeed = {
    "date": "2026-11-01",
    "ts": 1793515501,
    "dur": 31,
-   "views": 4467,
+   "views": 4629,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -51,7 +51,7 @@ KD.tiktokFeed = {
    "date": "2026-10-28",
    "ts": 1793200635,
    "dur": 18,
-   "views": 6215,
+   "views": 6358,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -67,7 +67,7 @@ KD.tiktokFeed = {
    "date": "2026-10-20",
    "ts": 1792478405,
    "dur": 58,
-   "views": 3983,
+   "views": 4066,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -83,7 +83,7 @@ KD.tiktokFeed = {
    "date": "2026-09-23",
    "ts": 1790162099,
    "dur": 33,
-   "views": 8062,
+   "views": 8191,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -307,7 +307,7 @@ KD.tiktokFeed = {
    "date": "2026-06-10",
    "ts": 1781089653,
    "dur": 59,
-   "views": 9760,
+   "views": 9888,
    "likes": null,
    "comments": null,
    "shares": null,
@@ -315,7 +315,23 @@ KD.tiktokFeed = {
    "cover": "assets/img/tiktok/7649721783783984405.jpg",
    "cw": 480,
    "ch": 480
+  },
+  {
+   "id": "7706743064596974856",
+   "url": "https://www.tiktok.com/@kradangnga.prot/video/7706743064596974856",
+   "desc": "3 DaY CoUntDoWn #คณะสีกระดังงา #กีฬาสี #สีเขียว #พรตพิทยพยัต #เชียร์ลีดเดอร์ ",
+   "date": "",
+   "ts": null,
+   "dur": null,
+   "views": 1455,
+   "likes": null,
+   "comments": null,
+   "shares": null,
+   "music": "",
+   "cover": "assets/img/tiktok/7706743064596974856.jpg",
+   "cw": 480,
+   "ch": 556
   }
  ],
- "updated": "2026-11-11T09:37+07:00"
+ "updated": "2026-11-12T01:29+07:00"
 };
