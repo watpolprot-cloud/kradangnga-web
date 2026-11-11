@@ -14,6 +14,23 @@ KD.instagramFeed = {
  },
  "posts": [
   {
+   "id": "DfleC15PVFr",
+   "url": "https://www.instagram.com/p/DfleC15PVFr/",
+   "kind": "video",
+   "reel": false,
+   "caption": "3 DaY CoUntDoWn #คณะสีกระดังงา #กีฬาสี #สีเขียว #พรตพิทยพยัต #เชียร์ลีดเดอร์",
+   "date": "2026-11-11",
+   "ts": 1794366211,
+   "images": [
+    "assets/img/instagram/DfleC15PVFr.jpg"
+   ],
+   "cw": 720,
+   "ch": 405,
+   "alt": "",
+   "likes": 96,
+   "comments": 0
+  },
+  {
    "id": "DfgH_KJve4t",
    "url": "https://www.instagram.com/p/DfgH_KJve4t/",
    "kind": "video",
@@ -29,23 +46,6 @@ KD.instagramFeed = {
    "alt": "",
    "likes": 1929,
    "comments": 5
-  },
-  {
-   "id": "DfV65e9P1hU",
-   "url": "https://www.instagram.com/p/DfV65e9P1hU/",
-   "kind": "video",
-   "reel": false,
-   "caption": "💚💚 #กีฬาสี #คณะสีกระดังงา #สีเขียว #พรตพิทยพยัต #ดรัมเมเยอร์",
-   "date": "2026-11-05",
-   "ts": 1793844735,
-   "images": [
-    "assets/img/instagram/DfV65e9P1hU.jpg"
-   ],
-   "cw": 640,
-   "ch": 1136,
-   "alt": "",
-   "likes": 7954,
-   "comments": 1
   },
   {
    "id": "De4ggCbPm-l",
@@ -173,5 +173,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-11T04:18+07:00"
+ "updated": "2026-11-11T17:59+07:00"
 };
