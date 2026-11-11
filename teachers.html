@@ -36,6 +36,13 @@ document.getElementById("leader").innerHTML = `
 const levels = ["ทั้งหมด", "ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"];
 const F = document.getElementById("filters"), P = document.getElementById("people");
 const DUTY = KD.duty || [], COA = KD.coaches || [];
+// เวรครูช่วงกีฬาภายใน (KD.eventDuty ใน data/duty.js) แสดงเฉพาะเวรตั้งแต่วันนี้เป็นต้นไป จนถึงวันสุดท้ายของช่วงเวร
+const ED = KD.eventDuty, EYMD = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Bangkok" });
+const EROWS = ED && (!ED.end || EYMD <= ED.end) ? (ED.groups || []).flatMap(g => g.days.flatMap(d => d.cells.flatMap((r, pi) => r.flatMap((c, ti) => c.map(n => ({ n, txt: `${+d.date.slice(8)} พ.ย. ${g.times[ti].replace(" น.", "")} ${g.places[pi].short || g.places[pi].name}`, k: d.date + g.times[ti], d: d.date })))))) : [];
+function eventDuty(name) {
+  const m = EROWS.filter(r => r.n === name && r.d >= EYMD).sort((a, b) => a.k.localeCompare(b.k));
+  return m.length ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(name)}#games-duty">เวรกีฬาภายใน: ${m.map(r => esc(r.txt)).join("<br>")}</a>` : "";
+}
 function coach(name) {
   const c = COA.filter(c => c.teachers.includes(name));
   return c.length ? `<a class="coach-line" href="games.html#coaches">คุมนักกีฬา: ${c.map(c => esc(c.sport + " " + c.div)).join(" · ")}</a>` : "";
@@ -52,6 +59,7 @@ function card(t) {
     ${coach(t.name)}
     ${(KD.lineupDuty?.days || []).filter(d => d.teacher === t.name).map(d => `<a class="duty-line" href="duty.html#lineup">เวรตรวจแถว: ${esc(d.day)} ${esc(KD.lineupDuty.time || "")}</a>`).join("")}
     ${(KD.cleanRoom?.sets || []).map((s, i) => s.g1 === t.name || s.g2 === t.name ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}#cleanroom">ตรวจห้องเรียนสะอาด: กลุ่มที่ ${s.g1 === t.name ? 1 : 2} ชุดที่ ${i + 1} · วันพุธ 16.00 น. (${(KD.cleanRoom.groups.find(g => g.no === (s.g1 === t.name ? 1 : 2)) || { dates: [] }).dates.length} ครั้ง)</a>` : "").join("")}
+    ${eventDuty(t.name)}
     ${duty.length ? `<a class="duty-line" href="duty.html?t=${encodeURIComponent(t.name)}">${duty.map(d => `เวร: จุดที่ ${d.spot} ${esc(d.place)} ${esc(d.time)}`).join("<br>")}</a>` : ""}
   </div></div>`;
 }

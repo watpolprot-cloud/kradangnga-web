@@ -170,6 +170,25 @@ function build() {
     ].filter(Boolean).join("\n"));
   }
 
+  const ED = KD.eventDuty;
+  if (ED && (ED.groups || []).length) {
+    const TH_DL = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+    const dTH = s => { const [y, m, d] = s.split("-").map(Number); return `วัน${TH_DL[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]}ที่ ${d} พ.ย. ${y + 543}`; };
+    const rows = ED.groups.flatMap(g => g.days.flatMap(d => d.cells.flatMap((r, pi) => r.flatMap((c, ti) => c.map(n => ({ n, g, date: d.date, place: g.places[pi].name, time: g.times[ti] }))))));
+    const names = [...new Set(rows.map(r => r.n))];
+    add(`${ED.title} (${ED.range})`, "duty.html#games-duty", [
+      `ครูคณะสีกระดังงาลงเวรช่วงกีฬาภายใน ${ED.range} คุณครู ${names.length} ท่าน แบ่งเป็น ${ED.groups.map(g => `${g.title} (${g.sub})`).join(" และ ")}`,
+      ED.note,
+      "แยกตามวัน:",
+      ...ED.groups.flatMap(g => g.days.map(d => `- ${dTH(d.date)} ${g.title}: ` + g.places.map((p, pi) => `${p.name} ` +
+        g.times.map((t, ti) => `${t} ${d.cells[pi][ti].length ? d.cells[pi][ti].join(", ") : "ไม่มีเวร"}`).join(" / ")).join(" · "))),
+      "แยกตามครู:",
+      ...names.map(n => `- ${n}: ` + rows.filter(r => r.n === n).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).map(r => `${dTH(r.date)} ${r.time} ${r.place}${r.g.id === "evening" ? " (เวรเย็น)" : ""}`).join(" และ ")),
+      (ED.exempt || []).length && "ครูที่ได้รับยกเว้นเวรวันแข่งขัน: " + ED.exempt.map(e => `${e.who} ได้แก่ ${e.teachers.join(", ")}`).join(" · "),
+      ED.source && `ที่มา: ${ED.source}`
+    ].filter(Boolean).join("\n"));
+  }
+
   // ทำเนียบนักเรียน
   const G = KD.studentGroups || [];
   if (G.length) add("ทำเนียบนักเรียนผู้มีหน้าที่ในคณะสี", "students.html",

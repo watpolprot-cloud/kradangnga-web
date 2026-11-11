@@ -4,15 +4,31 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>เวรประจำจุด · คณะสีกระดังงา (สีเขียว)</title>
-<meta name="description" content="เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) เวรตรวจห้องเรียนสะอาด (วันพุธตามวันที่กำหนด 16.00 น. ครู 30 ท่าน 2 กลุ่ม) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
+<meta name="description" content="เวรครูช่วงกีฬาภายใน บุนนาคเกมส์ 2569 (เวรเย็น 9–12 พ.ย. และเวรวันแข่ง 12–13 พ.ย. 2569) เวรครูตรวจแถวตอนเช้า (ทุกเช้า 07.30 น. ลานโดมอเนกประสงค์) เวรตรวจห้องเรียนสะอาด (วันพุธตามวันที่กำหนด 16.00 น. ครู 30 ท่าน 2 กลุ่ม) และเวรประจำจุดของครูคณะสีกระดังงา (สีเขียว) ภาคเรียนที่ 2/2569 ทุกวันพุธ 20 จุด คุณครู 31 ท่าน ดูได้ว่าครูแต่ละท่านอยู่จุดไหน เวลาเท่าไร">
 <link rel="icon" href="assets/img/favicon.png">
-<link rel="stylesheet" href="css/style.css?v=20261101a">
+<link rel="stylesheet" href="css/style.css?v=20261111a">
 </head>
 <body>
 <section class="page-head duty-head">
   <div class="wrap"><div class="eyebrow">คณะสีกระดังงา · สีเขียว</div><h1>เวรประจำจุด</h1><p id="duty-sub">ภาคเรียนที่ 2/2569 · ทุกวันพุธ · 20 จุด · คุณครู 31 ท่าน</p></div>
   <img class="duty-flower f1" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
   <img class="duty-flower f2" src="assets/img/kradangnga-flower.svg" alt="" aria-hidden="true">
+</section>
+<section class="block ed-sec" id="games-duty">
+  <div class="wrap">
+    <div class="dp-head reveal"><h2 id="ed-title">เวรครูช่วงกีฬาภายใน</h2><span id="ed-when"></span></div>
+    <p class="lu-task reveal" id="ed-note"></p>
+    <div class="duty-tools reveal">
+      <label class="duty-find"><span>หาเวรของครู</span>
+        <select id="ed-teacher"><option value="">เลือกชื่อครู</option></select>
+      </label>
+    </div>
+    <div class="duty-result ed-result" id="ed-result" hidden></div>
+    <div class="ed-tabs reveal" id="ed-tabs" role="tablist" aria-label="เลือกวัน"></div>
+    <div id="ed-board" aria-live="polite"></div>
+    <div class="ed-exempt reveal" id="ed-exempt"></div>
+    <p class="duty-note" id="ed-src"></p>
+  </div>
 </section>
 <section class="block alt" id="lineup">
   <div class="wrap">
@@ -175,6 +191,81 @@ S.onchange = () => { period = "ทั้งหมด"; if (S.value) mapSel = Mat
 const want = new URLSearchParams(location.search).get("t");
 if (want && names.includes(want)) { S.value = want; mapSel = Math.max(0, MP.findIndex(p => p.slots.some(d => d.teachers.includes(want)))); }
 render();
+
+// เวรครูช่วงกีฬาภายใน (KD.eventDuty ใน data/duty.js) แยกตามวัน ไฮไลต์วันนี้ตามเวลาไทย เลือกชื่อครูหรือเปิดด้วย ?t=ชื่อครู#games-duty
+const ED = KD.eventDuty;
+if (ED && (ED.groups || []).length) {
+  const TH_DS = ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."], TH_DL = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+  const dObj = s => { const [y, m, d] = s.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d)); };
+  const dShort = s => `${TH_DS[dObj(s).getUTCDay()]} ${+s.slice(8)} พ.ย.`;
+  const dLong = s => `วัน${TH_DL[dObj(s).getUTCDay()]}ที่ ${+s.slice(8)} พฤศจิกายน ${+s.slice(0, 4) + 543}`;
+  const now = new Date(), ymd = now.toLocaleDateString("sv-SE", { timeZone: "Asia/Bangkok" });
+  const hr = +now.toLocaleString("en-GB", { hour: "2-digit", hour12: false, timeZone: "Asia/Bangkok" });
+  const dates = [...new Set(ED.groups.flatMap(g => g.days.map(d => d.date)))].sort();
+  // รายการเวรทั้งหมดแบบแบน ใช้หาเวรของครูแต่ละท่าน
+  const rows = ED.groups.flatMap(g => g.days.flatMap(d => d.cells.flatMap((r, pi) => r.flatMap((c, ti) => c.map(n => ({ n, g, date: d.date, place: g.places[pi], time: g.times[ti] }))))));
+  const edNames = [...new Set(rows.map(r => r.n))].sort((a, b) => a.localeCompare(b, "th"));
+  const ES = document.getElementById("ed-teacher"), ER = document.getElementById("ed-result"), ET = document.getElementById("ed-tabs"), EB = document.getElementById("ed-board");
+  document.getElementById("ed-title").textContent = ED.title;
+  document.getElementById("ed-when").textContent = `${ED.range} · คุณครูลงเวร ${edNames.length} ท่าน`;
+  document.getElementById("ed-note").textContent = ED.note || "";
+  document.getElementById("ed-src").textContent = `ที่มา: ${ED.source || ""}`;
+  ES.innerHTML += edNames.map(n => `<option>${esc(n)}</option>`).join("");
+  const who = (n, sel) => {
+    const [, pre = "", first, last] = n.match(/^(ครู|Mr\. |Ms\. |Mrs\. )?(\S+)\s*(.*)$/);
+    const ph = photo[n] ? `<img src="${esc(photo[n])}" alt="" loading="lazy">` : `<img class="no-photo" src="assets/img/logo.png" alt="" loading="lazy">`;
+    return `<div class="cr-p${n === sel ? " me" : ""}"><span class="cr-ph">${ph}</span><span><b>${esc(pre + first)}</b><small>${esc(last)}</small></span></div>`;
+  };
+  // วันเริ่มต้น: วันนี้ถ้าอยู่ในช่วงเวร (หลัง 19.00 น. ข้ามไปวันถัดไป) ก่อนช่วงเวรเปิดวันแรก หลังจบเปิดวันสุดท้าย
+  const pickDay = () => { const nx = dates.find(d => d > ymd), t = dates.includes(ymd) && hr < 19 ? ymd : nx; return t || dates[dates.length - 1]; };
+  let day = pickDay();
+  function grid(g, d, sel) {
+    const cols = `minmax(0, 1.25fr) repeat(${g.times.length}, minmax(0, 1fr))`;
+    return `<div class="ed-grid reveal">
+      <div class="ed-gh"><h3>${esc(g.title)}</h3><span>${esc(g.sub)}</span></div>
+      <div class="ed-table" style="--ed-cols:${cols}">
+        <div class="ed-tr ed-th"><span>บริเวณที่รับผิดชอบ</span>${g.times.map(t => `<span>${esc(t)}</span>`).join("")}</div>
+        ${g.places.map((p, pi) => `<div class="ed-tr${sel && d.cells[pi].some(c => c.includes(sel)) ? " me" : ""}">
+          <div class="ed-place"><b>${esc(p.name)}</b><small>ช่วงละ ${p.per} คน</small></div>
+          ${d.cells[pi].map((c, ti) => `<div class="ed-cell${c.includes(sel) ? " me" : ""}${c.length ? "" : " off"}" data-t="${esc(g.times[ti])}">${c.length ? c.map(n => who(n, sel)).join("") : `<span class="ed-off">ไม่มีเวร</span>`}</div>`).join("")}
+        </div>`).join("")}
+      </div></div>`;
+  }
+  function renderED() {
+    const sel = ES.value, mine = sel ? rows.filter(r => r.n === sel).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)) : [];
+    ET.innerHTML = dates.map(d => {
+      const game = ED.groups.some(g => g.id === "game" && g.days.some(x => x.date === d));
+      const has = sel && mine.some(r => r.date === d);
+      return `<button type="button" role="tab" aria-selected="${d === day}" class="ed-tab${d === day ? " active" : ""}${d < ymd ? " past" : ""}${has ? " mine" : ""}" data-d="${d}">
+        <b>${esc(dShort(d))}</b><small>${game ? "วันแข่งขัน" : "เวรเย็น"}${d === ymd ? " · วันนี้" : ""}</small></button>`;
+    }).join("");
+    ET.querySelectorAll(".ed-tab").forEach(b => b.onclick = () => { day = b.dataset.d; renderED(); });
+    ER.hidden = !sel;
+    if (sel) {
+      ER.innerHTML = `${person(sel)}<div><b>${esc(sel)}</b>${mine.length ? mine.map(r =>
+        `<p>${esc(dShort(r.date))} ${esc(r.time)} · ${esc(r.place.name)}${r.g.id === "evening" ? " (เวรเย็น)" : ""}${r.date < ymd ? " (ผ่านแล้ว)" : ""}</p>`).join("") : "<p>ไม่มีเวรในช่วงนี้</p>"}
+        <button type="button" class="back-btn" id="ed-clear">ดูเวรทั้งหมด</button></div>`;
+      document.getElementById("ed-clear").onclick = () => { ES.value = ""; renderED(); };
+    }
+    const groups = ED.groups.map(g => [g, g.days.find(x => x.date === day)]).filter(([, d]) => d);
+    EB.innerHTML = `<p class="ed-day">${esc(dLong(day))}${day < ymd ? " (ผ่านไปแล้ว)" : day === ymd ? " (วันนี้)" : ""}</p>` + groups.map(([g, d]) => grid(g, d, sel)).join("");
+    document.getElementById("ed-exempt").innerHTML = (ED.exempt || []).length ? `<h3>ครูที่ได้รับยกเว้นเวรวันแข่งขัน</h3><ul>${ED.exempt.map(e =>
+      `<li><span>${esc(e.who)}</span><b>${e.teachers.map(n => n === sel ? `<mark>${esc(n)}</mark>` : esc(n)).join(", ")}</b></li>`).join("")}</ul>` : "";
+    revealAll();
+  }
+  ES.onchange = () => {
+    const sel = ES.value;
+    if (sel) { const m = rows.filter(r => r.n === sel).map(r => r.date).sort(); day = m.find(d => d >= ymd) || m[m.length - 1] || day; }
+    renderED();
+    if (sel) ER.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  if (want && edNames.includes(want)) { ES.value = want; const m = rows.filter(r => r.n === want).map(r => r.date).sort(); day = m.find(d => d >= ymd) || m[m.length - 1] || day; }
+  renderED();
+  // จบช่วงเวรแล้ว ย้ายส่วนนี้ไปไว้ท้ายหน้า ให้เวรประจำปกติขึ้นก่อน
+  const SEC = document.getElementById("games-duty");
+  if (ED.end && ymd > ED.end) { const last = document.getElementById("duty-imgs").closest("section"); last.parentNode.insertBefore(SEC, last); }
+  if (ES.value && location.hash === "#games-duty") setTimeout(() => ER.scrollIntoView({ block: "center" }), 350);
+} else document.getElementById("games-duty").hidden = true;
 
 // เวรครูตรวจแถวตอนเช้า (KD.lineupDuty ใน data/duty.js) ไฮไลต์เวรของวันนี้ตามเวลาไทย
 const LU = KD.lineupDuty;
