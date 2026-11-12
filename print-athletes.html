@@ -92,7 +92,7 @@ body { background: #e9eee9; color: #111; font-family: "THSN", "TH Sarabun New", 
   const quota = ev => { const m = ev.form.match(/(?:ส่งได้|ทีมละ|ทีม)\s*(\d+)\s*คน/); return m ? +m[1] : 0; };
   const coachOf = ev => {
     const c = CO.find(c => c.sport === sp.sport && c.div === ev.div)
-      || (/^4×100/.test(ev.div) && CO.find(c => c.sport === sp.sport && /^4×100/.test(c.div)));
+      || (/^4×100/.test(ev.div) && CO.find(c => c.sport === sp.sport && /^4×100/.test(c.div) && ev.div.startsWith(c.div)));
     return c && c.teachers.length ? c.teachers.map(t => t.replace(/^ครู/, "")).join(", ") : "";
   };
 

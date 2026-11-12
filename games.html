@@ -243,8 +243,8 @@ const SPT = KD.sports || [];
 if (!SPT.length) document.getElementById("sports").hidden = true;
 const COA = KD.coaches || [];
 function coachOf(s, e) {
-  // รายการผลัด 4×100 รวมเป็นแถวเดียวในข้อมูลครู
-  const c = COA.find(c => c.no === s.no && (c.div === e.div || (e.div.startsWith("4×100") && c.div.startsWith("4×100"))));
+  // รายการผลัด 4×100 แยกชาย/หญิง ในข้อมูลครู ("4×100 เมตร ชาย" ใช้กับ "4×100 เมตร ชาย ม.1" ถึง ม.6)
+  const c = COA.find(c => c.no === s.no && (c.div === e.div || (e.div.startsWith("4×100") && e.div.startsWith(c.div))));
   if (!c) return "";
   const t = c.teachers.map(esc).join(", ");
   return t ? `<span class="co-who">${t}${c.pending ? " และครูอีก " + c.pending + " ท่าน (รอประกาศ)" : ""}</span>`

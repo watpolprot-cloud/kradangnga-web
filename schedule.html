@@ -135,7 +135,7 @@ function teamOf(ev) {
 }
 function coachesOf(ev) {
   const s = sportOf(ev); if (!s) return [];
-  const c = CO.find(c => c.no === s.no && (c.div === ev.div || (ev.relay && c.div.startsWith("4×100"))));
+  const c = CO.find(c => c.no === s.no && (c.div === ev.div || (ev.relay && ev.div.startsWith(c.div))));
   return c ? c.teachers : [];
 }
 // เฮดกีฬาจากบทบาท เช่น "เฮดฟุตซอล" "เฮดบาสเกตบอล (หญิง)" "เฮด ROV"
