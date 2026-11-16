@@ -18,7 +18,8 @@
     <p class="lead">บ้านของครูและนักเรียนสีเขียว ที่นี่รวมข่าวสาร ภาพกิจกรรม และความทรงจำทุกช่วงเวลาที่เราได้ทำร่วมกัน</p>
     <div class="theme-chip">ธีมบุนนาคเกมส์ 2569 · พระสุธนมโนราห์</div>
     <div class="hero-actions">
-      <a class="btn btn-gold" href="news.html">อ่านข่าวล่าสุด</a>
+      <a class="btn btn-gold" href="#games-photos">ดูภาพบุนนาคเกมส์ ครั้งที่ 26</a>
+      <a class="btn btn-line" href="news.html">อ่านข่าวล่าสุด</a>
       <a class="btn btn-line" href="gallery.html">ดูภาพกิจกรรม</a>
       <a class="btn btn-line" href="tiktok.html">ดูคลิป TikTok</a>
     </div>
@@ -30,10 +31,38 @@
   <div class="stats">
     <div class="stat reveal"><b>30</b><span>ครูที่ปรึกษาในคณะสี</span></div>
     <div class="stat reveal"><b>ลำดับ 3</b><span>ลำดับการแสดงบุนนาคเกมส์ 2569</span></div>
-    <div class="stat reveal"><b>12–13 พ.ย.</b><span>วันแข่งขันบุนนาคเกมส์ 2569</span></div>
+    <div class="stat reveal"><b>12–13 พ.ย.</b><span>บุนนาคเกมส์ ครั้งที่ 26 แข่งขันเสร็จสิ้นแล้ว</span></div>
     <div class="stat reveal"><b>2570</b><span>ปีที่กระดังงาเป็นเจ้าภาพครั้งแรก</span></div>
   </div>
 </div>
+
+<section class="block alt" id="games-photos">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><h2>บุนนาคเกมส์ ครั้งที่ 26 จบลงแล้ว</h2><p>ขอบคุณครู นักเรียน ผู้ปกครอง ศิษย์เก่า และผู้สนับสนุนทุกท่าน ที่ร่วมเป็นพลังให้สีเขียว รวมลิงก์คลังภาพไว้ให้เปิดดูและเก็บเป็นความทรงจำ</p></div>
+      <a class="btn btn-green" href="schedule.html">ดูตารางและผลการแข่งขัน</a>
+    </div>
+    <div class="grid grid-2">
+      <article class="card reveal">
+        <div class="card-body">
+          <div class="meta"><span class="tag t-บุนนาคเกมส์">บุนนาคเกมส์</span><span>12–13 พ.ย. 2569</span></div>
+          <h3>บุนนาคเกมส์ ครั้งที่ 26</h3>
+          <p>กิจกรรมส่งเสริมสุขภาพและความสามัคคีของนักเรียน ภาพวันแข่งขันและวันพิธีเปิด แยกโฟลเดอร์ตามวัน</p>
+          <div class="hero-actions" style="margin-top:8px"><a class="btn btn-gold" href="https://drive.google.com/drive/folders/11ECnXsUoGBXfiPQv3rXpYGW89hDzifOI?usp=sharing" target="_blank" rel="noopener">เปิดคลังภาพ 12–13 พ.ย.</a></div>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="card-body">
+          <div class="meta"><span class="tag t-กิจกรรม">กิจกรรม</span><span>3–6 พ.ย. 2569</span></div>
+          <h3>บรรยากาศการแข่งขันกีฬาและการซ้อม</h3>
+          <p>บรรยากาศการแข่งขันกีฬา การซ้อม และการเตรียมความพร้อมของคณะสี มีทั้งภาพและวิดีโอ</p>
+          <div class="hero-actions" style="margin-top:8px"><a class="btn btn-gold" href="https://drive.google.com/drive/folders/19CAvAaTFjsORTm-VD8UyDUhTVl3eELwf?usp=sharing" target="_blank" rel="noopener">เปิดคลังภาพ 3–6 พ.ย.</a></div>
+        </div>
+      </article>
+    </div>
+    <p style="margin-top:14px;color:var(--ink-soft);font-size:.95rem">คลังภาพอยู่บน Google Drive กดแล้วจะเปิดหน้าใหม่ · ภาพและคลิปที่คณะสีคัดไว้ดูได้ที่หน้า <a href="gallery.html">ภาพกิจกรรม</a></p>
+  </div>
+</section>
 
 <section class="block">
   <div class="wrap">
@@ -215,7 +244,7 @@ document.getElementById("latest-news").innerHTML = KD.news.slice(0, 3).map(n => 
       <div class="meta"><span class="tag t-${esc(n.type)}">${esc(n.type)}</span><span>${thDate(n.date)}</span></div>
       <h3>${esc(n.title)}</h3>
       <p>${esc(n.body)}</p>
-      <a class="more-link" href="${esc(n.link || "news.html")}">${esc(n.linkText || "อ่านต่อ")}</a>
+      <a class="more-link" href="${esc(n.link || "news.html")}"${/^https?:/.test(n.link || "") ? ' target="_blank" rel="noopener"' : ""}>${esc(n.linkText || "อ่านต่อ")}</a>
     </div>
   </article>`).join("");
 
