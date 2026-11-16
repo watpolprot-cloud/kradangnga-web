@@ -8,11 +8,65 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 668,
   "following": null,
-  "posts": 45,
+  "posts": 48,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-16"
  },
  "posts": [
+  {
+   "id": "DfyszlsFOjl",
+   "url": "https://www.instagram.com/p/DfyszlsFOjl/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "ทุกเสียงเชียร์ ทุกหยาดเหงื่อ และทุกความตั้งใจ หลอมรวมเป็นความภาคภูมิใจของพวกเราชาวกระดังงา \nขอบคุณทุกแรงกาย แรงใจ และทุกการสนับสนุนที่ทำให้ปีนี้เป็นอีกหนึ่งความทรงจำที่งดงาม 💚✨\n#พรตพิทยพยัต #กีฬาสี #คณะสีกระดังงา #บุนนาคเกมส์ครั้งที่26",
+   "date": "2026-11-16",
+   "ts": 1794810088,
+   "images": [
+    "assets/img/instagram/DfyszlsFOjl.jpg",
+    "assets/img/instagram/DfyszlsFOjl-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 65,
+   "comments": 0
+  },
+  {
+   "id": "Dfyswj2lNtV",
+   "url": "https://www.instagram.com/p/Dfyswj2lNtV/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "ทุกเสียงเชียร์ ทุกหยาดเหงื่อ และทุกความตั้งใจ หลอมรวมเป็นความภาคภูมิใจของพวกเราชาวกระดังงา \nขอบคุณทุกแรงกาย แรงใจ และทุกการสนับสนุนที่ทำให้ปีนี้เป็นอีกหนึ่งความทรงจำที่งดงาม 💚✨\n#พรตพิทยพยัต #กีฬาสี #คณะสีกระดังงา #บุนนาคเกมส์ครั้งที่26",
+   "date": "2026-11-16",
+   "ts": 1794810063,
+   "images": [
+    "assets/img/instagram/Dfyswj2lNtV.jpg",
+    "assets/img/instagram/Dfyswj2lNtV-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 135,
+   "comments": 0
+  },
+  {
+   "id": "DfyssWjFPxy",
+   "url": "https://www.instagram.com/p/DfyssWjFPxy/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "ทุกเสียงเชียร์ ทุกหยาดเหงื่อ และทุกความตั้งใจ หลอมรวมเป็นความภาคภูมิใจของพวกเราชาวกระดังงา \nขอบคุณทุกแรงกาย แรงใจ และทุกการสนับสนุนที่ทำให้ปีนี้เป็นอีกหนึ่งความทรงจำที่งดงาม 💚✨\n#พรตพิทยพยัต #กีฬาสี #คณะสีกระดังงา #บุนนาคเกมส์ครั้งที่26",
+   "date": "2026-11-16",
+   "ts": 1794810028,
+   "images": [
+    "assets/img/instagram/DfyssWjFPxy.jpg",
+    "assets/img/instagram/DfyssWjFPxy-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 26,
+   "comments": 0
+  },
   {
    "id": "DfleC15PVFr",
    "url": "https://www.instagram.com/p/DfleC15PVFr/",
@@ -190,5 +244,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-16T00:43+07:00"
+ "updated": "2026-11-16T18:21+07:00"
 };
