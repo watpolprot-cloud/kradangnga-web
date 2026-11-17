@@ -6,11 +6,11 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 672,
+  "followers": 676,
   "following": null,
   "posts": 49,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-17"
+  "day": "2026-11-18"
  },
  "posts": [
   {
@@ -45,7 +45,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 79,
+   "likes": 85,
    "comments": 0
   },
   {
@@ -63,7 +63,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 148,
+   "likes": 152,
    "comments": 0
   },
   {
@@ -81,7 +81,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 34,
+   "likes": 39,
    "comments": 0
   },
   {
@@ -98,7 +98,7 @@ KD.instagramFeed = {
    "cw": 720,
    "ch": 405,
    "alt": "",
-   "likes": 140,
+   "likes": 141,
    "comments": 0
   },
   {
@@ -115,7 +115,7 @@ KD.instagramFeed = {
    "cw": 720,
    "ch": 1280,
    "alt": "",
-   "likes": 1976,
+   "likes": 1977,
    "comments": 5
   },
   {
@@ -261,5 +261,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-17T21:26+07:00"
+ "updated": "2026-11-18T05:53+07:00"
 };
