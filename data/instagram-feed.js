@@ -8,11 +8,28 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 672,
   "following": null,
-  "posts": 48,
+  "posts": 49,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-17"
  },
  "posts": [
+  {
+   "id": "Df1QuMcPODN",
+   "url": "https://www.instagram.com/p/Df1QuMcPODN/",
+   "kind": "image",
+   "reel": false,
+   "caption": "ทุกเสียงเชียร์ ทุกหยาดเหงื่อ และทุกความตั้งใจ หลอมรวมเป็นความภาคภูมิใจของพวกเราชาวกระดังงาขอบคุณทุกแรงกาย แรงใจ และทุกการสนับสนุนที่ทำให้ปีนี้เป็นอีกหนึ่งความทรงจำที่งดงาม 💚🥇\n#พรตพิทยพยัต #กีฬาสี #คณะสีกระดังงา #บุนนาคเกมส์ครั้งที่26",
+   "date": "2026-11-17",
+   "ts": 1794896049,
+   "images": [
+    "assets/img/instagram/Df1QuMcPODN.jpg"
+   ],
+   "cw": 912,
+   "ch": 1200,
+   "alt": "",
+   "likes": 35,
+   "comments": 0
+  },
   {
    "id": "DfyszlsFOjl",
    "url": "https://www.instagram.com/p/DfyszlsFOjl/",
@@ -244,5 +261,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-17T05:54+07:00"
+ "updated": "2026-11-17T21:26+07:00"
 };
