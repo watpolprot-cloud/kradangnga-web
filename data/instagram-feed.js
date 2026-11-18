@@ -8,11 +8,65 @@ KD.instagramFeed = {
   "bio": null,
   "followers": 676,
   "following": null,
-  "posts": 49,
+  "posts": 52,
   "avatar": "assets/img/instagram/avatar.jpg",
   "day": "2026-11-18"
  },
  "posts": [
+  {
+   "id": "Df3-m43FPSo",
+   "url": "https://www.instagram.com/p/Df3-m43FPSo/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "เเล้วเจอกันใหม่บุนนาคเกมส์ครั้งที่ 27 (2570) #พรตพิทยพยัต #กีฬาสี #บุนนาคเกมส์",
+   "date": "2026-11-18",
+   "ts": 1794987193,
+   "images": [
+    "assets/img/instagram/Df3-m43FPSo.jpg",
+    "assets/img/instagram/Df3-m43FPSo-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 24,
+   "comments": 0
+  },
+  {
+   "id": "Df3-lKSlJdf",
+   "url": "https://www.instagram.com/p/Df3-lKSlJdf/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "เเล้วเจอกันใหม่บุนนาคเกมส์ครั้งที่ 27 (2570) #พรตพิทยพยัต #กีฬาสี #บุนนาคเกมส์",
+   "date": "2026-11-18",
+   "ts": 1794987179,
+   "images": [
+    "assets/img/instagram/Df3-lKSlJdf.jpg",
+    "assets/img/instagram/Df3-lKSlJdf-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 20,
+   "comments": 0
+  },
+  {
+   "id": "Df3-is9FL0W",
+   "url": "https://www.instagram.com/p/Df3-is9FL0W/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "เเล้วเจอกันใหม่บุนนาคเกมส์ครั้งที่ 27 (2570) #พรตพิทยพยัต #กีฬาสี #บุนนาคเกมส์",
+   "date": "2026-11-18",
+   "ts": 1794987159,
+   "images": [
+    "assets/img/instagram/Df3-is9FL0W.jpg",
+    "assets/img/instagram/Df3-is9FL0W-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 16,
+   "comments": 0
+  },
   {
    "id": "Df1QuMcPODN",
    "url": "https://www.instagram.com/p/Df1QuMcPODN/",
@@ -261,5 +315,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-18T05:53+07:00"
+ "updated": "2026-11-18T21:00+07:00"
 };
