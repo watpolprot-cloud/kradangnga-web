@@ -10,7 +10,7 @@ KD.instagramFeed = {
   "following": null,
   "posts": 52,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-21"
+  "day": "2026-11-22"
  },
  "posts": [
   {
@@ -28,7 +28,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 29,
+   "likes": 30,
    "comments": 0
   },
   {
@@ -315,5 +315,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-21T05:15+07:00"
+ "updated": "2026-11-22T03:54+07:00"
 };
