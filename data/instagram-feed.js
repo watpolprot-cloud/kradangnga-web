@@ -6,13 +6,65 @@ KD.instagramFeed = {
  "profile": {
   "name": "คณะสีกระดังงา โรงเรียนพรตพิทยพยัต",
   "bio": null,
-  "followers": 676,
+  "followers": 678,
   "following": null,
-  "posts": 52,
+  "posts": 54,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-23"
+  "day": "2026-11-24"
  },
  "posts": [
+  {
+   "id": "DgHRibSD2FX",
+   "url": "https://www.instagram.com/p/DgHRibSD2FX/",
+   "kind": "carousel",
+   "reel": false,
+   "caption": "คณะสีกระดังงา ขอขอบพระคุณผู้สนับสนุนทุกท่าน ที่ให้การสนับสนุนและเป็นส่วนหนึ่งของกีฬาสี บุนนาคเกมส์ ครั้งที่ 26\n\nทุกแรงสนับสนุนและทุกกำลังใจ คือพลังสำคัญที่ทำให้กิจกรรมครั้งนี้เกิดขึ้นได้อย่างสมบูรณ์\n\nขอขอบพระคุณจากใจ แล้วพบกันใหม่ในโอกาสหน้า \n#บุนนาคเกมส์ #พรตพิทยพยัต #คณะสึกระดังงา #กีฬาสี",
+   "date": "2026-11-24",
+   "ts": 1795500434,
+   "images": [
+    "assets/img/instagram/DgHRibSD2FX.jpg",
+    "assets/img/instagram/DgHRibSD2FX-2.jpg"
+   ],
+   "cw": 960,
+   "ch": 960,
+   "alt": "",
+   "likes": 22,
+   "comments": 0
+  },
+  {
+   "id": "DgHQqYNPS2P",
+   "url": "https://www.instagram.com/p/DgHQqYNPS2P/",
+   "kind": "image",
+   "reel": false,
+   "caption": "คณะสีกระดังงา ขอขอบพระคุณผู้สนับสนุนทุกท่าน ที่ให้การสนับสนุนและเป็นส่วนหนึ่งของกีฬาสี บุนนาคเกมส์ ครั้งที่ 26\n\nทุกแรงสนับสนุนและทุกกำลังใจ คือพลังสำคัญที่ทำให้กิจกรรมครั้งนี้เกิดขึ้นได้อย่างสมบูรณ์\n\nขอขอบพระคุณจากใจ แล้วพบกันใหม่ในโอกาสหน้า \n#บุนนาคเกมส์ #พรตพิทยพยัต #คณะสึกระดังงา #กีฬาสี",
+   "date": "2026-11-24",
+   "ts": 1795499979,
+   "images": [
+    "assets/img/instagram/DgHQqYNPS2P.jpg"
+   ],
+   "cw": 960,
+   "ch": 1200,
+   "alt": "",
+   "likes": 8,
+   "comments": 0
+  },
+  {
+   "id": "DgHQmWrP6gs",
+   "url": "https://www.instagram.com/p/DgHQmWrP6gs/",
+   "kind": "image",
+   "reel": false,
+   "caption": "คณะสีกระดังงา ขอขอบพระคุณผู้สนับสนุนทุกท่าน ที่ให้การสนับสนุนและเป็นส่วนหนึ่งของกีฬาสี บุนนาคเกมส์ ครั้งที่ 26\n\nทุกแรงสนับสนุนและทุกกำลังใจ คือพลังสำคัญที่ทำให้กิจกรรมครั้งนี้เกิดขึ้นได้อย่างสมบูรณ์\n\nขอขอบพระคุณจากใจ แล้วพบกันใหม่ในโอกาสหน้า \n#บุนนาคเกมส์ #พรตพิทยพยัต #คณะสึกระดังงา #กีฬาสี",
+   "date": "2026-11-24",
+   "ts": 1795499953,
+   "images": [
+    "assets/img/instagram/DgHQmWrP6gs.jpg"
+   ],
+   "cw": 960,
+   "ch": 1200,
+   "alt": "",
+   "likes": 8,
+   "comments": 0
+  },
   {
    "id": "Df3-m43FPSo",
    "url": "https://www.instagram.com/p/Df3-m43FPSo/",
@@ -64,7 +116,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 20,
+   "likes": 21,
    "comments": 0
   },
   {
@@ -315,5 +367,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-23T03:22+07:00"
+ "updated": "2026-11-24T13:58+07:00"
 };
