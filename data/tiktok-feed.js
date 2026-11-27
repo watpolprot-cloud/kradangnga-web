@@ -6,8 +6,8 @@ KD.tiktokFeed = {
  "profile": {
   "name": "สีเขียว(กระดังงา)- พรตพิทยพยัต",
   "bio": "คณะสีกระดังงา (เขียว) 🟢โรงเรียนพรตพิทยพยัต 💛💜",
-  "followers": 1070,
-  "likes": 66575,
+  "followers": 1069,
+  "likes": 66605,
   "videos": 26,
   "avatar": "assets/img/tiktok/avatar.jpg"
  },
@@ -19,8 +19,8 @@ KD.tiktokFeed = {
    "date": "2026-11-19",
    "ts": 1795065548,
    "dur": 600,
-   "views": 3694,
-   "likes": 390,
+   "views": 3716,
+   "likes": 393,
    "comments": 4,
    "shares": 73,
    "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
@@ -36,7 +36,7 @@ KD.tiktokFeed = {
    "ts": 1794664582,
    "dur": 29,
    "views": 46400,
-   "likes": 7377,
+   "likes": 7386,
    "comments": 45,
    "shares": 1278,
    "music": "original sound - Parakan Fharr",
@@ -51,7 +51,7 @@ KD.tiktokFeed = {
    "date": "2026-11-11",
    "ts": 1794365961,
    "dur": 21,
-   "views": 3734,
+   "views": 3735,
    "likes": 237,
    "comments": 2,
    "shares": 22,
@@ -68,7 +68,7 @@ KD.tiktokFeed = {
    "ts": 1793844458,
    "dur": 12,
    "views": 72700,
-   "likes": 7520,
+   "likes": 7530,
    "comments": 6,
    "shares": 863,
    "music": "เสียงต้นฉบับ - สีเขียว(กระดังงา)- พรตพิทยพยัต",
@@ -83,7 +83,7 @@ KD.tiktokFeed = {
    "date": "2026-11-01",
    "ts": 1793515501,
    "dur": 31,
-   "views": 5748,
+   "views": 5751,
    "likes": 261,
    "comments": 8,
    "shares": 72,
@@ -99,7 +99,7 @@ KD.tiktokFeed = {
    "date": "2026-10-28",
    "ts": 1793200635,
    "dur": 18,
-   "views": 7326,
+   "views": 7327,
    "likes": 420,
    "comments": 4,
    "shares": 126,
@@ -131,7 +131,7 @@ KD.tiktokFeed = {
    "date": "2026-09-23",
    "ts": 1790162099,
    "dur": 33,
-   "views": 9056,
+   "views": 9060,
    "likes": 418,
    "comments": 6,
    "shares": 75,
@@ -365,5 +365,5 @@ KD.tiktokFeed = {
    "ch": 480
   }
  ],
- "updated": "2026-11-27T03:02+07:00"
+ "updated": "2026-11-27T11:52+07:00"
 };
