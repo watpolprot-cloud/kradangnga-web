@@ -10,7 +10,7 @@ KD.instagramFeed = {
   "following": null,
   "posts": 54,
   "avatar": "assets/img/instagram/avatar.jpg",
-  "day": "2026-11-27"
+  "day": "2026-11-28"
  },
  "posts": [
   {
@@ -45,7 +45,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 1200,
    "alt": "",
-   "likes": 24,
+   "likes": 25,
    "comments": 0
   },
   {
@@ -80,7 +80,7 @@ KD.instagramFeed = {
    "cw": 960,
    "ch": 960,
    "alt": "",
-   "likes": 35,
+   "likes": 36,
    "comments": 0
   },
   {
@@ -367,5 +367,5 @@ KD.instagramFeed = {
  ],
  "qr": 1,
  "via": "embed",
- "updated": "2026-11-27T12:04+07:00"
+ "updated": "2026-11-28T06:28+07:00"
 };
